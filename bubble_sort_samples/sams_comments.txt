@@ -1,0 +1,30 @@
+comments on what it was like to write in my language:
+
+I don't think I need an end-of-statement character, but if we use one I would recommend a period. then we'd have to be careful when using floats (myFloat becomes 1.5.)
+
+I tried to avoid parentheses, and punctuation in general. I know they're necessary to some extent.
+
+loops: foreach (I called it for) and while, maybe also an until.
+
+method invocation: do method on parameter1 and parameter2 ..... could use improvement
+
+I like using the word "is" as boolean equals, but I also use it to declare variables as "is a" which could present a parsing complication.
+
+Comments are smileys. Obviously that's subject to change but I like them the way they are.
+
+Not whitespace sensitive except for newlines
+
+I'm looking for another word/phrase other than "done with" to close statement blocks.
+
+I'm thinking of requiring loops and if statements to operate only on functions (which could be defined anonymously) somewhat like the following:
+
+for i going from 1 to 10, repeat myFunc
+
+or
+
+for i going from 1 to 10, repeat procedure which does
+        :) method body
+        
+end procedure
+
+but that probably needs some syntax improvement
