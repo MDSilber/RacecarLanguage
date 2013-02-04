@@ -1,0 +1,101 @@
+:-) (block comment)
+first is some exploratory syntax stuff
+then a definition of bubbleSort
+(end block comment)
+:-(
+
+:) (single-line comment)
+:) Make a list of numbers
+
+myNumbers is a list of number
+
+:) keywords: is a --> declaration
+:)           list --> list
+:)           of --> type is next
+:)           number --> the type of the list elements
+
+:) loop index
+
+slot is a number
+
+:) loop
+
+repeat for slot going from 1 to 100
+
+        position slot of myNumbers becomes slot
+
+        :) element access --> position x of <list>
+        :) assignment --> becomes
+
+done with repeat
+
+:) done with --> close brace. must specify what you're closing
+
+:) execute function on input
+
+newList is a list of number
+
+newList becomes: do bubbleSort on myNumbers
+
+:) colon (:) means evaluate everything after before processing
+
+show newList
+
+
+
+:) define a function
+
+bubbleSort is a procedure which needs
+        a list called toSort
+        and gives a list
+        and does
+
+        :) procedure --> "function" data type
+        :) which needs --> parameter list next
+        :) a list --> type of parameter 1
+        :) called --> name of parameter 1
+        :) and gives --> return type
+        :) and does --> function implementation next
+
+        toSortLength is a number
+        toSortLength becomes do length on toSort
+
+        bubbleNumber is a number
+
+        repeat for bubbleNumber going from 0 to: toSortLength - 1
+                
+                :) variable definitions
+
+                currentMax is a number
+                currentMax becomes 0
+
+                currentMaxPosition is a number
+                currentMaxPosition becomes 1
+
+                slot is a number
+                slot becomes 1
+
+                repeat for slot going from 1 to: toSortLength - bubbleNumber
+
+                        currentSlot is a number
+                        currentSlot becomes position slot of toSort
+
+                        if currentSlot > currentMax then
+                                currentMax becomes currentSlot
+                                currentMaxPosition becomes slot
+                        done with if
+                done with repeat
+
+                :) swap
+
+                swapTemp is a number
+                swapTemp becomes position toSortLength - bubbleNumber of toSort
+
+                position toSortLength - bubbleNumber of toSort becomes currentMax
+                position currentMaxPosition of toSort becomes swapTemp
+
+        done with repeat
+
+        give toSort
+
+done with procedure
