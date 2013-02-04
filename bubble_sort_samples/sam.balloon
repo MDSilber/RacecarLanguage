@@ -31,68 +31,87 @@ done with repeat
 
 :) done with --> close brace. must specify what you're closing
 
+
+
+
+
 :) execute function on input
 
 newList is a list of number
 
 newList becomes: do bubbleSort on myNumbers
 
-:) colon (:) means evaluate everything after before processing
+:-)
+        colon (:) means evaluate everything after the colon before processing
+        the stuff before the colon.
+        equivalent to parentheses from the colon to the end of the line
+        and inspired by haskell's $ operator
+:-(
+
 
 show newList
+
+:) show --> print to stdout
+
+:) alternate:
+
+show: do bubbleSort on myNumbers
+
+
 
 
 
 :) define a function
 
-bubbleSort is a procedure which needs
-        a list called toSort
+bubbleSort is a procedure which
+        needs a list called toSort
         and gives a list
         and does
 
         :) procedure --> "function" data type
-        :) which needs --> parameter list next
+        :) which --> function's signature comes next
+        :) needs --> parameter list
         :) a list --> type of parameter 1
         :) called --> name of parameter 1
-        :) and gives --> return type
-        :) and does --> function implementation next
+        :) (and) gives --> return type
+        :) (and) does --> function implementation next
 
         toSortLength is a number
         toSortLength becomes do length on toSort
 
-        bubbleNumber is a number
+        isSwapped is a boolean
+        isSwapped becomes false
 
-        repeat for bubbleNumber going from 0 to: toSortLength - 1
+        repeat while isSwapped is false
                 
                 :) variable definitions
-
-                currentMax is a number
-                currentMax becomes 0
-
-                currentMaxPosition is a number
-                currentMaxPosition becomes 1
 
                 slot is a number
                 slot becomes 1
 
-                repeat for slot going from 1 to: toSortLength - bubbleNumber
+                repeat for slot going from 1 to: toSortLength - 1
 
                         currentSlot is a number
                         currentSlot becomes position slot of toSort
 
-                        if currentSlot > currentMax then
-                                currentMax becomes currentSlot
-                                currentMaxPosition becomes slot
+                        nextSlot is a number
+                        nextSlot becomes position slot + 1 of toSort
+
+                        if currentSlot > nextSlot then
+                                :) swap
+
+                                swapTemp is a number
+                                swapTemp becomes nextSlot
+
+                                position slot + 1 of toSort becomes currentSlot
+
+                                position slot of toSort becomes swapTemp
+
+                                swapped becomes true
+
                         done with if
+
                 done with repeat
-
-                :) swap
-
-                swapTemp is a number
-                swapTemp becomes position toSortLength - bubbleNumber of toSort
-
-                position toSortLength - bubbleNumber of toSort becomes currentMax
-                position currentMaxPosition of toSort becomes swapTemp
 
         done with repeat
 
