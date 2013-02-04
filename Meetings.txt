@@ -1,0 +1,11 @@
+Meeting Summaries
+-------------------------
+
+2/3/13
+-----
+language name: Balloon
+written in: java, python, or ocaml?
+typed vs untypted: leaning towards typed w/ 2 or 3 types: number, word, and maybe bool
+compiled vs interpreted: leaning towards compiled
+
+task due friday: write bubble sort for a list of integers in our conception of the language
