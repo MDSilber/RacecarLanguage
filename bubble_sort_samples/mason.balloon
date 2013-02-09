@@ -1,0 +1,18 @@
+#Method call
+sort:list
+
+#Method definition
+define sort:(list of numbers a)
+{
+	list_length = length of a
+	temp1 = 0
+	temp2 = 0
+
+	loop list_length times:
+		loop (list_length - temp1) times:
+			if(a[temp2 - 1] is bigger than a[temp2])
+				switch a[temp2] and a[temp2 - 1]
+			temp2 = temp2 + 1
+		temp1 = temp1 + 1
+	print a
+}
