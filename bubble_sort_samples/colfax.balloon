@@ -1,0 +1,47 @@
+
+main(){
+	
+	list myList
+
+	myList[1] = 63
+	myList[2] = 12
+	myList[3] = 3
+	myList[4] = 5
+	myList[5] = 19
+	myList[6] = 4
+	myList[7] = 10
+	myList[8] = 34
+	myList[9] = 56
+	myList[10] = 11
+
+	//or
+	//lisy myList = 63, 12, 3, 5, 19, 4, 10, 34, 56, 11
+
+	print "here is the unsorted list: "
+	print myList
+
+	bubbleSort(myList)//list passed by reference
+
+	print "Yay, it's sorted now! Here is the sorted list: "
+	print myList
+
+}
+
+//you can have a return, but if there is nothing, assumed to be void
+bubbleSort(list toSort){
+
+	number holder;
+	
+	for all i from 1 to toSort.length backwards {
+		for all j from 1 to i-1 {
+			if toSort[j] > toSort[j+1] {
+				holder = toSort[j]
+				toSort[j] = toSort[j+1]
+				toSort[j+1] = toSort[j]
+			}
+		}
+	}
+
+
+}
+
