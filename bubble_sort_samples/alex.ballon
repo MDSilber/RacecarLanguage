@@ -1,0 +1,11 @@
+cards is a list of numbers
+
+cards has 1 7 4 2 7 4
+
+until cards is in order
+
+  for each number
+
+		move right while it is a smaller number  // ????
+
+show me cards
