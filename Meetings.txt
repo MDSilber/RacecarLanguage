@@ -9,3 +9,20 @@ typed vs untypted: leaning towards typed w/ 2 or 3 types: number, word, and mayb
 compiled vs interpreted: leaning towards compiled
 
 task due friday: write bubble sort for a list of integers in our conception of the language
+
+(Can't remember the date from this one)
+-----
+went over bubble sorts. maybe our language will support a guided lesson plan with library functions.
+
+2/11/13
+-----
+With Aho: what interests kids? Make sure language captures that
+
+2/15/13
+-----
+Roles, at least for decision-making purposes:
+Sam = Project Manager
+Alex = Language Guru
+Colfax = Tester
+Jeremy = Systems Architect
+Mason = Systems Integrator
