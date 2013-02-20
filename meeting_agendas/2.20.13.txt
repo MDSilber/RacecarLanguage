@@ -1,0 +1,13 @@
+Agenda for meeting on 2/20/13 with TA
+
+1. clarify roles (particularly system integrator and system architect)
+
+2. ideas for language lessons (in order of decreasing resemblance to normal languages)
+
+  a. standard CS style lessons like sorting, print an array, calculate change for a payment, etc. in a kid-friendly scenario (like candy)
+
+  b. kid-friendly lessons like number of ways to share toys, who wins at a game of dice (write the game w/ help from library functions), how much candy can you buy with $x.
+
+  c. a game, such as navigating a grid with obstacles, with different levels, where you play by coding a correct route. <-- closer to the line of application vs. programming language
+
+3. language to write it in: ocaml for complier but not necessarily for compiler output (e.g. could translate to python)
