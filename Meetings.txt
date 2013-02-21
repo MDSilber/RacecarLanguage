@@ -26,3 +26,11 @@ Alex = Language Guru
 Colfax = Tester
 Jeremy = Systems Architect
 Mason = Systems Integrator
+
+
+2/2/13
+--------
+with Melanie (TA)
+advice:
+1. translate by hand first
+2. by the end of each week have a working compiler
