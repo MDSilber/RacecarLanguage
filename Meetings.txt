@@ -62,3 +62,11 @@ define go_left_corner
 mason is familiar with arduinos. we would translate into python (there is a python arduino wrapper). we would also have to write an arduino program to actually control the car, and it would have an api that the translated code would access. so, we would be writing a compiler and an application/program, but strictly speaking, I don't think it's actually necessary for us to write the arduino program or actually build the car in order for us to complete the project. But it would be awesome.
 
 if we opted for the animation instead of a physical car, we would code up a rudimentary gui (there wouldn't really be any interaction, just an animation) that would show the car driving around a 2d landscape. the translated code would then access the gui's api.
+
+
+2/24/13
+----------------------
+typed out sample code (in google docs) to demonstrate how we could formulate lessons out of the car paradigm
+
+calling it Racecar
+spent most of our time writing the white paper. needs proofreading.
