@@ -9,7 +9,7 @@ class SymbolLookupTable:
     def addEntry(self, entry):
         '''Add the given entry to the table.  Throws an error if
         there is already an entry with the given name and scope, regardless
-        of the type. Also throws an error if entry does not have a type.'''
+        of the type.'''
         
         # throws error if a function is attempted to be declared
         # outside of the global block
@@ -21,6 +21,7 @@ class SymbolLookupTable:
             raise Exception()
 
         # if not, add the entry to the table
+        print entry.id + "added"
         self.table[entry.id] = entry
 
     def verifyEntry(self, entry):
@@ -74,6 +75,8 @@ class SymbolTableEntry:
         self.functionParameterTypes = inFunctionPTypes
 
     def validateWithTableEntry(self, tableEntry):
+        print "self " + self.id
+        print "tableEntry " + tableEntry.id
         '''Returns true if the existence of tableEntry means that
         self cannot be added to the table (same ID and overlapping scopes)
         Ignore type since we don't want to allow different types'''
@@ -87,6 +90,9 @@ class SymbolTableEntry:
         # or in a non-function scope
         else:
             functionScopeAcceptable = (self.function == tableEntry.function)
+        print idEq
+        print selfScopeAcceptable
+        print functionScopeAcceptable
         if idEq and selfScopeAcceptable and functionScopeAcceptable:
             return True
         else:
