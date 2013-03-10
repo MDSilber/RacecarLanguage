@@ -1,0 +1,202 @@
+/* The goal is to steer around the edge of a map and to stop at the initial point the car began to go around the edge 
+
+How steering works (DOT = direction of travel)
+
+  
+DOT:		North		           ----North		    ----North		            (West)
+		---|---		          |   ---|---		   |   ---|---	                    ------	
+		| Car |		          V   | Car |		   V   | Car |            West  <-- | Car |
+		-------		              -------		       -------	                    -------	
+Coordinate:      (1,1)		              (1,1)		        (0,1)		             (0,1)
+Command:			          Steer left            Drive forward                    Steer straight
+
+
+
+assumes normal cartesian coordinate system. Idk what python actually uses in its graphical containers.
+
+
+conditional statements edit?
+change “make” to “define”?
+
+*/
+
+
+make turn using direction
+{
+	if using left	 // basically if(direction == left) idk if you guys like the syntax or not. just a thought
+		steer left
+		drive forward 1
+		steer forward 1
+	
+	else if using right
+		steer right
+		drive forward 1
+		steer forward 1
+}
+
+make move around track
+{
+
+	:) go to the edge of the board (left side) 
+	
+	if can move left
+	{
+		turn left
+	}
+	repeat if can move forward = true
+	{
+		drive forward 1
+	}
+	set original_position = get car position
+	
+	:) start to go around the board
+	
+	if can move left = true
+	{
+		turn left
+		move south original_position
+	}
+	else if move right = true
+	{
+		turn right
+		move north original_position
+	}
+	else
+	{
+		drive backward
+		move east original_position
+	}
+}
+
+
+make move north using original_position 
+{
+	if get position = original_position
+		done
+
+	if can move left = false
+	{
+		if can move straight = true
+		{
+			drive forward 1
+			move north original_position
+		}
+		else
+		{
+			if can move right = true
+			{
+				turn right
+				move east original_position
+			}
+			else
+			{
+				drive backwards
+				move south original_position
+			}
+		}
+	}
+	else
+	{
+		turn left
+		move west original_position
+	}
+}
+
+make move east using original_position
+{
+	if get position = original_position 
+		done
+		
+	if can move left = false
+	{
+		if can move straight = true
+		{
+			drive forward 1
+			move east original_position
+		}
+		else
+		{
+			if can move right = true
+			{
+				turn right
+				move south original_position
+			}
+			else
+			{
+				drive backward
+				move west original_position
+			}
+		}
+	}
+	else
+	{
+		turn left
+		move north original_position distance_traveled
+	}
+}
+
+make move south using original_position 
+{
+	if get position = original_position
+		done
+		
+	if can move left = false
+	{
+		if can move straight = true
+		{
+			drive forward 1
+			move south original_position 
+		}
+		else
+		{
+			if can move right = true
+			{
+				turn right
+				move west original_position 
+			}
+			else
+			{
+				drive backward
+				move_north original_position
+			}
+		}
+	}
+	else
+	{
+		turn left
+		move_east original_position
+	}
+}
+
+make move west using original_position
+{
+	if get position = original_position
+		done
+		
+	if can move left = false
+	{
+		if can move straight = true
+		{
+			drive forward 1
+			move west original_position
+		}
+		else
+		{
+			if can move right = true
+			{
+				turn right
+				move north original_position
+			}
+			else
+			{
+				drive backwards;
+				move east original_position
+			}
+		}
+	}
+	else
+	{
+		turn left
+		move south original_position
+	}
+}

@@ -1,0 +1,29 @@
+import RacecarApp as rc
+
+car = rc.Car()
+main()
+{
+	drive(forward, 10);
+}
+
+
+void drive(int direction, int steps)
+{
+	if(direction == "backward")
+		car.direction + right + right;
+
+	if(car.direction = NORTH)
+		car.y += steps;
+	else if(car.direction = SOUTH)
+	{
+		car.y -= steps;
+	}
+	else if(car.direction = WEST)
+	{
+		car.x -= steps;
+	}
+	else if(car.direction = EAST)
+	{
+		car.x += steps;
+	}
+}
