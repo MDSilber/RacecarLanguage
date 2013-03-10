@@ -42,3 +42,8 @@ Projected Timeline:
 5/07-5/14 : Practice demo on friends at least twice
 5/13 : Final Report and demo complete
 5/14 : Demo
+
+Project Log:
+2/24 : White paper draft, decided on Python for implementation language, examples of valid programs
+2/26 : Turned in white paper
+
