@@ -1,1 +1,4 @@
-drive forward 10
+make main
+{
+    drive forward 10
+}
