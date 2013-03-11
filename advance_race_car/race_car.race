@@ -1,0 +1,68 @@
+:-( The goal is to steer around the edge of a map
+and to stop at the initial point the car 
+began to go around the edge 
+conditional statements edit?
+change make to define?
+:-)
+
+
+make main
+{
+    move around track
+}
+
+make turn using direction(word)
+{
+    steer direction
+    drive forward 1
+    steer straight
+}
+
+
+:-( assume car starts off pointing north.
+    turn left and go to the western edge of the map
+    hug the edge, turning to accommodate non-straight edges
+:-)
+make move around track
+{
+
+    :) go to the edge of the board (left side) 
+
+    if can move left
+    {
+        turn left
+    }
+    repeat if can move forward
+    {
+        drive forward 1
+    }
+
+    :) remember the original position so you know when to stop
+    set original_position to get car position
+
+    :) start to go around the board counter-clockwise
+
+    turn left
+
+    repeat if get car position is not original_position
+    {
+        :) try to stay next to the boundary
+        if can move right
+        {
+            turn right
+        }
+        else if can move straight
+        {
+            :) drive forward 1 is given after all of the conditionals
+        }
+        else if can move left
+        {
+            turn left
+        }
+        else
+        {
+            :) error
+        }
+        drive forward 1
+    }
+}
