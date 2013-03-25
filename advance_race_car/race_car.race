@@ -1,8 +1,8 @@
 :-( The goal is to steer around the edge of a map
-and to stop at the initial point the car 
-began to go around the edge 
-conditional statements edit?
-change make to define?
+    and to stop at the initial point the car 
+    began to go around the edge 
+    conditional statements edit?
+    change make to define?
 :-)
 
 
@@ -14,7 +14,7 @@ make main
 make turn using direction(word)
 {
     steer direction
-    drive forward 1
+    drive forward 1 step
     steer straight
 }
 
@@ -38,7 +38,9 @@ make move around track
     }
 
     :) remember the original position so you know when to stop
+    original_position is a number
     set original_position to get car position
+
 
     :) start to go around the board counter-clockwise
 
