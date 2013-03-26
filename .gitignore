@@ -4,3 +4,9 @@
 *.lyx~
 
 *.lyx#
+
+*.pyc
+
+*.out
+
+parsetab.py
