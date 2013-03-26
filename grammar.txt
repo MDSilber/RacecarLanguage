@@ -5,9 +5,12 @@ statements : statements statement
 
 statement_block : '{' statements '}'
 
-statement : drive_cmd
+statement : statement_contents NEWLINE
+          | NEWLINE
+
+statement_contents : drive_cmd
      | steer_cmd
-     | make_cmd
+     | define_cmd
      | repeat_if_cmd
      | repeat_times_cmd
      | if_cmd
@@ -24,12 +27,15 @@ and_expr : and_expr AND not_expr
 not_expr : NOT not_expr
          | TRUE
          | FALSE
+         | CAN_MOVE can_move_dir_enum
          | comparison
+
+can_move_dir_enum : drive_dir_enum | steer_dir_enum
 
 comparison : comparison bool_operator number_expression
            | number_expression
 
-bool_operator : IS | IS_NOT | NOT | GT | LT | GEQ | LEQ
+bool_operator : IS | IS_NOT | GT | LT | GEQ | LEQ
 
 number_expression : number_expression '+' term
                   | number_expression '-' term
@@ -39,13 +45,18 @@ term : term '*' word_expression
      | term '/' word_expression
      | word_expression
 
-word_expression : word_expression CONCAT word_term
-                | word_term
+word_expression : word_expression CONCAT function_term 
+                | function_term
+
+function_term : function_term word_term
+              | word_term
 
 word_term : WORD
           | NUMBER
           | ID
+          | GET_CAR_POSITION
           | '(' expression ')'
+
 
 drive_cmd : DRIVE drive_dir_enum number_expression opt_steps
 
@@ -65,7 +76,7 @@ steer_dir_enum : LEFT
                | RIGHT
                | STRAIGHT
 
-make_cmd : MAKE ID opt_param_list statement_block
+make_cmd : DEFINE ID opt_param_list statement_block
 
 opt_param_list : epsilon
                | USING ID '(' type_enum ')' opt_extra_params

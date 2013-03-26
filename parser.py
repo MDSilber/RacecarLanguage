@@ -16,7 +16,9 @@ reserved = {
   'left' : 'LEFT',
   'right' : 'RIGHT',
   'straight' : 'STRAIGHT',
-  'make' : 'MAKE',
+  'canMove' : 'CAN_MOVE',
+  'getCarPosition' : 'GET_CAR_POSITION',
+  'define' : 'DEFINE',
   'using' : 'USING',
   'and' : 'AND',
   'or' : 'OR',
@@ -44,6 +46,7 @@ tokens = [ "NUMBER",
            "GEQ",
            "LEQ",
            "CONCAT",
+           "NEWLINE",
 ] + list(reserved.values())
 
 literals = "{}()+-*/"
@@ -55,6 +58,7 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
+t_NEWLINE = r'\n|;' # semicolon for debugging interpreter use
 t_ignore = ' '
 
 def t_ID(t):
@@ -100,10 +104,19 @@ def p_empty(p):
   p[0] = Tree()
   p[0].value = "empty"
 
+def p_statement_newline(p):
+  '''statement : statement_contents NEWLINE
+               | NEWLINE'''
+  print p_statement_newline.__doc__
+  p[0] = Tree()
+  p[0].children.append(p[1])
+  p[0].children.append('NEWLINE')
+  p[0].value = "statement"
+
 def p_statement(p):
-  '''statement : drive_cmd
+  '''statement_contents : drive_cmd
        | steer_cmd
-       | make_cmd
+       | define_cmd
        | repeat_if_cmd
        | repeat_times_cmd
        | if_cmd
@@ -113,7 +126,7 @@ def p_statement(p):
   print p_statement.__doc__
   p[0] = Tree()
   p[0].children.append(p[1])
-  p[0].value = "statement"
+  p[0].value = "statement_contents"
 
 def p_expression(p):
   '''expression : expression OR and_expr'''
@@ -152,8 +165,14 @@ def p_not_expr(p):
   '''not_expr : NOT not_expr
               | TRUE
               | FALSE
+              | CAN_MOVE can_move_dir_enum
               | comparison'''
   print p_not_expr.__doc__
+
+def p_can_move_dir_enum(p):
+  '''can_move_dir_enum : drive_dir_enum
+                       | steer_dir_enum'''
+  print p_can_move_dir_enum.__doc__
 
 def p_comparison(p):
   '''comparison : comparison comparison_operator number_expression
@@ -183,14 +202,20 @@ def p_term(p):
   print p_term.__doc__
 
 def p_word_expression(p):
-  '''word_expression : word_expression CONCAT word_term
-                     | word_term'''
+  '''word_expression : word_expression CONCAT function_term
+                     | function_term'''
   print p_word_expression.__doc__
+
+def p_function_term(p):
+  '''function_term : function_term word_term
+                   | word_term'''
+  print p_function_term.__doc__
 
 def p_word_term(p):
   '''word_term : '(' expression ')'
                | NUMBER
                | WORD
+               | GET_CAR_POSITION
                | ID'''
   print p_word_term.__doc__
 
@@ -221,9 +246,9 @@ def p_steer_dir_enum(p):
                  | STRAIGHT'''
   print p_steer_dir_enum.__doc__
 
-def p_make_cmd(p):
-  """make_cmd : MAKE ID opt_param_list statement_block"""
-  print p_make_cmd.__doc__
+def p_define_cmd(p):
+  """define_cmd : DEFINE ID opt_param_list statement_block"""
+  print p_define_cmd.__doc__
 
 def p_opt_param_list(p):
   '''opt_param_list : empty
