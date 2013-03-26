@@ -16,9 +16,19 @@ statement : drive_cmd
      | assignment_cmd
      | function_call_cmd
 
-expression : number_expression
-           | word_expression
-           | bool_expression
+expression : expression OR and_expr
+           | and_expr
+
+and_expr : and_expr AND not_expr
+         | not_expr
+
+not_expr : NOT not_expr
+         | comparison
+
+comparison : comparison bool_operator number_expression
+           | number_expression
+
+bool_operator : IS | IS_NOT | NOT | GT | LT | GEQ | LEQ
 
 number_expression : number_expression '+' term
                   | number_expression '-' term
@@ -28,9 +38,9 @@ term : term '*' factor
      | term '/' factor
      | factor
 
-factor : '(' number_expression ')'
-       | NUMBER
+factor : NUMBER
        | ID
+       | '(' expression ')'
 
 word_expression : word_expression '+' word_term
                 | word_term
@@ -38,36 +48,13 @@ word_expression : word_expression '+' word_term
 word_term : WORD
           | ID
 
-bool_expression : bool_expression OR and_expr
-                | and_expr
-
-and_expr : and_expr AND not_expr
-         | not_expr
-
-not_expr : NOT not_expr
-         | bool_factor
-
-bool_factor : '(' bool_expression ')'
-            | comparison
-
-comparison : comparison bool_operator bool_term
-           | bool_term
-
-bool_term : TRUE
-          | FALSE
-          | ID
-
-bool_operator : IS | IS_NOT | NOT | GT | LT | GEQ | LEQ
-
-drive_cmd : DRIVE drive_dir_enum number_or_var opt_steps
+drive_cmd : DRIVE drive_dir_enum number_expression opt_steps
 
 drive_dir_enum : FORWARD
          | FORWARDS
          | BACKWARD
          | BACKWARDS
 
-number_or_var : NUMBER
-              | ID
 
 opt_steps : STEP
           | STEPS
@@ -92,7 +79,7 @@ type_enum : NUMBER_TYPE
 
 repeat_if_cmd : REPEAT IF bool_expr '{' statements '}'
 
-repeat_times_cmd : REPEAT number_or_var TIMES '{' statements '}'
+repeat_times_cmd : REPEAT number_expression TIMES '{' statements '}'
 
 if_cmd : IF bool_expr '{' statements '}' opt_else_if opt_else
 
