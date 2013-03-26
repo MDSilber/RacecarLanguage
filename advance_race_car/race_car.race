@@ -2,16 +2,17 @@
     and to stop at the initial point the car 
     began to go around the edge 
     conditional statements edit?
-    change make to define?
+    change make to define? (yes)
 :-)
 
+main :) calling main in global scope
 
-make main
+define main :) not required, must call
 {
-    move around track
+    moveAroundTrack
 }
 
-make turn using direction(word)
+define turn using direction(word)
 {
     steer direction
     drive forward 1 step
@@ -23,41 +24,41 @@ make turn using direction(word)
     turn left and go to the western edge of the map
     hug the edge, turning to accommodate non-straight edges
 :-)
-make move around track
+define moveAroundTrack
 {
 
     :) go to the edge of the board (left side) 
 
-    if can move left
+    if canMove left
     {
         turn left
     }
-    repeat if can move forward
+    repeat if canMove forward
     {
         drive forward 1
     }
 
     :) remember the original position so you know when to stop
     original_position is a number
-    set original_position to get car position
+    set original_position to getCarPosition
 
 
     :) start to go around the board counter-clockwise
 
     turn left
 
-    repeat if get car position is not original_position
+    repeat if getCarPosition is not original_position
     {
         :) try to stay next to the boundary
-        if can move right
+        if canMove right
         {
             turn right
         }
-        else if can move straight
+        else if canMove straight
         {
             :) drive forward 1 is given after all of the conditionals
         }
-        else if can move left
+        else if canMove left
         {
             turn left
         }
