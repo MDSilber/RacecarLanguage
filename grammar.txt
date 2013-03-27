@@ -55,6 +55,7 @@ word_term : WORD
           | NUMBER
           | ID
           | GET_CAR_POSITION
+          | GET_WHEEL_DIRECTION
           | '(' expression ')'
 
 
