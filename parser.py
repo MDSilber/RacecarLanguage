@@ -52,7 +52,7 @@ tokens = [ "NUMBER",
 literals = "{}()+-*/"
 
 t_NUMBER = r'[0-9]+'
-t_WORD = r'"[^"]"'
+t_WORD = r'".*?"'
 t_GT = r'>'
 t_LT = r'<'
 t_GEQ = r'>='
@@ -67,7 +67,7 @@ def t_ID(t):
   return t
 
 def t_error(t):
-  raise TypeError("Unknown text: `s'" % (t.value,))
+  raise TypeError("Unknown text: `%s'" % (t.value,))
 
 lexer = lex.lex()
 
@@ -318,5 +318,3 @@ while True:
 
   else:
     result = parser.parse(inputString)
-    result.printTree()
-    print
