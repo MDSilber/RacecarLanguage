@@ -3,12 +3,12 @@
 from Tkinter import *
 import tkFileDialog
 
-currentProgram = None
+current_program = None
 
 class Program:
-	name = ''
-	def __init__(self, name = None):
-		self['name'] = name
+	def __init__(self):
+		self.name = None
+		self.file_obj = None
 
 def runProgram(code):
 	if len(code) > 1:
@@ -17,12 +17,14 @@ def runProgram(code):
 		print "Blank"
 
 def openFile():
-	filename = tkFileDialog.askopenfilename()
-	currentProgram = filename
-	file = open(filename,'r+')
+	file_name = tkFileDialog.askopenfile_name()
+	file_object = open(file_name,'r+')
+	current_program = Program()
+	current_program.name = file_name
+	current_program.file_obj = file_object
 	code.delete(1.0,END)
-	code.insert(1.0,file.read())
-	print filename
+	code.insert(1.0,file_object.read())
+	print file_name
 
 def save():
 	pass
@@ -31,27 +33,38 @@ def saveFile():
 def saveFileAs():
 	pass
 
+def clear():
+	code.delete(1.0,END)
+
 root = Tk()
 root.title('Racecar')
 root.rowconfigure('all',minsize=100)
 root.columnconfigure('all',minsize=100)
+window_width = root.winfo_screenwidth()
+window_height = root.winfo_screenheight()
+root.geometry	("%dx%d"%(window_width,window_height))
 
-menubar = Menu(root)
-menu = Menu(menubar, tearoff=0)
+menu_bar = Menu(root)
+menu = Menu(menu_bar, tearoff=0)
 menu.add_command(label="Open", command = lambda: openFile())
 menu.add_command(label="Save", command = lambda: save())
 menu.add_separator()
 menu.add_command(label="Quit", command = lambda: exit())
-menubar.add_cascade(label="File",menu=menu)
+menu_bar.add_cascade(label="File",menu=menu)
 
-root.config(menu=menubar)
+root.config(menu=menu_bar)
 
-code = Text(root)
-code.grid(row=0, rowspan=1, columnspan=1)
+#code is the window in which the code is written
+code = Text(root, width=50, height = window_height/20+4)
+code.grid(row=0, rowspan=1, columnspan=2)
 
-#button passes code into a run program method
-button = Button(root, text = "Run", command = lambda: runProgram(code.get(1.0,END)))
-button.grid(row=1,column=0)
+#run_button passes code into a run program method
+run_button = Button(root, text = "Run", command = lambda: runProgram(code.get(1.0,END)))
+run_button.grid(row=1,column=0)
+
+#clear_button clears the code in the text box
+clear_button = Button(root, text = "Clear code", command = lambda: clear())
+clear_button.grid(row=1,column=1)
 
 #code to add widgets goes here
 root.mainloop()
