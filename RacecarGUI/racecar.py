@@ -1,12 +1,35 @@
 #!/usr/bin/python
 
 from Tkinter import *
+import tkFileDialog
+
+currentProgram = None
+
+class Program:
+	name = ''
+	def __init__(self, name = None):
+		self['name'] = name
 
 def runProgram(code):
 	if len(code) > 1:
 		print code[:-1]
 	else:
 		print "Blank"
+
+def openFile():
+	filename = tkFileDialog.askopenfilename()
+	currentProgram = filename
+	file = open(filename,'r+')
+	code.delete(1.0,END)
+	code.insert(1.0,file.read())
+	print filename
+
+def save():
+	pass
+def saveFile():
+	pass
+def saveFileAs():
+	pass
 
 root = Tk()
 root.title('Racecar')
@@ -15,8 +38,8 @@ root.columnconfigure('all',minsize=100)
 
 menubar = Menu(root)
 menu = Menu(menubar, tearoff=0)
-menu.add_command(label="Open")
-menu.add_command(label="Save")
+menu.add_command(label="Open", command = lambda: openFile())
+menu.add_command(label="Save", command = lambda: save())
 menu.add_separator()
 menu.add_command(label="Quit", command = lambda: exit())
 menubar.add_cascade(label="File",menu=menu)
