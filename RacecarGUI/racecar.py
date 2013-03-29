@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
-import tkFileDialog
+import tkFileDialog, tkMessageBox
 
 current_program = None
 
@@ -163,7 +163,12 @@ def save_file_as():
 	current_program.file_obj.close()
 
 def clear():
-	code.delete(1.0,END)
+	if code.get(1.0,END) == '':
+		return
+	
+	if tkMessageBox.askyesno("Clear code", 
+		"Are you sure you want to delete all of your code?"):
+		code.delete(1.0,END)
 
 #User interface
 root = Tk()
