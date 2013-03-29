@@ -10,7 +10,34 @@ class Program:
 		self.name = None
 		self.file_obj = None
 
-def runProgram(code):
+class WheelDirection:
+	STRAIGHT=0
+	LEFT=1
+	RIGHT=2
+
+class CarDirection:
+	def __init__(self):
+		self.r_hat = 1
+		self.theta_hat = 0
+
+class Car:
+	def __init__(self):
+		self.x = 0
+		self.y = 0
+		self.wheel_direction = WheelDirection.STRAIGHT
+		#Car direction starts facing right
+		self.car_direction = CarDirection()
+	
+	def drive(steps):
+		if self.wheel_direction == WheelDirection.STRAIGHT:
+			pass
+		elif self.wheel_direction == WheelDirection.RIGHT:
+			pass
+		else:
+			pass
+
+
+def run_program(code):
 	if len(code) > 1:
 		print code[:-1]
 	else:
@@ -36,6 +63,7 @@ def saveFileAs():
 def clear():
 	code.delete(1.0,END)
 
+#User interface stuff
 root = Tk()
 root.title('Racecar')
 root.rowconfigure('all',minsize=100)
@@ -66,7 +94,7 @@ canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_heig
 canvas.pack()
 
 #run_button passes code into a run program method
-run_button = Button(root, text = "Run", command = lambda: runProgram(code.get(1.0,END)))
+run_button = Button(root, text = "Run", command = lambda: run_program(code.get(1.0,END)))
 run_button.grid(row=1,column=0)
 
 #clear_button clears the code in the text box
