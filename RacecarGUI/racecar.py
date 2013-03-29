@@ -58,6 +58,13 @@ root.config(menu=menu_bar)
 code = Text(root, width=50, height = window_height/20+4)
 code.grid(row=0, rowspan=1, columnspan=2)
 
+#canvas is where the car will go
+canvas_frame= Frame(root, width = window_width/1.5, height = code.winfo_height()*525)
+canvas_frame.configure(borderwidth=1.5,background='black')
+canvas_frame.grid(row=0,column=2)
+canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_height()*525)
+canvas.pack()
+
 #run_button passes code into a run program method
 run_button = Button(root, text = "Run", command = lambda: runProgram(code.get(1.0,END)))
 run_button.grid(row=1,column=0)
