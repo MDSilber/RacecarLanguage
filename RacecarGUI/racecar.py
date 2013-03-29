@@ -115,6 +115,8 @@ def run_program(code):
 
 def open_file():
 	global current_program
+	
+	#Keep returning to the file dialog if they didn't select a .race file
 	while True:
 		file_name = tkFileDialog.askopenfilename(defaultextension=".race")
 		if file_name == '':
@@ -124,7 +126,7 @@ def open_file():
 		file_regex = re.compile("\w*\.race$")
 		if len(file_regex.findall(file_name)) == 0:
 			tkMessageBox.showwarning("Open File Error",
-				"You must open a .race file")
+																			"You must open a .race file")
 		else:
 			break
 	
@@ -177,7 +179,7 @@ def clear():
 		return
 	
 	if tkMessageBox.askyesno("Clear code", 
-		"Are you sure you want to delete all of your code?"):
+							"Are you sure you want to delete all of your code?"):
 		code.delete(1.0,END)
 
 #User interface
