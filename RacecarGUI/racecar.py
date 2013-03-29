@@ -15,10 +15,65 @@ class WheelDirection:
 	LEFT=1
 	RIGHT=2
 
+#Car direction object
+#X and Y can be 1,0,-1 respectively. The only invalid combination is when x = 0
+#and y = 0. Positive axes point right and up respectively
 class CarDirection:
 	def __init__(self):
-		self.r_hat = 1
-		self.theta_hat = 0
+		self.x = 1
+		self.y = 0
+	
+	#Note that the commented degrees are before the turn, rather than after
+	def turn_right():
+		#In this case, y can never equal zero
+		if x == 0:
+			#90 degrees
+			if y == 1:
+				x = 1
+			#270 degrees
+			else:
+				x = -1
+		#In this case, x can never equal zero
+		elif y == 0:
+			#0 degrees
+			if x == 1:
+				y = -1
+			#180 degrees
+			else:
+				y = 1
+		else:
+			#45 degrees or 225 degrees
+			if (x == 1 and y == 1) or (x == -1 and y == -1):
+				y = 0
+			#135 degrees or 315 degrees
+			else:
+				x = 0
+
+	
+	def turn_left():
+		#In this case, y can never equal zero
+		if x == 0:
+			#90 degrees
+			if y == 1:
+				x = -1
+			#270 degrees
+			else:
+				x = 1
+		#In this case, x can never equal zero
+		elif y == 0:
+			#0 degrees
+			if x == 1:
+				y = 1
+			#180 degrees
+			else:
+				y = -1
+		else:
+			#45 degrees or 225 degrees
+			if (x == 1 and y == 1) or (x == -1 and y == -1):
+				y = 0
+			#135 degrees or 315 degrees
+			else:
+				x = 0
 
 class Car:
 	def __init__(self):
@@ -28,14 +83,28 @@ class Car:
 		#Car direction starts facing right
 		self.car_direction = CarDirection()
 	
+	#Drive method that updates the car's position (in the model, not on the UI)
+	#UI animation will need to be done moving x and y simultaneously
 	def drive(steps):
 		if self.wheel_direction == WheelDirection.STRAIGHT:
-			pass
+			self.x += self.car_direction.x * steps
+			self.y += self.car_direction.y * steps
 		elif self.wheel_direction == WheelDirection.RIGHT:
-			pass
+			for _ in range(steps):
+				self.turn_right()
 		else:
-			pass
+			for _ in range(steps):
+				self.turn_left()
+	
+	def turn_right():
+		self.car_direction.turn_right()
 
+	def turn_left():
+		self.car_direction.turn_left()
+		
+	#Decided on a 10:1 pixels to steps ratio
+	def steps_to_pixels(steps):
+		return 10*steps
 
 def run_program(code):
 	if len(code) > 1:
