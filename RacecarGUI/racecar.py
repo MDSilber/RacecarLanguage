@@ -7,7 +7,7 @@ current_program = None
 
 class Program:
 	def __init__(self):
-		self.name = None
+		self.name = ''
 		self.file_obj = None
 
 class WheelDirection:
@@ -24,7 +24,7 @@ class CarDirection:
 		self.y = 0
 	
 	#Note that the commented degrees are before the turn, rather than after
-	def turn_right():
+	def turn_right(self):
 		#In this case, y can never equal zero
 		if x == 0:
 			#90 degrees
@@ -50,7 +50,7 @@ class CarDirection:
 				x = 0
 
 	
-	def turn_left():
+	def turn_left(self):
 		#In this case, y can never equal zero
 		if x == 0:
 			#90 degrees
@@ -106,33 +106,66 @@ class Car:
 	def steps_to_pixels(steps):
 		return 10*steps
 
+#UI methods
 def run_program(code):
 	if len(code) > 1:
 		print code[:-1]
 	else:
 		print "Blank"
 
-def openFile():
-	file_name = tkFileDialog.askopenfile_name()
-	file_object = open(file_name,'r+')
+def open_file():
+	global current_program
+	file_name = tkFileDialog.askopenfilename(defaultextension=".race")
+	if file_name == '':
+		return
+	file_object = open(file_name,'r')
 	current_program = Program()
 	current_program.name = file_name
 	current_program.file_obj = file_object
 	code.delete(1.0,END)
 	code.insert(1.0,file_object.read())
+	current_program.file_obj.close()
 	print file_name
+	print current_program.name
 
 def save():
-	pass
-def saveFile():
-	pass
-def saveFileAs():
-	pass
+	global current_program
+	print "Save"
+	if current_program == None:
+		save_file_as()
+	else:
+		save_file()
+
+def save_file():
+	global current_program
+	print "Save file"
+	if not current_program.file_obj.closed:
+		current_program.file_obj.close()
+	#Open file for writing (will clear it)	
+	current_program.file_obj = open(current_program.name, 'w')
+	current_program.file_obj.truncate()
+	current_program.file_obj.write(code.get(1.0,END))
+	current_program.file_obj.close()
+
+def save_file_as():
+	global current_program
+	print "Save file as"
+	file_name = tkFileDialog.asksaveasfilename(defaultextension=".race")
+	
+	#Defaults to saving on the desktop
+	if file_name == '':
+		file_name = '~/Desktop/racecar_program.race'
+	
+	current_program = Program()
+	current_program.name = file_name
+	current_program.file_obj = open(file_name, 'w')
+	current_program.file_obj.write(code.get(1.0,END))
+	current_program.file_obj.close()
 
 def clear():
 	code.delete(1.0,END)
 
-#User interface stuff
+#User interface
 root = Tk()
 root.title('Racecar')
 root.rowconfigure('all',minsize=100)
@@ -143,7 +176,7 @@ root.geometry	("%dx%d"%(window_width,window_height))
 
 menu_bar = Menu(root)
 menu = Menu(menu_bar, tearoff=0)
-menu.add_command(label="Open", command = lambda: openFile())
+menu.add_command(label="Open", command = lambda: open_file())
 menu.add_command(label="Save", command = lambda: save())
 menu.add_separator()
 menu.add_command(label="Quit", command = lambda: exit())
