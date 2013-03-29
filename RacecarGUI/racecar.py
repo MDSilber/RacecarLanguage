@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
-import tkFileDialog, tkMessageBox
+import tkFileDialog, tkMessageBox, re
 
 current_program = None
 
@@ -115,9 +115,19 @@ def run_program(code):
 
 def open_file():
 	global current_program
-	file_name = tkFileDialog.askopenfilename(defaultextension=".race")
-	if file_name == '':
-		return
+	while True:
+		file_name = tkFileDialog.askopenfilename(defaultextension=".race")
+		if file_name == '':
+			return
+
+		#Check validity of file being opened
+		file_regex = re.compile("\w*\.race$")
+		if len(file_regex.findall(file_name)) == 0:
+			tkMessageBox.showwarning("Open File Error",
+				"You must open a .race file")
+		else:
+			break
+	
 	file_object = open(file_name,'r')
 	current_program = Program()
 	current_program.name = file_name
