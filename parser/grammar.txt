@@ -3,7 +3,7 @@ A grammar for Racecar
 statements : statements statement
       | epsilon
 
-statement_block : '{' statements '}'
+statement_block : '{' statements '}' NEWLINE
 
 statement : simple_statement
           | compound_statement
@@ -100,10 +100,10 @@ repeat_times_command : REPEAT plus_expression TIMES NEWLINE statement_block
 
 if_command : IF expression NEWLINE statement_block opt_else_if opt_else
 
-opt_else_if : NEWLINE ELSE IF expression NEWLINE statement_block opt_else_if
+opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
             | epsilon
 
-opt_else : NEWLINE ELSE NEWLINE statement_block
+opt_else : ELSE NEWLINE statement_block
          | epsilon
 
 print_command : PRINT word_expression
