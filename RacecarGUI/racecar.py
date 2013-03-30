@@ -228,7 +228,8 @@ canvas_frame= Frame(root, width = window_width/1.5, height = code.winfo_height()
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas_frame.grid(row=0,column=2)
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_height()*525)
-car_image = PhotoImage(file='car.GIF')
+car_image = ImageTk.PhotoImage(Image.open('car.GIF'))
+#print car_image.format, car_image.size, car_image.mode
 car.car_object = canvas.create_image(30,250,image=car_image)
 canvas.pack()
 
