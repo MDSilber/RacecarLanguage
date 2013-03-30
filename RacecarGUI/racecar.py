@@ -2,6 +2,7 @@
 
 from Tkinter import *
 import tkFileDialog, tkMessageBox, re, time
+from PIL import Image, ImageTk
 
 current_program = None
 
@@ -122,6 +123,10 @@ def move_car(steps):
 		time.sleep(0.025)
 		canvas.move(car.car_object,1,0)
 		canvas.update()
+	for i in range(0,10*int(steps)):
+		time.sleep(0.025)
+		canvas.move(car.car_object,0,1)
+		canvas.update()
 
 def open_file():
 	global current_program
@@ -223,7 +228,8 @@ canvas_frame= Frame(root, width = window_width/1.5, height = code.winfo_height()
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas_frame.grid(row=0,column=2)
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_height()*525)
-car.car_object = canvas.create_polygon(0,245,0,255,25,250,fill="#000")
+car_image = PhotoImage(file='car.GIF')
+car.car_object = canvas.create_image(30,250,image=car_image)
 canvas.pack()
 
 #run_button passes code into a run program method
