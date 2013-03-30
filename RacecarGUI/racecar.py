@@ -108,13 +108,20 @@ class Car:
 		return 10*steps
 
 #UI methods
-def run_program(code):
+def generate_program(code):
 	if len(code) > 1:
 		print code[:-1]
-		global car
-
+		move_car(code)
 	else:
 		print "Blank"
+
+def move_car(steps):
+	global car
+	car_coords = canvas.coords(car.car_object)
+	for i in range(0,10*int(steps)):
+		time.sleep(0.025)
+		canvas.move(car.car_object,1,0)
+		canvas.update()
 
 def open_file():
 	global current_program
@@ -220,7 +227,7 @@ car.car_object = canvas.create_polygon(0,245,0,255,25,250,fill="#000")
 canvas.pack()
 
 #run_button passes code into a run program method
-run_button = Button(root, text = "Run", command = lambda: run_program(code.get(1.0,END)))
+run_button = Button(root, text = "Run", command = lambda: generate_program(code.get(1.0,END)))
 run_button.grid(row=1,column=0)
 
 #clear_button clears the code in the text box
