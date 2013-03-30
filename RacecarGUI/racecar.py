@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
-import tkFileDialog, tkMessageBox, re
+import tkFileDialog, tkMessageBox, re, time
 
 current_program = None
 
@@ -82,6 +82,7 @@ class Car:
 		self.wheel_direction = WheelDirection.STRAIGHT
 		#Car direction starts facing right
 		self.car_direction = CarDirection()
+		self.car_object = None
 	
 	#Drive method that updates the car's position (in the model, not on the UI)
 	#UI animation will need to be done moving x and y simultaneously
@@ -110,6 +111,8 @@ class Car:
 def run_program(code):
 	if len(code) > 1:
 		print code[:-1]
+		global car
+
 	else:
 		print "Blank"
 
@@ -205,11 +208,15 @@ root.config(menu=menu_bar)
 code = Text(root, width=50, height = window_height/20+4)
 code.grid(row=0, rowspan=1, columnspan=2)
 
+#car object
+car = Car()
+
 #canvas is where the car will go
 canvas_frame= Frame(root, width = window_width/1.5, height = code.winfo_height()*525)
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas_frame.grid(row=0,column=2)
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_height()*525)
+car.car_object = canvas.create_polygon(0,245,0,255,25,250,fill="#000")
 canvas.pack()
 
 #run_button passes code into a run program method
