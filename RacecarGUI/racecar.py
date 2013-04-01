@@ -84,7 +84,8 @@ class Car:
         self.wheel_direction = WheelDirection.STRAIGHT
         #Car direction starts facing right
         self.car_direction = CarDirection()
-        self.car_image = None
+        self.image = None
+        self.image_tk = None
         self.car_object = None
     
     #Drive method that updates the car's position (in the model, not on the UI)
@@ -120,7 +121,7 @@ def generate_program(code):
 
 def move_car(steps):
     global car
-    
+
     #Just an example for now
     #Move to the left
     for _ in range(0,10*int(steps)):
@@ -128,18 +129,19 @@ def move_car(steps):
         canvas.move(car.car_object,1,0)
         canvas.update()
     #Rotate clockwise
-    for _ in range(0,90):
+    for i in range(0,90):
         time.sleep(0.025)
         canvas.delete(car.car_object)
-        car.car_image = car.car_image.rotate(1)
-        car_object = ImageTk.PhotoImage(car.car_image)
-        car.car_object = canvas.create_image(30+10*int(steps),250, image=car_object)
+        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
+        car.car_object = canvas.create_image(30+10*int(steps),250, image=car.image_tk)
         canvas.update()
     #Move down
     for _ in range(0,10*int(steps)):
         time.sleep(0.025)
         canvas.move(car.car_object,0,1)
         canvas.update()
+
+
 
 def open_file():
     global current_program
@@ -241,10 +243,10 @@ canvas_frame= Frame(root, width = window_width/1.5, height = code.winfo_height()
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas_frame.grid(row=0,column=2)
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = code.winfo_height()*525)
-car.car_image = Image.open('car.png')
-car_object = ImageTk.PhotoImage(car.car_image)
+car.image = Image.open('car.png')
+car.image_tk = ImageTk.PhotoImage(car.image)
 #print car_image.format, car_image.size, car_image.mode
-car.car_object = canvas.create_image(30,250,image=car_object)
+car.car_object = canvas.create_image(30,250,image=car.image_tk)
 canvas.pack()
 
 #run_button passes code into a run program method
