@@ -3,6 +3,7 @@
 from Tkinter import *
 import tkFileDialog, tkMessageBox, re, time
 from PIL import Image, ImageTk
+import parser
 
 current_program = None
 
@@ -115,13 +116,15 @@ class Car:
 def generate_program(code):
     if len(code) > 1:
         print code[:-1]
-        move_car(code)
+        translate_car(code)
     else:
         print "Blank"
 
-def move_car(steps):
+def translate_car(steps):
     global car
+		
 
+'''
     #Just an example for now
     #Move to the left
     for _ in range(0,10*int(steps)):
@@ -129,7 +132,7 @@ def move_car(steps):
         canvas.move(car.car_object,1,0)
         canvas.update()
     #Rotate clockwise
-    for i in range(0,90):
+    for i in range(0,45):
         time.sleep(0.025)
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
@@ -138,9 +141,9 @@ def move_car(steps):
     #Move down
     for _ in range(0,10*int(steps)):
         time.sleep(0.025)
-        canvas.move(car.car_object,0,1)
+        canvas.move(car.car_object,1,-1)
         canvas.update()
-
+'''
 
 
 def open_file():
