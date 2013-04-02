@@ -65,7 +65,7 @@ function_command : function_command primary_expression
               | primary_expression
 
 
-drive_command : DRIVE drive_direction plus_expression opt_steps
+drive_command : DRIVE drive_direction plus_expression optional_steps
 
 drive_direction : FORWARD
          | FORWARDS
@@ -73,7 +73,7 @@ drive_direction : FORWARD
          | BACKWARDS
 
 
-opt_steps : STEP
+optional_steps : STEP
           | STEPS
           | epsilon
 
@@ -83,13 +83,13 @@ steer_direction : LEFT
                | RIGHT
                | STRAIGHT
 
-make_command : DEFINE ID opt_param_list NEWLINE statement_block
+make_command : DEFINE ID optional_param_list NEWLINE statement_block
 
-opt_param_list : epsilon
-               | USING ID '(' type_enum ')' opt_extra_params
+optional_param_list : epsilon
+               | USING ID '(' type_enum ')' optional_extra_params
 
-opt_extra_params : epsilon
-                 : AND ID '(' type_enum ')' opt_extra_params
+optional_extra_params : epsilon
+                 : AND ID '(' type_enum ')' optional_extra_params
 
 type_enum : NUMBER_TYPE
           | WORD_TYPE
@@ -98,12 +98,12 @@ repeat_if_command : REPEAT IF expression NEWLINE statement_block
 
 repeat_times_command : REPEAT plus_expression TIMES NEWLINE statement_block
 
-if_command : IF expression NEWLINE statement_block opt_else_if opt_else
+if_command : IF expression NEWLINE statement_block optional_else_if optional_else
 
-opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
+optional_else_if : ELSE_IF expression NEWLINE statement_block optional_else_if
             | epsilon
 
-opt_else : ELSE NEWLINE statement_block
+optional_else : ELSE NEWLINE statement_block
          | epsilon
 
 print_command : PRINT word_expression
