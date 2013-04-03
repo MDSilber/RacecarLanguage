@@ -111,14 +111,7 @@ class Car:
 def steps_to_pixels(steps):
     return 10*steps
 
-#UI methods and API functions
-def generate_program(code):
-    if len(code) > 1:
-        print code[:-1]
-        translate_car(code,CarDirection.FORWARDS)
-    else:
-        print "Blank"
-
+#API Functions
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
@@ -133,9 +126,16 @@ def translate_car(steps, direction):
     else:
         #rotate car
         rotate_car(steps, car.wheel_direction)
+
+#Demo movement
+def demo(steps):
     
-    '''
-    #Rotate clockwise
+    #Move right
+    for _ in range(0,10*int(steps)):
+        time.sleep(0.025)
+        canvas.move(car.car_object, car.car_direction.x, car.car_direction.y)
+        canvas.update()
+    #Rotate counterclockwise
     for i in range(0,45):
         time.sleep(0.025)
         canvas.delete(car.car_object)
@@ -143,12 +143,24 @@ def translate_car(steps, direction):
         car.car_object = canvas.create_image(30+10*int(steps),250, image=car.image_tk)
         car.car_direction.y = -1
         canvas.update()
-    #Move down
+    #Move diagonal
     for _ in range(0,10*int(steps)):
         time.sleep(0.025)
         canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
         canvas.update()
-'''
+    #Rotate clockwise
+    for i in range(0,45):
+        time.sleep(0.025)
+        canvas.delete(car.car_object)
+        car.image_tk = ImageTk.PhotoImage(car.image.rotate(44-i))
+        car.car_object = canvas.create_image(30+20*int(steps),250-10*int(steps), image=car.image_tk)
+        car.car_direction.y = 0
+        canvas.update()
+    #Move right
+    for _ in range(0,10*int(steps)):
+        time.sleep(0.025)
+        canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
+        canvas.update()
 
 #direction must be WheelDirection.LEFT, WheelDirection.RIGHT, or WheelDirection.STRAIGHT
 def steer_wheels(direction):
@@ -250,6 +262,25 @@ def clear():
                             "Are you sure you want to delete all of your code?"):
         code.delete(1.0,END)
 
+def clear_console():
+    if console.get(1.0,END) == '':
+        return
+    else:
+        console.delete(1.0,END)
+
+#Code generation and compilation
+#Runs code
+def generate_program(code):
+    if len(code) > 1:
+        print code[:-1]
+        demo(code)
+    else:
+        print "Blank"
+
+#Checks if program is a valid Racecar program
+def verify_program(code):
+    pass
+
 #car object
 car = Car()
 
@@ -261,6 +292,7 @@ window_height = root.winfo_screenheight()
 root.geometry    ("%dx%d"%(window_width-100,window_height-100))
 
 menu_bar = Menu(root)
+
 menu = Menu(menu_bar, tearoff=0)
 menu.add_command(label="Open", command = open_file)
 menu.add_command(label="Save", command = save)
@@ -268,6 +300,13 @@ menu.add_command(label="Save As", command= save_file_as)
 menu.add_separator()
 menu.add_command(label="Quit", command = exit)
 menu_bar.add_cascade(label="File",menu=menu)
+
+menu = Menu(menu_bar, tearoff=0)
+menu.add_command(label="Verify Code", command= lambda: verify_program(code.get(1.0,END)))
+menu.add_command(label="Run Code", command = lambda: generate_program(code.get(1.0,END)))
+menu.add_command(label="Clear Code", command = clear)
+menu.add_command(label="Clear Console", command = clear_console)
+menu_bar.add_cascade(label="Code",menu=menu)
 
 root.config(menu=menu_bar)
 
