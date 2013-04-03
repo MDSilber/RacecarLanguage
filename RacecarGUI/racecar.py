@@ -127,6 +127,7 @@ def translate_car(steps, direction):
             time.sleep(0.025)
             #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
             canvas.move(car.car_object,direction*car.car_direction.x,direction*car.car_direction.y)
+            car.drive(steps)
             canvas.update()
     else:
         #rotate car
@@ -163,11 +164,13 @@ def rotate_car(steps, direction):
 				
 				if direction == WheelDirection.LEFT:
 						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
-				elif direction == WheelDirection.RIGHT:
+				        car.car_direction.turn_left()
+                elif direction == WheelDirection.RIGHT:
 						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i-1))
-				else:
+				        car.car_direction.turn_right()
+                else:
 						return
-				
+
 				car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
 				canvas.update()
 
