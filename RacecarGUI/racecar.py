@@ -108,7 +108,7 @@ class Car:
     #Decided on a 10:1 pixels to steps ratio
 
 def steps_to_pixels(steps):
-	return 10*steps
+    return 10*steps
 
 #UI methods and API functions
 def generate_program(code):
@@ -121,7 +121,7 @@ def generate_program(code):
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
-		
+        
     if car.wheel_direction == WheelDirection.STRAIGHT:
         for _ in range(0,steps_to_pixels(int(steps))):
             time.sleep(0.025)
@@ -156,23 +156,23 @@ def steer_wheels(direction):
     pass
 
 def rotate_car(steps, direction):
-		global car
-		
-		for i in range(0,int(steps)):
-				time.sleep(0.025)
-				canvas.delete(car.car_object)
-				
-				if direction == WheelDirection.LEFT:
-						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
-				        car.car_direction.turn_left()
+        global car
+        
+        for i in range(0,int(steps)):
+                time.sleep(0.025)
+                canvas.delete(car.car_object)
+                
+                if direction == WheelDirection.LEFT:
+                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
+                        car.car_direction.turn_left()
                 elif direction == WheelDirection.RIGHT:
-						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i-1))
-				        car.car_direction.turn_right()
+                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i-1))
+                        car.car_direction.turn_right()
                 else:
-						return
+                        return
 
-				car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
-				canvas.update()
+                car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
+                canvas.update()
 
 def print_to_console(message):
     #Should console be cleared each time the program is restart? Or should there
@@ -271,12 +271,17 @@ root.config(menu=menu_bar)
 
 #frame for left side of window
 left_frame = Frame(root)
+code_frame = Frame(left_frame)
 
 #label for code window
 code_label = Label(left_frame, text="Enter code here:", anchor=W,pady=5)
 
+#scrollbar for code window
+code_scrollbar = Scrollbar(code_frame)
+code_scrollbar.pack(side=RIGHT, fill=Y)
+
 #code is the window in which the code is written
-code = Text(left_frame, width=50, height = 42)
+code = Text(code_frame, width=50, height = 42, wrap=WORD, yscrollcommand=code_scrollbar.set)
 
 #run_button passes code into a run program method
 run_button = Button(left_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
@@ -301,13 +306,20 @@ console.config(state=DISABLED)
 
 #add them to canvas
 left_frame.pack(side=LEFT)
-code_label.pack();
+
+code_label.pack()
+
+code_frame.pack()
 code.pack()
+
 run_button.pack(side=LEFT)
 clear_button.pack(side=RIGHT)
+
 canvas_frame.pack()
 canvas.pack()
 console_label.pack()
 console.pack()
+
+code_scrollbar.config(command=code.yview)
 
 root.mainloop()
