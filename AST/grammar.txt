@@ -1,0 +1,113 @@
+A grammar for Racecar
+
+statements : statements statement
+      | epsilon
+
+statement_block : '{' statements '}' NEWLINE
+
+statement : simple_statement
+          | compound_statement
+
+simple_statement : statement_contents NEWLINE
+          | NEWLINE
+
+compound_statement : if_command
+                   | repeat_if_command
+                   | repeat_times_command
+
+statement_contents : drive_command
+     | steer_command
+     | define_command
+     | print_command
+     | declaration_command
+     | assignment_command
+     | function_command
+
+expression : expression OR and_expression
+           | and_expression
+
+and_expression : and_expression AND not_expression
+         | not_expression
+
+not_expression : NOT not_expression
+         | TRUE
+         | FALSE
+         | CAN_MOVE can_move_direction
+         | comparison
+
+can_move_direction : drive_direction | steer_direction
+
+comparison : comparison bool_operator plus_expression
+           | plus_expression
+
+bool_operator : IS | IS_NOT | GT | LT | GEQ | LEQ
+
+plus_expression : plus_expression '+' times_expression
+                  | plus_expression '-' times_expression
+                  | times_expression
+
+times_expression : times_expression '*' word_expression
+     | times_expression '/' word_expression
+     | word_expression
+
+word_expression : word_expression CONCAT primary_expression
+                | primary_expression
+
+
+primary_expression : WORD
+          | NUMBER
+          | ID
+          | GET_CAR_POSITION
+          | GET_WHEEL_DIRECTION
+          | '(' expression ')'
+
+function_command : function_command primary_expression
+              | primary_expression
+
+
+drive_command : DRIVE drive_direction plus_expression optional_steps
+
+drive_direction : FORWARD
+         | FORWARDS
+         | BACKWARD
+         | BACKWARDS
+
+
+optional_steps : STEP
+          | STEPS
+          | epsilon
+
+steer_command : STEER steer_direction
+
+steer_direction : LEFT
+               | RIGHT
+               | STRAIGHT
+
+make_command : DEFINE ID optional_param_list NEWLINE statement_block
+
+optional_param_list : epsilon
+               | USING ID '(' type_enum ')' optional_extra_params
+
+optional_extra_params : epsilon
+                 : AND ID '(' type_enum ')' optional_extra_params
+
+type_enum : NUMBER_TYPE
+          | WORD_TYPE
+
+repeat_if_command : REPEAT IF expression NEWLINE statement_block
+
+repeat_times_command : REPEAT plus_expression TIMES NEWLINE statement_block
+
+if_command : IF expression NEWLINE statement_block optional_else_if optional_else
+
+optional_else_if : ELSE_IF expression NEWLINE statement_block optional_else_if
+            | epsilon
+
+optional_else : ELSE NEWLINE statement_block
+         | epsilon
+
+print_command : PRINT word_expression
+
+declaration_command : ID IS_A type_enum
+
+assignment_command : SET ID TO expression
