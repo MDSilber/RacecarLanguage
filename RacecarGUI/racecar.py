@@ -118,18 +118,20 @@ def generate_program(code):
     else:
         print "Blank"
 
+#direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
 		
-    #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
     if car.wheel_direction == WheelDirection.STRAIGHT:
         for _ in range(0,steps_to_pixels(int(steps))):
             time.sleep(0.025)
+            #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
             canvas.move(car.car_object,direction*car.car_direction.x,direction*car.car_direction.y)
             canvas.update()
     else:
         #rotate car
-        pass
+        rotate_car(steps, car.wheel_direction)
+    
     '''
     #Rotate clockwise
     for i in range(0,45):
@@ -145,8 +147,11 @@ def translate_car(steps, direction):
         canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
         canvas.update()
 '''
+
+#direction must be WheelDirection.LEFT, WheelDirection.RIGHT, or WheelDirection.STRAIGHT
 def steer_wheels(direction):
     global car
+    car.wheel_direction = direction
     pass
 
 def rotate_car(steps, direction):
@@ -156,10 +161,10 @@ def rotate_car(steps, direction):
 				time.sleep(0.025)
 				canvas.delete(car.car_object)
 				
-				if direction == WheelDirection.left:
+				if direction == WheelDirection.LEFT:
 						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
-				elif direction == WheelDirection.right:
-						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
+				elif direction == WheelDirection.RIGHT:
+						car.image_tk = ImageTk.PhotoImage(car.image.rotate(i-1))
 				else:
 						return
 				
