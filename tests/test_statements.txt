@@ -1,0 +1,44 @@
+drive forward 10 steps;
+drive forwards 10 steps;
+drive forward 10 step;
+drive forwards 10 step;
+drive backward 10 steps;
+drive backwards 10 steps;
+drive backward 10 step;
+drive backwards 10 step;
+:) single line comment;
+:-(	multi line
+	comment with a lot
+	of text
+:-);
+steer left;
+steer right;
+steer straight;
+print "hello world";
+if wheelDirection is "left"
+{
+    print "Wheels are turned left"
+};
+if wheelDirection is "left"
+{
+    print "Wheels are turned left"
+}
+else
+{
+    steer left
+};
+if wheelDirection is "left"
+{
+    print "Wheel direction is left"
+}
+else if wheelDirection is "right"
+{
+    print "Wheel direction is right"
+}
+else
+{
+    print "Wheels are straight"
+};
+
+
+
