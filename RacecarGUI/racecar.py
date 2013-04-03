@@ -22,6 +22,9 @@ class WheelDirection:
 #and y = 0. Positive axes point right and up respectively
 
 class CarDirection:
+    FORWARDS=1
+    BACKWARDS=-1
+
     def __init__(self):
         self.x = 1
         self.y = 0
@@ -104,26 +107,29 @@ class Car:
     
     #Decided on a 10:1 pixels to steps ratio
 
-def steps_to_pixels(self, steps):
+def steps_to_pixels(steps):
 	return 10*steps
 
 #UI methods and API functions
 def generate_program(code):
     if len(code) > 1:
         print code[:-1]
-        translate_car(code)
+        translate_car(code,CarDirection.FORWARDS)
     else:
         print "Blank"
 
-def translate_car(steps):
+def translate_car(steps, direction):
     global car
 		
-    #Just an example for now
-    #Move to the left
-    for _ in range(0,steps_to_pixels(int(steps))):
-        time.sleep(0.025)
-        canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
-        canvas.update()
+    #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
+    if car.wheel_direction == WheelDirection.STRAIGHT:
+        for _ in range(0,steps_to_pixels(int(steps))):
+            time.sleep(0.025)
+            canvas.move(car.car_object,direction*car.car_direction.x,direction*car.car_direction.y)
+            canvas.update()
+    else:
+        #rotate car
+        pass
     '''
     #Rotate clockwise
     for i in range(0,45):
@@ -139,6 +145,9 @@ def translate_car(steps):
         canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
         canvas.update()
 '''
+def steer_wheels(direction):
+    global car
+    pass
 
 def rotate_car(steps, direction):
 		global car
