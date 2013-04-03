@@ -271,10 +271,12 @@ root.config(menu=menu_bar)
 
 #frame for left side of window
 left_frame = Frame(root)
-code_frame = Frame(left_frame)
 
 #label for code window
-code_label = Label(left_frame, text="Enter code here:", anchor=W,pady=5)
+code_label = Label(left_frame, text="Enter code here", anchor=W,pady=5)
+
+#frame for code window to hold textbox and scrollbar
+code_frame = Frame(left_frame)
 
 #scrollbar for code window
 code_scrollbar = Scrollbar(code_frame)
@@ -300,8 +302,16 @@ car.car_object = canvas.create_image(30,250,image=car.image_tk)
 #label above the console
 console_label = Label(root, text = "Console", anchor=W,pady=5)
 
+#frame for the console to hold the textbox and the scrollbar
+console_frame = Frame(root)
+
+#scrollbar for the console
+console_scrollbar = Scrollbar(console_frame)
+console_scrollbar.pack(side=RIGHT,fill=Y)
+
 #console to print to
-console = Text(root, width = int(window_width/1.5), height = 10, padx=2, pady=2)
+console = Text(console_frame, width = int(window_width/1.5), height = 10,
+                                        padx=2, pady=2, wrap=WORD, yscrollcommand=console_scrollbar.set)
 console.config(state=DISABLED)
 
 #add them to canvas
@@ -317,9 +327,13 @@ clear_button.pack(side=RIGHT)
 
 canvas_frame.pack()
 canvas.pack()
+
 console_label.pack()
+
+console_frame.pack()
 console.pack()
 
 code_scrollbar.config(command=code.yview)
+console_scrollbar.config(command=console.yview)
 
 root.mainloop()
