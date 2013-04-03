@@ -107,7 +107,7 @@ class Car:
 def steps_to_pixels(self, steps):
 	return 10*steps
 
-#UI methods
+#UI methods and API functions
 def generate_program(code):
     if len(code) > 1:
         print code[:-1]
@@ -157,6 +157,12 @@ def rotate_car(steps, direction):
 				car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
 				canvas.update()
 
+def print_to_console(message):
+    #Should console be cleared each time the program is restart? Or should there
+    #be a button?
+    console.insert(message+'\n')
+
+#Menu functions
 def open_file():
     global current_program
     
@@ -274,6 +280,7 @@ console_label = Label(root, text = "Console", anchor=W,pady=5)
 
 #console to print to
 console = Text(root, width = int(window_width/1.5), height = 10, padx=2, pady=2)
+console.config(state=DISABLED)
 
 #add them to canvas
 left_frame.pack(side=LEFT)
