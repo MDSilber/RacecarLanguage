@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
 from Tkinter import *
-import tkFileDialog, tkMessageBox, re, time
 from PIL import Image, ImageTk
-import parser
+import tkFileDialog, tkMessageBox, re, time, parser
 
+#current_program ised used to store the current file open in order to save back
+#to that file
 current_program = None
 
 class Program:
@@ -263,6 +264,7 @@ menu_bar = Menu(root)
 menu = Menu(menu_bar, tearoff=0)
 menu.add_command(label="Open", command = open_file)
 menu.add_command(label="Save", command = save)
+menu.add_command(label="Save As", command= save_file_as)
 menu.add_separator()
 menu.add_command(label="Quit", command = exit)
 menu_bar.add_cascade(label="File",menu=menu)
@@ -314,7 +316,8 @@ console = Text(console_frame, width = int(window_width/1.5), height = 10,
                                         padx=2, pady=2, wrap=WORD, yscrollcommand=console_scrollbar.set)
 console.config(state=DISABLED)
 
-#add them to canvas
+#add them to GUI Window
+#These are grouped logically in order to better see what's going on
 left_frame.pack(side=LEFT)
 
 code_label.pack()
