@@ -192,6 +192,25 @@ def print_to_console(message):
     #be a button?
     console.insert(message+'\n')
 
+#Course generation functions
+def course_one():
+    pass
+
+def course_two():
+    pass
+
+def course_three():
+    pass
+
+def course_four():
+    pass
+
+def course_five():
+    pass
+
+def clear_course():
+    pass
+
 #Menu functions
 def open_file():
     global current_program
@@ -308,6 +327,16 @@ menu.add_command(label="Clear Code", command = clear)
 menu.add_command(label="Clear Console", command = clear_console)
 menu_bar.add_cascade(label="Code",menu=menu)
 
+menu = Menu(menu_bar, tearoff=0)
+menu.add_command(label="Course 1", command = course_one)
+menu.add_command(label="Course 2", command = course_two)
+menu.add_command(label="Course 3", command = course_three)
+menu.add_command(label="Course 4", command = course_four)
+menu.add_command(label="Course 5", command = course_five)
+menu.add_separator()
+menu.add_command(label="Clear course", command = clear_course)
+menu_bar.add_cascade(label="Courses", menu=menu)
+
 root.config(menu=menu_bar)
 
 #frame for left side of window
@@ -357,23 +386,23 @@ console.config(state=DISABLED)
 
 #add them to GUI Window
 #These are grouped logically in order to better see what's going on
-left_frame.pack(side=LEFT)
+left_frame.pack(side=LEFT,fill=BOTH)
 
 code_label.pack()
 
-code_frame.pack()
-code.pack()
+code_frame.pack(fill=BOTH)
+code.pack(fill=BOTH)
 
 run_button.pack(side=LEFT)
 clear_button.pack(side=RIGHT)
 
-canvas_frame.pack()
-canvas.pack()
+canvas_frame.pack(fill=BOTH)
+canvas.pack(fill=BOTH)
 
 console_label.pack()
 
-console_frame.pack()
-console.pack()
+console_frame.pack(fill=BOTH)
+console.pack(fill=BOTH)
 
 code_scrollbar.config(command=code.yview)
 console_scrollbar.config(command=console.yview)
