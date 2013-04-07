@@ -353,7 +353,7 @@ code_scrollbar = Scrollbar(code_frame)
 code_scrollbar.pack(side=RIGHT, fill=Y)
 
 #code is the window in which the code is written
-code = Text(code_frame, width=50, height = 42, wrap=WORD, yscrollcommand=code_scrollbar.set)
+code = Text(code_frame, width=50, height = 30, wrap=WORD, yscrollcommand=code_scrollbar.set)
 
 #run_button passes code into a run program method
 run_button = Button(left_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
@@ -365,7 +365,7 @@ clear_button = Button(left_frame, text = "Clear Code", command = clear)
 canvas_frame= Frame(root, width = window_width/1.5, height = window_height-300,padx=2,pady=2)
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = window_height-300)
-car.image = Image.open('images/car.png')
+car.image = Image.open('images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 car.car_object = canvas.create_image(30,250,image=car.image_tk)
 
