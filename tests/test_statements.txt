@@ -1,24 +1,50 @@
-drive forward 10 steps;
-drive forwards 10 steps;
-drive forward 10 step;
-drive forwards 10 step;
-drive backward 10 steps;
-drive backwards 10 steps;
-drive backward 10 step;
-drive backwards 10 step;
-:) single line comment;
+#bulit in functions
+drive forward 10 steps
+
+drive forwards 10 steps
+
+drive forward 10 step
+
+drive forwards 10 step
+
+drive backward 10 steps
+
+drive backwards 10 steps
+
+drive backward 10 step
+
+drive backwards 10 step
+
+steer left
+
+steer right
+
+steer straight
+
+canMove left
+
+canMove right
+
+canMove straight
+
+getWheelDirection
+
+getLocation
+
+:) single line comment
+
 :-(	multi line
 	comment with a lot
 	of text
-:-);
-steer left;
-steer right;
-steer straight;
-print "hello world";
+:-)
+
+print "hello world"
+
 if wheelDirection is "left"
 {
     print "Wheels are turned left"
-};
+}
+
 if wheelDirection is "left"
 {
     print "Wheels are turned left"
@@ -26,7 +52,8 @@ if wheelDirection is "left"
 else
 {
     steer left
-};
+}
+
 if wheelDirection is "left"
 {
     print "Wheel direction is left"
@@ -38,7 +65,92 @@ else if wheelDirection is "right"
 else
 {
     print "Wheels are straight"
-};
+}
 
+numberOfSteps is a number
+set numberOfSteps to 10
+drive numberOfSteps forward
 
+color is a word
+set color to "blue"
+print color
+
+num is a number
+set num to 10
+set num to num*2
+
+myCounter is a number
+set myCounter to 1
+repeat if myCounter is not 5
+{
+    drive forward 1 step
+    set myCounter to myCounter + 1
+}
+
+:-( This program is similar to our last, 
+but this time we stop our loop when 
+a word has changed instead of a number
+:-)
+location is a word
+set location to "out"
+:) save the car's current position in a variable
+homePosition is a number
+set homePosition to getCarPosition
+:) drive away from home!
+drive backwards 15 steps
+:) try to find "home"
+repeat if location is not "home"
+{
+    :) you are in the loop so you must not be "home"
+
+    :) first, drive one step
+    drive forward 1 step
+
+    :) then, check to see if you are home
+    if getCarPosition is homePosition
+    {
+        set location to "home"
+    }
+}
+
+myCounter is a number
+set myCounter to 10
+repeat myCounter times
+{
+    drive forward 1 step
+}
+
+repeat 5 times
+{
+     drive forward 1 step
+}
+
+define turnLeft
+{
+steer left
+drive forward 2 steps
+steer straight
+}
+drive 10 steps
+turnLeft
+drive 10 steps
+
+define turnLeft using numSteps (number)
+{
+    steer left
+    drive numSteps steps
+    steer straight
+}
+turnLeft 8
+drive forward 10 steps
+turnLeft 4
+
+define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
+{
+steer left
+drive numSteps steps
+steer straight
+drive numStepsDrive
+}
+turnLeftThenDriveStraight 5 10
 
