@@ -68,8 +68,7 @@ def translate_car(steps, direction):
     global car
     steps = int(steps)
     direction = int(direction)
-    print "car.position_x = ", car.position_x
-    print "car.position_y = ", car.position_y
+    
     for _ in range(0,steps_to_pixels(int(steps))):
         time.sleep(0.025)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
@@ -99,7 +98,6 @@ def rotate_car(direction):
         elif direction == WheelDirection.RIGHT:
           car.car_direction.turn_right()
         else:
-          print "what else?"
           return
         
 
@@ -112,23 +110,16 @@ def rotate_car(direction):
                 elif direction == WheelDirection.RIGHT:
                         car.image_tk = ImageTk.PhotoImage(car.image.rotate(current_direction_deg - i))
                 else:
-                        print "what?"
                         return
 
                 car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
                 canvas.update()
 
-        print "car.position_x = ", car.position_x
-        print "car.position_y = ", car.position_y
-
 def print_to_console(message):
     
     #Should console be cleared each time the program is restart? Or should there
     #be a button?
-    print message
-
     console.config(state=NORMAL)
-    console.insert(END, message + '\n')
     console.insert(END, message + '\n')
     console.config(state=DISABLED)
 
@@ -176,12 +167,9 @@ def open_file():
     code.delete(1.0,END)
     code.insert(1.0,file_object.read())
     current_program.file_obj.close()
-    print file_name
-    print current_program.name
 
 def save():
     global current_program
-    print "Save"
     if current_program == None:
         save_file_as()
     else:
@@ -189,7 +177,6 @@ def save():
 
 def save_file():
     global current_program
-    print "Save file"
     if not current_program.file_obj.closed:
         current_program.file_obj.close()
     #Open file for writing (will clear it)    
@@ -200,7 +187,6 @@ def save_file():
 
 def save_file_as():
     global current_program
-    print "Save file as"
     file_name = tkFileDialog.asksaveasfilename(defaultextension=".race")
     
     #Defaults to saving on the desktop
@@ -231,7 +217,7 @@ def clear_console():
 #Runs code
 def generate_program(code):
     if len(code) > 1:
-        print code[:-1]
+        #print code[:-1]
         #demo(code)
         eval(Compiler.getPythonCode(code))
     else:
