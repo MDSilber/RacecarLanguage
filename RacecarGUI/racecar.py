@@ -2,7 +2,7 @@
 
 from Tkinter import *
 from PIL import Image, ImageTk
-import tkFileDialog, tkMessageBox, re, time, parser
+import tkFileDialog, tkMessageBox, re, time, Compiler
 
 #current_program ised used to store the current file open in order to save back
 #to that file
@@ -226,7 +226,8 @@ def clear_console():
 def generate_program(code):
     if len(code) > 1:
         print code[:-1]
-        demo(code)
+        #demo(code)
+        eval(Compiler.getPythonCode(code))
     else:
         print "Blank"
 
