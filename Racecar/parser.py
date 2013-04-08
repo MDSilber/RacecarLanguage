@@ -151,17 +151,17 @@ def p_statement_contents_define(p):
 def p_compound_statement_repeat_if(p):
   '''compound_statement : repeat_if_command'''
   #print p_statement_contents_repeat_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_repeat_times(p):
   '''compound_statement : repeat_times_command'''
   #print p_statement_contents_repeat_times.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_if(p):
   '''compound_statement : if_command'''
   #print p_statement_contents_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_statement_contents_print(p):
   '''statement_contents : print_command'''
@@ -176,7 +176,7 @@ def p_statement_contents_assignment(p):
 def p_statement_contents_declaration(p):
   '''statement_contents : declaration_command'''
   #print p_statement_contents_declaration.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_statement_contents_function(p):
   '''statement_contents : function_command'''
@@ -250,7 +250,7 @@ def p_comparison_operator(p):
                    | GEQ
                    | LEQ'''
   #print p_comparison_operator.__doc__
-  p[0] = makeParseTreeNode(p, "comparison_operator")
+  p[0] = p[1]
 
 def p_plus_expression_plus_minus(p):
   '''plus_expression : plus_expression '+' times_expression
