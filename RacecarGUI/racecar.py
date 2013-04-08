@@ -31,7 +31,7 @@ class CarDirection:
     
     DIRECTIONS = [(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1),(1,1)]
 
-    def getDirection(self):
+    def get_direction(self):
         return CarDirection.DIRECTIONS[self.direction]
 
     def turn_right(self):
@@ -54,8 +54,8 @@ class Car:
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
     def update_position(self, steps):
-        self.position_x += self.car_direction.getDirection()[0] * steps
-        self.position_y += self.car_direction.getDirection()[1] * steps
+        self.position_x += self.car_direction.get_direction()[0] * steps
+        self.position_y += self.car_direction.get_direction()[1] * steps
     
     #Decided on a 10:1 pixels to steps ratio
 
@@ -72,7 +72,7 @@ def translate_car(steps, direction):
     for _ in range(0,steps_to_pixels(int(steps))):
         time.sleep(0.025)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
-        canvas.move(car.car_object, direction * car.car_direction.getDirection()[0], direction * car.car_direction.getDirection()[1])
+        canvas.move(car.car_object, direction * car.car_direction.get_direction()[0], direction * car.car_direction.get_direction()[1])
         canvas.update()
 
     car.update_position(steps_to_pixels(steps))
@@ -87,6 +87,7 @@ def demo(steps):
     #translate_car(steps, CarDirection.FORWARDS)
     print_to_console(str(car.position_x) + ", " + str(car.position_y))
 
+#direction must be WheelDirection.LEFT or WheelDirection.RIGHT
 def rotate_car(direction):
         global car
         
