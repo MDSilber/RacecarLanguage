@@ -81,11 +81,11 @@ def translate_car(steps, direction):
 #Demo movement
 def demo(steps):
 
-    translate_car(steps, CarDirection.FORWARDS)
-    rotate_car(WheelDirection.LEFT)
-    translate_car(steps, CarDirection.FORWARDS)
-    rotate_car(WheelDirection.RIGHT)
-    translate_car(steps, CarDirection.FORWARDS)
+    #translate_car(steps, CarDirection.FORWARDS)
+    #rotate_car(WheelDirection.LEFT)
+    #translate_car(steps, CarDirection.FORWARDS)
+    #rotate_car(WheelDirection.RIGHT)
+    #translate_car(steps, CarDirection.FORWARDS)
     print_to_console(str(car.position_x) + ", " + str(car.position_y))
 
 def rotate_car(direction):
@@ -122,9 +122,15 @@ def rotate_car(direction):
         print "car.position_y = ", car.position_y
 
 def print_to_console(message):
+    
     #Should console be cleared each time the program is restart? Or should there
     #be a button?
-    console.insert(END, message+'\n')
+    print message
+
+    console.config(state=NORMAL)
+    console.insert(END, message + '\n')
+    console.insert(END, message + '\n')
+    console.config(state=DISABLED)
 
 #Course generation functions
 def course_one():
