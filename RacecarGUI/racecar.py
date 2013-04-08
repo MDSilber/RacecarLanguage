@@ -13,10 +13,10 @@ class Program:
         self.name = ''
         self.file_obj = None
 
+#Static variables for turning the car
 class WheelDirection:
-    STRAIGHT=0
-    LEFT=1
-    RIGHT=2
+  LEFT=1
+  RIGHT=-1
 
 #Car direction object
 #X and Y can be 1,0,-1 respectively. The only invalid combination is when x = 0
@@ -25,68 +25,26 @@ class WheelDirection:
 class CarDirection:
     FORWARDS=1
     BACKWARDS=-1
-
+    
     def __init__(self):
-        self.x = 1
-        self.y = 0
+        self.direction = 0
     
-    #Note that the commented degrees are before the turn, rather than after
-    def turn_right(self):
-        #In this case, y can never equal zero
-        if self.x == 0:
-            #90 degrees
-            if self.y == 1:
-                self.x = 1
-            #270 degrees
-            else:
-                self.x = -1
-        #In this case, x can never equal zero
-        elif self.y == 0:
-            #0 degrees
-            if self.x == 1:
-                self.y = -1
-            #180 degrees
-            else:
-                self.y = 1
-        else:
-            #45 degrees or 225 degrees
-            if (self.x == 1 and self.y == 1) or (self.x == -1 and self.y == -1):
-                self.y = 0
-            #135 degrees or 315 degrees
-            else:
-                self.x = 0
+    DIRECTIONS = [(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1),(1,1)]
 
-    
+    def getDirection(self):
+        return CarDirection.DIRECTIONS[self.direction]
+
+    def turn_right(self):
+        self.direction = (self.direction - 1) % len(CarDirection.DIRECTIONS)
+
     def turn_left(self):
-        #In this case, y can never equal zero
-        if self.x == 0:
-            #90 degrees
-            if self.y == 1:
-                self.x = -1
-            #270 degrees
-            else:
-                self.x = 1
-        #In this case, x can never equal zero
-        elif self.y == 0:
-            #0 degrees
-            if self.x == 1:
-                self.y = 1
-            #180 degrees
-            else:
-                self.y = -1
-        else:
-            #45 degrees or 225 degrees
-            if (self.x == 1 and self.y == 1) or (self.x == -1 and self.y == -1):
-                self.y = 0
-            #135 degrees or 315 degrees
-            else:
-                self.x = 0
+        self.direction = (self.direction + 1) % len(CarDirection.DIRECTIONS)
+
 
 class Car:
     def __init__(self):
         self.position_x = 0
         self.position_y = 0
-        self.wheel_direction = WheelDirection.STRAIGHT
         #Car direction starts facing right
         self.car_direction = CarDirection()
         self.image = None
@@ -95,16 +53,9 @@ class Car:
     
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
-    def drive(self, steps):
-        if self.wheel_direction == WheelDirection.STRAIGHT:
-            self.position_x += self.car_direction.x * steps
-            self.position_y += self.car_direction.y * steps
-        elif self.wheel_direction == WheelDirection.RIGHT:
-            for _ in range(steps):
-                self.car_direction.turn_right()
-        else:
-            for _ in range(steps):
-                self.car_direction.turn_left()
+    def update_position(self, steps):
+        self.position_x += self.car_direction.getDirection()[0] * steps
+        self.position_y += self.car_direction.getDirection()[1] * steps
     
     #Decided on a 10:1 pixels to steps ratio
 
@@ -115,82 +66,65 @@ def steps_to_pixels(steps):
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
-        
-    if car.wheel_direction == WheelDirection.STRAIGHT:
-        for _ in range(0,steps_to_pixels(int(steps))):
-            time.sleep(0.025)
-            #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
-            canvas.move(car.car_object,direction*car.car_direction.x,direction*car.car_direction.y)
-            car.drive(steps)
-            canvas.update()
-    else:
-        #rotate car
-        rotate_car(steps, car.wheel_direction)
+    steps = int(steps)
+    direction = int(direction)
+    print "car.position_x = ", car.position_x
+    print "car.position_y = ", car.position_y
+    for _ in range(0,steps_to_pixels(int(steps))):
+        time.sleep(0.025)
+        #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
+        canvas.move(car.car_object, direction * car.car_direction.getDirection()[0], direction * car.car_direction.getDirection()[1])
+        canvas.update()
+
+    car.update_position(steps_to_pixels(steps))
 
 #Demo movement
 def demo(steps):
-    
-    #Move right
-    for _ in range(0,10*int(steps)):
-        time.sleep(0.025)
-        canvas.move(car.car_object, car.car_direction.x, car.car_direction.y)
-        canvas.update()
-    #Rotate counterclockwise
-    for i in range(0,45):
-        time.sleep(0.025)
-        canvas.delete(car.car_object)
-        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
-        car.car_object = canvas.create_image(30+10*int(steps),250, image=car.image_tk)
-        car.car_direction.y = -1
-        canvas.update()
-    #Move diagonal
-    for _ in range(0,10*int(steps)):
-        time.sleep(0.025)
-        canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
-        canvas.update()
-    #Rotate clockwise
-    for i in range(0,45):
-        time.sleep(0.025)
-        canvas.delete(car.car_object)
-        car.image_tk = ImageTk.PhotoImage(car.image.rotate(44-i))
-        car.car_object = canvas.create_image(30+20*int(steps),250-10*int(steps), image=car.image_tk)
-        car.car_direction.y = 0
-        canvas.update()
-    #Move right
-    for _ in range(0,10*int(steps)):
-        time.sleep(0.025)
-        canvas.move(car.car_object,car.car_direction.x,car.car_direction.y)
-        canvas.update()
 
-#direction must be WheelDirection.LEFT, WheelDirection.RIGHT, or WheelDirection.STRAIGHT
-def steer_wheels(direction):
-    global car
-    car.wheel_direction = direction
-    pass
+    translate_car(steps, CarDirection.FORWARDS)
+    rotate_car(WheelDirection.LEFT)
+    translate_car(steps, CarDirection.FORWARDS)
+    rotate_car(WheelDirection.RIGHT)
+    translate_car(steps, CarDirection.FORWARDS)
+    print_to_console(str(car.position_x) + ", " + str(car.position_y))
 
-def rotate_car(steps, direction):
+def rotate_car(direction):
         global car
         
-        for i in range(0,int(steps)):
+        #This is current index in DIRECTIONS array
+        current_direction_deg = car.car_direction.direction*45
+
+        if direction == WheelDirection.LEFT:
+          car.car_direction.turn_left()
+        elif direction == WheelDirection.RIGHT:
+          car.car_direction.turn_right()
+        else:
+          print "what else?"
+          return
+        
+
+        for i in range(0,45):
                 time.sleep(0.025)
                 canvas.delete(car.car_object)
                 
                 if direction == WheelDirection.LEFT:
-                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i+1))
-                        car.car_direction.turn_left()
+                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(current_direction_deg + i))
                 elif direction == WheelDirection.RIGHT:
-                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(i-1))
-                        car.car_direction.turn_right()
+                        car.image_tk = ImageTk.PhotoImage(car.image.rotate(current_direction_deg - i))
                 else:
+                        print "what?"
                         return
 
                 car.car_object = canvas.create_image(car.position_x, car.position_y, image=car.image_tk)
                 canvas.update()
 
+        print "car.position_x = ", car.position_x
+        print "car.position_y = ", car.position_y
+
 def print_to_console(message):
     #Should console be cleared each time the program is restart? Or should there
     #be a button?
-    console.insert(message+'\n')
+    console.insert(END, message+'\n')
 
 #Course generation functions
 def course_one():
@@ -368,6 +302,8 @@ canvas = Canvas(canvas_frame, width = window_width/1.5, height = window_height-3
 car.image = Image.open('images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 car.car_object = canvas.create_image(30,250,image=car.image_tk)
+car.position_x = 30
+car.position_y = 250
 
 #label above the console
 console_label = Label(root, text = "Console", anchor=W,pady=5)
