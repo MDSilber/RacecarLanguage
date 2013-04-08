@@ -60,22 +60,34 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
-t_NEWLINE = r'\n|;' # semicolon for debugging interpreter use
 t_ignore = ' '
 
 def t_ID(t):
   r'[A-Za-z][A-Za-z0-9]*'
   t.type = reserved.get(t.value, 'ID')
   return t
+  
+def t_NEWLINE(t):
+  r'\n|;' # semicolon for debugging interpreter use
+  t.lexer.lineno += len(t.value)
+  return t
 
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
-    t.lexer.skip(1)
+  print "Illegal character '%s' at line '%s'" % (t.value[0], t.lexer.lineno)
+  t.lexer.skip(1)
 
 lexer = lex.lex()
 
 def p_error(p):
-  raise SyntaxError()
+  if p == None:
+    raise SyntaxError("Reached end of file unexpectedly!")
+  else:
+    print "Syntax error at token ", p.type#, " at line ", p.lineno(num), " and position ", p.lexpos(num)
+    # Read ahead looking for a closing '}'
+    while 1:
+      tok = yacc.token()             # Get the next token
+      if not tok or tok.type == '}': break
+    yacc.restart()
 
 def makeParseTreeNode(p, value):
   '''Returns a Tree object containing
