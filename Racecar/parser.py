@@ -93,7 +93,15 @@ def makeParseTreeNode(p, value):
   '''Returns a Tree object containing
      as children p[1:] and a value of value'''
   toReturn = Tree()
-  toReturn.children = p[1:]
+  for element in p[1:]:
+    if type(element) == type(toReturn):
+      toReturn.children.append(element)
+    else:
+      # the element is not a tree. wrap it in a tree
+      newElement = Tree()
+      newElement.value = element
+      toReturn.children.append(newElement)
+
   toReturn.value = value
   return toReturn
 

@@ -1,12 +1,19 @@
 from Parser import parseString
 
 def getPythonCode(code):
-    return "translate_car(5, CarDirection.FORWARDS)"
+    #return "translate_car(5, CarDirection.FORWARDS)"
+    # first parse the string
+    ast = parseString(code)
+    # then run the string through the semantic analyzer
+    # ast = runSemanticAnalyzer(ast)
+    # then generate python code!
+    pythonCode = generatePythonCode(ast)
+
+    return pythonCode
 
 
 def generatePythonCode(ast):
     pythonCode = ""
-    print ast
     if ast.value == "empty":
         return ""
     elif ast.value == "statements":
@@ -17,8 +24,10 @@ def generatePythonCode(ast):
         pythonCode += generatePythonCode(ast.children[2])
         pythonCode += ", " + generatePythonCode(ast.children[1])
         pythonCode += ")\n"
+    elif ast.value == "forward":
+        pythonCode += "CarDirection.FORWARDS"
     else:
-        raise SyntaxError("unrecognized AST: " + ast)
+        pythonCode += ast.value
 
     return pythonCode
         

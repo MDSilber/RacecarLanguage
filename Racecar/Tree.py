@@ -16,13 +16,14 @@ class Tree:
 
 
   def printTree(self):
-    print self.value, " -> ",
-    for child in self.children:
-      if type(child) == type(self):
-        print child.value, " ",
-      else:
-        print child, " ",
-    print
-    for child in self.children:
-      if type(child) == type(self):
-        child.printTree()
+    if self.value != "empty" and len(self.children) != 0:
+      print self.value, " -> ",
+      for child in self.children:
+        if type(child) == type(self):
+          print child.value, " ",
+        else:
+          print child, " ",
+      print
+      for child in self.children:
+        if type(child) == type(self):
+          child.printTree()
