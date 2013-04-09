@@ -9,10 +9,13 @@ class SymbolLookupTable:
     def addEntry(self, entry):
         '''Add the given entry to the table.  Throws an error if
         there is already an entry with the given name and scope, regardless
-        of the type.'''
+        of the type. Also throws an error if entry does not have a type.'''
 
         # check if the id is already in the table (error)
-        if entry.id in self.table and self.table[entry.id].scope == entry.scope:
+        #if entry.id in self.table and self.table[entry.id].scope == entry.scope:
+            #raise Exception()
+
+        if self.verifyEntry(entry):
             raise Exception()
 
         # if not, add the entry to the table
@@ -35,7 +38,7 @@ class SymbolLookupTable:
 
 class SymbolTableEntry:
     '''A class representing a SymbolLookupTable entry. Each entry has
-    an id (name), type, and scope.'''
+    an id (name), maybe a type, and scope.'''
 
     def __init__(self):
         '''Default constructor, initializes everything to
@@ -54,7 +57,7 @@ class SymbolTableEntry:
         '''Returns true if all fields of self are the same as those
         in tableEntry'''
         idEq = (self.id == tableEntry.id)
-        typeEq = (self.type == tableEntry.type)
+        typeEq = (self.type == tableEntry.type) or not self.type
         scopeEq = (self.scope == tableEntry.scope)
         if idEq and typeEq and scopeEq:
             return True

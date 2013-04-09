@@ -3,7 +3,7 @@ import unittest
 import Racecar.Parser as Parser
 import Racecar.SymbolTable as SymbolTable
 
-class TestSequenceFunctions(unittest.TestCase):
+class TranslatorTests(unittest.TestCase):
 
     def test_drive_forwards(self):
         test_string = """
@@ -47,24 +47,52 @@ class TestSequenceFunctions(unittest.TestCase):
 
         self.assertEqual(result, correct_translation)
 
+
+class SymbolTableTests(unittest.TestCase):
+
     def test_symbol_table_entry_validate(self):
+        '''Tests the SymbolTableEntry.validateWithTableEntry() function.
+        In particular, ensures two same-named entries with different scopes
+        are not equal, and an entry without a type matches an existing entry
+        that has a type and the same name and scope, but not one with a different
+        scope.'''
+
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
         entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
 
         self.assertFalse(entry1.validateWithTableEntry(entry2))
         self.assertFalse(entry2.validateWithTableEntry(entry1))
 
+        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+
+        self.assertTrue(entry3.validateWithTableEntry(entry1))
+        self.assertFalse(entry3.validateWithTableEntry(entry2))
+
     def test_symbol_table_add_entry_twice(self):
+        table = SymbolTable.SymbolLookupTable()
+
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
+
+        table.addEntry(entry1)
+        
+        self.assertRaises(Exception, table.addEntry, entry1)
+
+    def test_symbol_table_verify(self):
         table = SymbolTable.SymbolLookupTable()
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
         entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
 
         table.addEntry(entry1)
+
+        self.assertTrue(table.verifyEntry(entry1))
+        self.assertFalse(table.verifyEntry(entry2))
         
-        self.assertRaises(Exception, table.addEntry, entry1)
-        
+        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+
+        self.assertTrue(table.verifyEntry(entry3))
+        self.assertFalse(table.verifyEntry(entry2))
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestSequenceFunctions)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TranslatorTests)
     unittest.TextTestRunner(verbosity=2).run(suite)
