@@ -5,13 +5,13 @@ from Tree import *
 reserved = {
   'drive' : 'DRIVE',
   'forward' : 'FORWARD',
-  'forwards' : 'FORWARDS',
+  'forwards' : 'FORWARDS', # never passed on to parser
   'backward' : 'BACKWARD',
-  'backwards' : 'BACKWARDS',
+  'backwards' : 'BACKWARDS',# never passed on to parser 
   'number' : 'NUMBER_TYPE',
   'word' : 'WORD_TYPE',
   'step' : 'STEP',
-  'steps' : 'STEPS',
+  'steps' : 'STEPS',# never passed on to parser
   'steer' : 'STEER',
   'left' : 'LEFT',
   'right' : 'RIGHT',
@@ -65,6 +65,10 @@ t_ignore = ' '
 def t_ID(t):
   r'[A-Za-z][A-Za-z0-9]*'
   t.type = reserved.get(t.value, 'ID')
+  # get rid of forward/forwards, backward/backwards, and step/steps ambiguity
+  if t.type == "FORWARDS" or t.type == "BACKWARDS" or t.type == "STEPS":
+    t.type = t.type[:-1]
+    t.value = t.value[:-1]
   return t
   
 def t_NEWLINE(t):
@@ -319,15 +323,12 @@ def p_drive_command(p):
 
 def p_drive_direction(p):
   '''drive_direction : FORWARD
-           | FORWARDS
-           | BACKWARD
-           | BACKWARDS'''
+           | BACKWARD'''
   #print p_drive_direction.__doc__
   p[0] = p[1]
 
 def p_opt_steps(p):
   '''opt_steps : STEP
-            | STEPS
             | empty'''
   #print p_opt_steps.__doc__
   p[0] = p[1]

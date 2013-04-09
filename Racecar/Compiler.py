@@ -26,6 +26,8 @@ def generatePythonCode(ast):
         pythonCode += ")\n"
     elif ast.value == "forward":
         pythonCode += "CarDirection.FORWARDS"
+    elif ast.value == "backward":
+        pythonCode += "CarDirection.BACKWARDS"
     else:
         pythonCode += ast.value
 
