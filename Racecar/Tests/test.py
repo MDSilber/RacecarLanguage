@@ -1,6 +1,7 @@
 import random
 import unittest
-import parser
+import Racecar.Parser as Parser
+import Racecar.SymbolTable as SymbolTable
 
 class TestSequenceFunctions(unittest.TestCase):
 
@@ -10,7 +11,7 @@ class TestSequenceFunctions(unittest.TestCase):
         """
 
         correct_translation = "translate_car(10, CarDirection.FORWARDS)"
-        result = parser.parser.parse(test_string)
+        result = Parser.parseString(test_string)
 
         self.assertEqual(result, correct_translation)
 
@@ -21,7 +22,7 @@ class TestSequenceFunctions(unittest.TestCase):
         """
 
         correct_translation = "translate_car(10, CarDirection.BACKWARDS)"
-        result = parser.parser.parse(test_string)
+        result = Parser.parseString(test_string)
 
         self.assertEqual(result, correct_translation)
 
@@ -32,7 +33,7 @@ class TestSequenceFunctions(unittest.TestCase):
         """
 
         correct_translation = "rotate_car(WheelDirection.LEFT)"
-        result = parser.parser.parse(test_string)
+        result = Parser.parseString(test_string)
 
         self.assertEqual(result, correct_translation)
 
@@ -42,9 +43,27 @@ class TestSequenceFunctions(unittest.TestCase):
         """
 
         correct_translation = "rotate_car(WheelDirection.RIGHT)"
-        result = parser.parser.parse(test_string)
+        result = Parser.parseString(test_string)
 
         self.assertEqual(result, correct_translation)
+
+    def test_symbol_table_entry_validate(self):
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
+
+        self.assertFalse(entry1.validateWithTableEntry(entry2))
+        self.assertFalse(entry2.validateWithTableEntry(entry1))
+
+    def test_symbol_table_add_entry_twice(self):
+        table = SymbolTable.SymbolLookupTable()
+
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
+
+        table.addEntry(entry1)
+        
+        self.assertRaises(Exception, table.addEntry, entry1)
+        
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestSequenceFunctions)
