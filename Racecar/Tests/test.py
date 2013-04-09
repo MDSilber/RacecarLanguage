@@ -69,6 +69,7 @@ class SymbolTableTests(unittest.TestCase):
         self.assertFalse(entry3.validateWithTableEntry(entry2))
 
     def test_symbol_table_add_entry_twice(self):
+        '''Tests whether adding a duplicate entry results in an error.'''
         table = SymbolTable.SymbolLookupTable()
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
@@ -78,6 +79,7 @@ class SymbolTableTests(unittest.TestCase):
         self.assertRaises(Exception, table.addEntry, entry1)
 
     def test_symbol_table_verify(self):
+        '''Tests the SymbolLookupTable.verifyEntry() function.'''
         table = SymbolTable.SymbolLookupTable()
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
@@ -94,6 +96,7 @@ class SymbolTableTests(unittest.TestCase):
         self.assertFalse(table.verifyEntry(entry2))
 
     def test_symbol_table_get_entry(self):
+        '''Tests the SymbolLookupTable.getEntry() function.'''
         table = SymbolTable.SymbolLookupTable()
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")

@@ -11,10 +11,6 @@ class SymbolLookupTable:
         there is already an entry with the given name and scope, regardless
         of the type. Also throws an error if entry does not have a type.'''
 
-        # check if the id is already in the table (error)
-        #if entry.id in self.table and self.table[entry.id].scope == entry.scope:
-            #raise Exception()
-
         if self.verifyEntry(entry):
             raise Exception()
 
