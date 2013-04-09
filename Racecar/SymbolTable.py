@@ -26,14 +26,22 @@ class SymbolLookupTable:
         type and scope. Checks entry.validateWithTableEntry() on each
         entry in the table that has the same id as entry'''
 
-        potentialEntries = [y for (x, y) in self.table.iteritems() if y.id == entry.id]
-
-        for existingEntry in potentialEntries:
+        for x, existingEntry in self.table.iteritems():
             if entry.validateWithTableEntry(existingEntry):
                 return True
 
         # if none validate
         return False
+
+    def getEntry(self, entryQuery):
+        '''Returns the entry corresponding to the specified id and scope.
+        This is really only useful to find out the type of a particular id.'''
+
+        matches = [y for (x,y) in self.table.iteritems() if self.verifyEntry(entryQuery)]
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            raise Exception()
 
 
 class SymbolTableEntry:

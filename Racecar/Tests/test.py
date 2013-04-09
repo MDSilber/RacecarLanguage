@@ -93,6 +93,20 @@ class SymbolTableTests(unittest.TestCase):
         self.assertTrue(table.verifyEntry(entry3))
         self.assertFalse(table.verifyEntry(entry2))
 
+    def test_symbol_table_get_entry(self):
+        table = SymbolTable.SymbolLookupTable()
+
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
+        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+
+        table.addEntry(entry1)
+
+        entry4 = table.getEntry(entry3)
+        
+        self.assertTrue(entry3.validateWithTableEntry(entry4))
+        self.assertRaises(Exception, table.getEntry, entry2)
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TranslatorTests)
     unittest.TextTestRunner(verbosity=2).run(suite)
