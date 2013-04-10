@@ -5,13 +5,13 @@ from Tree import *
 reserved = {
   'drive' : 'DRIVE',
   'forward' : 'FORWARD',
-  'forwards' : 'FORWARDS',
+  'forwards' : 'FORWARDS', # never passed on to parser
   'backward' : 'BACKWARD',
-  'backwards' : 'BACKWARDS',
+  'backwards' : 'BACKWARDS',# never passed on to parser 
   'number' : 'NUMBER_TYPE',
   'word' : 'WORD_TYPE',
   'step' : 'STEP',
-  'steps' : 'STEPS',
+  'steps' : 'STEPS',# never passed on to parser
   'steer' : 'STEER',
   'left' : 'LEFT',
   'right' : 'RIGHT',
@@ -65,6 +65,10 @@ t_ignore = ' '
 def t_ID(t):
   r'[A-Za-z][A-Za-z0-9]*'
   t.type = reserved.get(t.value, 'ID')
+  # get rid of forward/forwards, backward/backwards, and step/steps ambiguity
+  if t.type == "FORWARDS" or t.type == "BACKWARDS" or t.type == "STEPS":
+    t.type = t.type[:-1]
+    t.value = t.value[:-1]
   return t
   
 def t_NEWLINE(t):
@@ -93,7 +97,15 @@ def makeParseTreeNode(p, value):
   '''Returns a Tree object containing
      as children p[1:] and a value of value'''
   toReturn = Tree()
-  toReturn.children = p[1:]
+  for element in p[1:]:
+    if type(element) == type(toReturn):
+      toReturn.children.append(element)
+    else:
+      # the element is not a tree. wrap it in a tree
+      newElement = Tree()
+      newElement.value = element
+      toReturn.children.append(newElement)
+
   toReturn.value = value
   return toReturn
 
@@ -151,17 +163,17 @@ def p_statement_contents_define(p):
 def p_compound_statement_repeat_if(p):
   '''compound_statement : repeat_if_command'''
   #print p_statement_contents_repeat_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_repeat_times(p):
   '''compound_statement : repeat_times_command'''
   #print p_statement_contents_repeat_times.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_if(p):
   '''compound_statement : if_command'''
   #print p_statement_contents_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_statement_contents_print(p):
   '''statement_contents : print_command'''
@@ -176,7 +188,7 @@ def p_statement_contents_assignment(p):
 def p_statement_contents_declaration(p):
   '''statement_contents : declaration_command'''
   #print p_statement_contents_declaration.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_statement_contents_function(p):
   '''statement_contents : function_command'''
@@ -250,7 +262,7 @@ def p_comparison_operator(p):
                    | GEQ
                    | LEQ'''
   #print p_comparison_operator.__doc__
-  p[0] = makeParseTreeNode(p, "comparison_operator")
+  p[0] = p[1]
 
 def p_plus_expression_plus_minus(p):
   '''plus_expression : plus_expression '+' times_expression
@@ -311,15 +323,12 @@ def p_drive_command(p):
 
 def p_drive_direction(p):
   '''drive_direction : FORWARD
-           | FORWARDS
-           | BACKWARD
-           | BACKWARDS'''
+           | BACKWARD'''
   #print p_drive_direction.__doc__
   p[0] = p[1]
 
 def p_opt_steps(p):
   '''opt_steps : STEP
-            | STEPS
             | empty'''
   #print p_opt_steps.__doc__
   p[0] = p[1]

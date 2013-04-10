@@ -2,7 +2,7 @@
 
 from Tkinter import *
 from PIL import Image, ImageTk
-import tkFileDialog, tkMessageBox, re, time, Compiler
+import tkFileDialog, tkMessageBox, re, time, Racecar.Tree, Racecar.Compiler
 
 #current_program ised used to store the current file open in order to save back
 #to that file
@@ -220,7 +220,7 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-        eval(Compiler.getPythonCode(code))
+        exec(Racecar.Compiler.getPythonCode(code))
     else:
         print "Blank"
 
@@ -293,7 +293,7 @@ clear_button = Button(left_frame, text = "Clear Code", command = clear)
 canvas_frame= Frame(root, width = window_width/1.5, height = window_height-300,padx=2,pady=2)
 canvas_frame.configure(borderwidth=1.5,background='black')
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = window_height-300)
-car.image = Image.open('images/racecar.png')
+car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 car.car_object = canvas.create_image(30,250,image=car.image_tk)
 car.position_x = 30
