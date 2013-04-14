@@ -102,7 +102,7 @@ def makeParseTreeNode(p, value, errors = []):
      as children p[1:] and a value of value'''
   toReturn = Tree()
   for element in p[1:]:
-    if type(element[0]) == type(toReturn):
+    if type(element) == type((Tree(), [])):
       toReturn.children.append(element[0])
     else:
       # the element is not a tree. wrap it in a tree
@@ -114,7 +114,7 @@ def makeParseTreeNode(p, value, errors = []):
 
  
   for errorList in p[1:]:
-    if type(errorList[0]) == type(Tree()):
+    if type(errorList) == type((Tree(), [])):
       errorList = errorList[1]
       errors += errorList
 
