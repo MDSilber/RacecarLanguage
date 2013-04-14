@@ -236,9 +236,9 @@ def generate_program(code):
 	    console.tag_add("End", "end -1 lines", END)
 	else:
 	    #Print message to console saying program has errors
-	    console.tag_add("Error", 1.0, 1.end)
-	    console.tag_config("Error", foreground="Red")
 	    print_to_console("You have " + str(len(errors)) + " errors in your program")
+	    console.tag_add("Error", "1.0", "1.end")
+	    console.tag_config("Error", foreground="Red")
 	    
 	    for error in errors:
 		print_to_console(error)
