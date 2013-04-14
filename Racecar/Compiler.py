@@ -1,9 +1,11 @@
 from Parser import parseString
 
 def getPythonCode(code):
+
     #return "translate_car(5, CarDirection.FORWARDS)"
     # first parse the string
     ast = parseString(code)
+    
     # then run the string through the semantic analyzer
     # ast = runSemanticAnalyzer(ast)
     # then generate python code!

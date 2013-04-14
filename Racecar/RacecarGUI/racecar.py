@@ -220,10 +220,11 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-        try:
-		exec(Racecar.Compiler.getPythonCode(code), globals())
-	except:
-		print "THIS WAS WRONG"
+	code = Racecar.Compiler.getPythonCode(code)
+	if code != None:	
+		exec(code, globals())
+	else:
+		print "THIS IS WRONG"
     else:
         print "Blank"
 
