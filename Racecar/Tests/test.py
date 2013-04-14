@@ -46,16 +46,16 @@ class TranslatorTests(unittest.TestCase):
         self.assertEqual(result4, correct_translation)
 
 
-    def test_steer_left(self):
-        test_string = "steer left\n"
+    def test_turn_left(self):
+        test_string = "turn left\n"
 
         correct_translation = "rotate_car(WheelDirection.LEFT)\n"
         result = Compiler.getPythonCode(test_string)
 
         self.assertEqual(result, correct_translation)
 
-    def test_steer_right(self):
-        test_string = "steer right\n"
+    def test_turn_right(self):
+        test_string = "turn right\n"
 
         correct_translation = "rotate_car(WheelDirection.RIGHT)\n"
         result = Compiler.getPythonCode(test_string)

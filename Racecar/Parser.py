@@ -12,10 +12,9 @@ reserved = {
   'word' : 'WORD_TYPE',
   'step' : 'STEP',
   'steps' : 'STEPS',# never passed on to parser
-  'steer' : 'STEER',
+  'turn' : 'TURN',
   'left' : 'LEFT',
   'right' : 'RIGHT',
-  'straight' : 'STRAIGHT',
   'canMove' : 'CAN_MOVE',
   'getCarPosition' : 'GET_CAR_POSITION',
   'getWheelDirection' : 'GET_WHEEL_DIRECTION',
@@ -60,7 +59,7 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
-t_ignore = ' '
+t_ignore = ' \t'
 
 def t_ID(t):
   r'[A-Za-z][A-Za-z0-9]*( a)?'
@@ -151,9 +150,9 @@ def p_statement_contents_drive(p):
   #print p_statement_contents_drive.__doc__
   p[0] = p[1]
 
-def p_statement_contents_steer(p):
-  '''statement_contents : steer_command'''
-  #print p_statement_contents_steer.__doc__
+def p_statement_contents_turn(p):
+  '''statement_contents : turn_command'''
+  #print p_statement_contents_turn.__doc__
   p[0] = p[1]
 
 def p_compound_statement_define(p):
@@ -240,7 +239,7 @@ def p_not_expression_comparison(p):
 
 def p_can_move_direction(p):
   '''can_move_direction : drive_direction
-                        | steer_direction'''
+                        | turn_direction'''
   #print p_can_move_direction.__doc__
   p[0] = makeParseTreeNode(p, "can_move_direction")
 
@@ -338,16 +337,15 @@ def p_opt_steps(p):
   #print p_opt_steps.__doc__
   p[0] = p[1]
 
-def p_steer_command(p):
-  '''steer_command : STEER steer_direction'''
-  #print p_steer_command.__doc__
-  p[0] = makeParseTreeNode(p, "steer_command")
+def p_turn_command(p):
+  '''turn_command : TURN turn_direction'''
+  #print p_turn_command.__doc__
+  p[0] = makeParseTreeNode(p, "turn_command")
 
-def p_steer_direction(p):
-  '''steer_direction : LEFT
-                 | RIGHT
-                 | STRAIGHT'''
-  #print p_steer_direction.__doc__
+def p_turn_direction(p):
+  '''turn_direction : LEFT
+                 | RIGHT'''
+  #print p_turn_direction.__doc__
   p[0] = p[1]
 
 def p_define_command(p):
