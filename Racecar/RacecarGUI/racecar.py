@@ -50,6 +50,8 @@ class Car:
         self.image = None
         self.image_tk = None
         self.car_object = None
+	self.width = 97
+	self.height = 54
     
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
@@ -220,17 +222,38 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-	code = Racecar.Compiler.getPythonCode(code)
-	if code != None:	
-		exec(code, globals())
+	python_code, errors, correct = verify_program(code)
+	if(correct):
+	    #Print message to console saying program is executing
+	    print_to_console("Program executing")
+	    console.tag_add("Correct", "1.0", "1.end")
+	    console.tag_config("Correct", foreground="Green")
+	    
+	    exec(python_code, globals())
+	    
+	    #Print message to console saying program is finished executing
+	    print_to_console("Done running program")
+	    console.tag_add("End", "end -1 lines", END)
 	else:
-		print "THIS IS WRONG"
+	    #Print message to console saying program has errors
+	    console.tag_add("Error", 1.0, 1.end)
+	    console.tag_config("Error", foreground="Red")
+	    print_to_console("You have " + str(len(errors)) + " errors in your program")
+	    
+	    for error in errors:
+		print_to_console(error)
     else:
         print "Blank"
 
 #Checks if program is a valid Racecar program
 def verify_program(code):
-    pass
+    if len(code) < 2:
+    	return ("BLANK", False)
+    code, errors = Racecar.Compiler.getPythonCode(code)
+    if len(errors) > 0:
+    	return (code, errors, False)
+    else:
+    	return (code, errors, True)
 
 #car object
 car = Car()
