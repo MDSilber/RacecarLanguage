@@ -211,10 +211,9 @@ def clear():
         code.delete(1.0,END)
 
 def clear_console():
-    if console.get(1.0,END) == '':
-        return
-    else:
-        console.delete(1.0,END)
+    console.config(state=NORMAL)
+    console.delete(1.0,END)
+    console.config(state=DISABLED)
 
 #Code generation and compilation
 #Runs code
@@ -233,11 +232,11 @@ def generate_program(code):
 	    
 	    #Print message to console saying program is finished executing
 	    print_to_console("Done running program")
-	    console.tag_add("End", "end -1 lines", END)
+	    console.tag_add("End", "end -1 l", END)
 	    console.tag_config("End", foreground="Green")
 	else:
 	    #Print message to console saying program has errors
-	    print_to_console("You have " + str(len(errors)) + " errors in your program")
+	    print_to_console("You have " + str(len(errors)) + " error(s) in your program")
 	    console.tag_add("Error", "1.0", "1.end")
 	    console.tag_config("Error", foreground="Red")
 	    
@@ -246,7 +245,8 @@ def generate_program(code):
     else:
         print "Blank"
 
-#Checks if program is a valid Racecar program
+#Checks if program is a valid Racecar program and returns corresponding python
+#code if necessary
 def verify_program(code):
     clear_console()
     if len(code) < 2:
@@ -256,6 +256,21 @@ def verify_program(code):
     	return (code, errors, False)
     else:
     	return (code, errors, True)
+
+def verify_program_callback(code):
+    verification = verify_program(code)
+    if verification[2]:
+	print_to_console("Program syntax correct")
+	console.tag_add("Correct", "1.0", "1.end")
+	console.tag_config("Correct", foreground="Green")
+    else:
+    	errors = verification[1]
+	print_to_console("You have " + str(len(errors)) + " error(s) in your program")
+	console.tag_add("Error", "1.0", "1.end")
+	console.tag_config("Error", foreground="Red")
+	    
+	for error in errors:
+	    print_to_console(error)
 
 #car object
 car = Car()
@@ -278,7 +293,7 @@ menu.add_command(label="Quit", command = exit)
 menu_bar.add_cascade(label="File",menu=menu)
 
 menu = Menu(menu_bar, tearoff=0)
-menu.add_command(label="Verify Code", command= lambda: verify_program(code.get(1.0,END)))
+menu.add_command(label="Verify Code", command= lambda: verify_program_callback(code.get(1.0,END)))
 menu.add_command(label="Run Code", command = lambda: generate_program(code.get(1.0,END)))
 menu.add_command(label="Clear Code", command = clear)
 menu.add_command(label="Clear Console", command = clear_console)
