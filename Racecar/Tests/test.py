@@ -9,7 +9,7 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = ""
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_drive_forwards(self):
         test_string1 = "drive forwards 10 steps\n"
@@ -23,10 +23,10 @@ class TranslatorTests(unittest.TestCase):
         result3 = Compiler.getPythonCode(test_string3)
         result4 = Compiler.getPythonCode(test_string4)
 
-        self.assertEqual(result1, correct_translation)
-        self.assertEqual(result2, correct_translation)
-        self.assertEqual(result3, correct_translation)
-        self.assertEqual(result4, correct_translation)
+        self.assertEqual(result1[0], correct_translation)
+        self.assertEqual(result2[0], correct_translation)
+        self.assertEqual(result3[0], correct_translation)
+        self.assertEqual(result4[0], correct_translation)
 
     def test_drive_backwards(self):
         test_string1 = "drive backwards 10 steps\n"
@@ -40,10 +40,10 @@ class TranslatorTests(unittest.TestCase):
         result3 = Compiler.getPythonCode(test_string3)
         result4 = Compiler.getPythonCode(test_string4)
 
-        self.assertEqual(result1, correct_translation)
-        self.assertEqual(result2, correct_translation)
-        self.assertEqual(result3, correct_translation)
-        self.assertEqual(result4, correct_translation)
+        self.assertEqual(result1[0], correct_translation)
+        self.assertEqual(result2[0], correct_translation)
+        self.assertEqual(result3[0], correct_translation)
+        self.assertEqual(result4[0], correct_translation)
 
 
     def test_turn_left(self):
@@ -52,7 +52,7 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = "rotate_car(WheelDirection.LEFT)\n"
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_turn_right(self):
         test_string = "turn right\n"
@@ -60,7 +60,7 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = "rotate_car(WheelDirection.RIGHT)\n"
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_print(self):
         test_string = "print \"hello world\"\n"
@@ -68,14 +68,14 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = "print_to_console(\"hello world\")\n"
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_declare(self):
         test_string = "myNum is a number\n"
         correct_translation = "myNum = None\n"
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_assign(self):
         test_string = "set myVar to otherThing\n"
@@ -83,7 +83,7 @@ class TranslatorTests(unittest.TestCase):
 
         result = Compiler.getPythonCode(test_string)
 
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
     
     def test_define(self):
         test_string = """
@@ -98,7 +98,7 @@ define moveForwardFive
 """
 
         result = Compiler.getPythonCode(test_string)
-        self.assertEqual(result, correct_translation)
+        self.assertEqual(result[0], correct_translation)
 
     def test_function_invocation_no_params(self):
         test_string = """
