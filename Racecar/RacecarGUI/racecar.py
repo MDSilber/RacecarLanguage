@@ -121,7 +121,7 @@ def print_to_console(message):
     #Should console be cleared each time the program is restart? Or should there
     #be a button?
     console.config(state=NORMAL)
-    console.insert(END, message + '\n')
+    console.insert(END, str(message) + '\n')
     console.config(state=DISABLED)
 
 #Course generation functions

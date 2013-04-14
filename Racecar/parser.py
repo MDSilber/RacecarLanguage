@@ -31,8 +31,8 @@ reserved = {
   'times' : 'TIMES',
   'true' : 'TRUE',
   'false' : 'FALSE',
+  'a' : 'A',
   'is' : 'IS',
-  'is a' : 'IS_A',
   'is not' : 'IS_NOT',
   'not' : 'NOT',
   'set' : 'SET',
@@ -63,7 +63,7 @@ t_CONCAT = r'\+\+'
 t_ignore = ' '
 
 def t_ID(t):
-  r'[A-Za-z][A-Za-z0-9]*'
+  r'[A-Za-z][A-Za-z0-9]*( a)?'
   t.type = reserved.get(t.value, 'ID')
   # get rid of forward/forwards, backward/backwards, and step/steps ambiguity
   if t.type == "FORWARDS" or t.type == "BACKWARDS" or t.type == "STEPS":
@@ -155,8 +155,8 @@ def p_statement_contents_steer(p):
   #print p_statement_contents_steer.__doc__
   p[0] = p[1]
 
-def p_statement_contents_define(p):
-  '''statement_contents : define_command'''
+def p_compound_statement_define(p):
+  '''compound_statement : define_command'''
   #print p_statement_contents_define.__doc__
   p[0] = p[1]
 
@@ -401,7 +401,7 @@ def p_print_command(p):
   p[0] = makeParseTreeNode(p, "print")
 
 def p_declaration_command(p):
-  """declaration_command : ID IS_A type_enum"""
+  """declaration_command : ID IS A type_enum"""
   #print p_declaration_command.__doc__
   p[0] = makeParseTreeNode(p, "declaration_command")
 
@@ -426,6 +426,10 @@ if __name__ == "__main__":
 			break
 
 		else:
-			result = parser.parse(inputString)
-			result.printTree()
-			print
+                        try:
+                          result = parser.parse(inputString)
+                        except SyntaxError as e:
+                          print "Error: ", e
+                        else:
+                          result.printTree()
+                          print
