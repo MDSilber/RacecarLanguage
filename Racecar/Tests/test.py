@@ -4,6 +4,12 @@ import Racecar.Compiler as Compiler
 import Racecar.SymbolTable as SymbolTable
 
 class TranslatorTests(unittest.TestCase):
+    def test_empty_statement(self):
+        test_string = "\n"
+        correct_translation = ""
+        result = Compiler.getPythonCode(test_string)
+
+        self.assertEqual(result, correct_translation)
 
     def test_drive_forwards(self):
         test_string1 = "drive forwards 10 steps\n"
@@ -80,11 +86,41 @@ class TranslatorTests(unittest.TestCase):
         self.assertEqual(result, correct_translation)
     
     def test_define(self):
-        test_string = "define moveForwardFive\n{drive forward 5\n}\n"
-        correct_translation = "def moveForwardFive():\n    translate_car(5, CarDirection.FORWARDS)\n"
+        test_string = """
+define moveForwardFive
+{
+    drive forward 5
+}
+"""
+        correct_translation =\
+"""def moveForwardFive():
+    translate_car(5, CarDirection.FORWARDS)
+"""
 
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result, correct_translation)
+
+    def test_function_invocation_no_params(self):
+        test_string = """
+define moveBackwardFive
+{
+    drive backward 5
+}
+define moveForwardThenBackward
+{
+    drive forward 5
+    moveBackwardFive
+}
+moveForwardThenBackward
+"""
+        correct_translation =\
+"""def moveBackwardFive():
+    translate_car(5, CarDirection.BACKWARDS)
+def moveForwardThenBackward():
+    translate_car(5, CarDirection.FORWARDS)
+    moveBackwardFive()
+moveForwardThenBackward()
+"""
 
 
 

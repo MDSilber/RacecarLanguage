@@ -143,7 +143,8 @@ def p_simple_statement_command(p):
 def p_statement_newline(p):
   '''simple_statement : NEWLINE'''
   #print p_statement_newline.__doc__
-  p[0] = makeParseTreeNode(p, "simple_statement")
+  p[0] = Tree()
+  p[0].value = "empty"
 
 def p_statement_contents_drive(p):
   '''statement_contents : drive_command'''
@@ -311,10 +312,14 @@ def p_primary_expression_token(p):
   p[0] = p[1]
 
 def p_function_command(p):
-  '''function_command : function_command primary_expression
-                   | primary_expression'''
+  '''function_command : primary_expression opt_parameters'''
   #print p_function_command.__doc__
   p[0] = makeParseTreeNode(p, "function_command")
+
+def p_opt_parameters(p):
+  '''opt_parameters : opt_parameters primary_expression
+                    | empty'''
+  p[0] = makeParseTreeNode(p, "opt_parameters")
 
 def p_drive_command(p):
   '''drive_command : DRIVE drive_direction plus_expression opt_steps'''

@@ -220,7 +220,7 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-        exec(Racecar.Compiler.getPythonCode(code))
+        exec(Racecar.Compiler.getPythonCode(code), globals())
     else:
         print "Blank"
 

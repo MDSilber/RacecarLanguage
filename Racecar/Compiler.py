@@ -66,13 +66,26 @@ def generatePythonCode(ast):
         pythonCode += "():\n"
         pythonCode += generatePythonCode(ast.children[4])
 
-
     elif ast.value == "statement_block":
         prelimPythonCode = generatePythonCode(ast.children[1])
         # Insert 4 spaces (i.e. 1 tab) at the beginning of every line
-        splitCode = prelimPythonCode.splitlines()
+        splitCode = prelimPythonCode.splitlines(True)
 
-        pythonCode += "    " + "    ".join(splitCode) + "\n"
+        pythonCode += "    " + "    ".join(splitCode)
+
+    elif ast.value == "function_command":
+        pythonCode += generatePythonCode(ast.children[0])
+        pythonCode += "("
+        pythonCode += generatePythonCode(ast.children[1])
+        pythonCode += ")\n"
+
+    elif ast.value == "opt_parameters":
+        if len(ast.children) > 1:
+            pythonCode += generatePythonCode(ast.children[0])
+            pythonCode += generatePythonCode(ast.children[1])
+            pythonCode += ", "
+            
+
 
 
     else:
