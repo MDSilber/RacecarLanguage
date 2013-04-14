@@ -9,6 +9,7 @@ def getPythonCode(code):
     
 =======
     ast, errors = parseString(code)
+
     print "errors = ",errors
     if len(errors) > 0:
       return (None, errors)
