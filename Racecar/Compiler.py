@@ -6,8 +6,7 @@ def getPythonCode(code):
     # first parse the string
     ast, errors = parseString(code)
 
-    print "errors = ",errors
-    if len(errors) > 0:
+    if errors:
       return (None, errors)
 
     # then run the string through the semantic analyzer

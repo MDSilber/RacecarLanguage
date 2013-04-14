@@ -234,6 +234,7 @@ def generate_program(code):
 	    #Print message to console saying program is finished executing
 	    print_to_console("Done running program")
 	    console.tag_add("End", "end -1 lines", END)
+	    console.tag_config("End", foreground="Green")
 	else:
 	    #Print message to console saying program has errors
 	    print_to_console("You have " + str(len(errors)) + " errors in your program")
@@ -247,10 +248,11 @@ def generate_program(code):
 
 #Checks if program is a valid Racecar program
 def verify_program(code):
+    clear_console()
     if len(code) < 2:
     	return ("BLANK", False)
     code, errors = Racecar.Compiler.getPythonCode(code)
-    if len(errors) > 0:
+    if errors:
     	return (code, errors, False)
     else:
     	return (code, errors, True)
