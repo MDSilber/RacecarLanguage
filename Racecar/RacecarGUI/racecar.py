@@ -232,8 +232,9 @@ def generate_program(code):
 	    
 	    #Print message to console saying program is finished executing
 	    print_to_console("Done running program")
-	    console.tag_add("End", "end -1 l", END)
+	    console.tag_add("End", "end -2 l", END)
 	    console.tag_config("End", foreground="Green")
+	    print "OUTPUT: " + console.index("end -1 l")
 	else:
 	    #Print message to console saying program has errors
 	    print_to_console("You have " + str(len(errors)) + " error(s) in your program")
