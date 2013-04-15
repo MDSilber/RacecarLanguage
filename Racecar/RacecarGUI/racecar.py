@@ -91,9 +91,8 @@ def rotate_car(direction):
         elif direction == WheelDirection.RIGHT:
           car.car_direction.turn_right()
         else:
-          return
-        
-
+	  return
+	
         for i in range(0,45):
                 time.sleep(0.025)
                 canvas.delete(car.car_object)
@@ -248,6 +247,7 @@ def verify_program(code):
     else:
     	return (code, errors, True)
 
+#Called when verify program is called
 def verify_program_callback(code):
     verification = verify_program(code)
     if verification[2]:
@@ -263,6 +263,14 @@ def verify_program_callback(code):
 	for error in errors:
 	    print_to_console(error)
 
+#Resets car's position and orientation to original position
+def reset_car_position():
+	global car
+	canvas.delete(car.car_object)
+	car.car_object = canvas.create_image(30, 250, image = car.image_tk)
+	car.position_x = 30
+	car.position_y = 250
+	
 #car object
 car = Car()
 
@@ -318,11 +326,18 @@ code_scrollbar.pack(side=RIGHT, fill=Y)
 #code is the window in which the code is written
 code = Text(code_frame, width=50, height = 30, wrap=WORD, yscrollcommand=code_scrollbar.set)
 
+#Frame for buttons
+button_frame = Frame(left_frame)
+
 #run_button passes code into a run program method
-run_button = Button(left_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
+run_button = Button(button_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
+
+#reset car position button puts the car back in its original position and
+#orientation
+reset_car_position_button = Button(button_frame, text = "Reset Car Position", pady=5, padx=5, command = reset_car_position)
 
 #clear_button clears the code in the text box
-clear_button = Button(left_frame, text = "Clear Code", command = clear)
+clear_button = Button(button_frame, text = "Clear Code", command = clear)
 
 #canvas is where the car will go
 canvas_frame= Frame(root, width = window_width/1.5, height = window_height-300,padx=2,pady=2)
@@ -358,8 +373,10 @@ code_label.pack()
 code_frame.pack(fill=BOTH)
 code.pack(fill=BOTH)
 
-run_button.pack(side=LEFT)
-clear_button.pack(side=RIGHT)
+button_frame.pack(fill=BOTH)
+run_button.grid(row = 1, column = 1)
+reset_car_position_button.grid(row = 1, column = 2)
+clear_button.grid(row = 1, column = 3)
 
 canvas_frame.pack(fill=BOTH)
 canvas.pack(fill=BOTH)
