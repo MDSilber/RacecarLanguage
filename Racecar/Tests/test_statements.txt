@@ -69,7 +69,7 @@ else
 
 numberOfSteps is a number
 set numberOfSteps to 10
-drive numberOfSteps forward
+drive forward numberOfSteps
 
 color is a word
 set color to "blue"
