@@ -1,15 +1,20 @@
 from Parser import parseString
 
 def getPythonCode(code):
+
     #return "translate_car(5, CarDirection.FORWARDS)"
     # first parse the string
     ast = parseString(code)
+
+    if len(ast.errors) > 0:
+      return (None, ast.errors)
+
     # then run the string through the semantic analyzer
     # ast = runSemanticAnalyzer(ast)
     # then generate python code!
     pythonCode = generatePythonCode(ast)
 
-    return pythonCode
+    return (pythonCode, None)
 
 
 def generatePythonCode(ast):
@@ -39,6 +44,16 @@ def generatePythonCode(ast):
 
     elif ast.value == "backward":
         pythonCode += "CarDirection.BACKWARDS"
+
+    elif ast.value == "turn_command":
+        pythonCode += "rotate_car("
+        pythonCode += generatePythonCode(ast.children[1])
+        pythonCode += ")\n"
+    elif ast.value == "left":
+        pythonCode += "WheelDirection.LEFT"
+    elif ast.value == "right":
+        pythonCode += "WheelDirection.RIGHT"
+
 
     elif ast.value == "declaration_command":
         # id is a whatever -->
@@ -105,7 +120,5 @@ if __name__ == "__main__":
 			break
 
 		else:
-			result = parseString(inputString)
-                        result.printTree()
-                        print generatePythonCode(result)
+                        print getPythonCode(inputString)
 

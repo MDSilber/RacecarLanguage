@@ -5,17 +5,16 @@ from Tree import *
 reserved = {
   'drive' : 'DRIVE',
   'forward' : 'FORWARD',
-  'forwards' : 'FORWARDS',
+  'forwards' : 'FORWARDS', # never passed on to parser
   'backward' : 'BACKWARD',
-  'backwards' : 'BACKWARDS',
+  'backwards' : 'BACKWARDS',# never passed on to parser 
   'number' : 'NUMBER_TYPE',
   'word' : 'WORD_TYPE',
   'step' : 'STEP',
-  'steps' : 'STEPS',
-  'steer' : 'STEER',
+  'steps' : 'STEPS',# never passed on to parser
+  'turn' : 'TURN',
   'left' : 'LEFT',
   'right' : 'RIGHT',
-  'straight' : 'STRAIGHT',
   'canMove' : 'CAN_MOVE',
   'getCarPosition' : 'GET_CAR_POSITION',
   'getWheelDirection' : 'GET_WHEEL_DIRECTION',
@@ -31,8 +30,8 @@ reserved = {
   'times' : 'TIMES',
   'true' : 'TRUE',
   'false' : 'FALSE',
+  'a' : 'A',
   'is' : 'IS',
-  'is a' : 'IS_A',
   'is not' : 'IS_NOT',
   'not' : 'NOT',
   'set' : 'SET',
@@ -60,38 +59,81 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
-t_NEWLINE = r'\n|;' # semicolon for debugging interpreter use
-t_ignore = ' '
+t_ignore = ' \t'
 
 def t_ID(t):
-  r'[A-Za-z][A-Za-z0-9]*'
+  r'[A-Za-z][A-Za-z0-9]*( a)?'
   t.type = reserved.get(t.value, 'ID')
+  # get rid of forward/forwards, backward/backwards, and step/steps ambiguity
+  if t.type == "FORWARDS" or t.type == "BACKWARDS" or t.type == "STEPS":
+    t.type = t.type[:-1]
+    t.value = t.value[:-1]
+  return t
+  
+def t_NEWLINE(t):
+  r'\n|;' # semicolon for debugging interpreter use
+  t.lexer.lineno += 1
   return t
 
 def t_error(t):
-  raise TypeError("Unknown text: `%s'" % (t.value,))
+  print "Illegal character '%s' at line '%s'" % (t.value[0], t.lexer.lineno)
+  t.lexer.skip(1)
+  return t
 
 lexer = lex.lex()
 
 def p_error(p):
-  raise SyntaxError()
+  if p == None:
+    raise SyntaxError("Reached end of file unexpectedly!")
+  elif p.value[0] == None:
+    print "Lexing Error with character ", p.value[1]
+    p.value = p.value[1]
+  else:
+    print "Syntax error at token ", p.type#, " at line ", p.lineno(num), " and position ", p.lexpos(num)
+    # Read ahead looking for a closing '}'
+    #while 1:
+    #  tok = yacc.token()             # Get the next token
+    #  if not tok or tok.type == 'NEWLINE': break
+    #yacc.restart()
 
 def makeParseTreeNode(p, value):
   '''Returns a Tree object containing
      as children p[1:] and a value of value'''
   toReturn = Tree()
-  toReturn.children = p[1:]
+  for element in p[1:]:
+    if type(element) == type(toReturn):
+      toReturn.children.append(element)
+      toReturn.errors += element.errors
+    else:
+      # the element is not a tree. wrap it in a tree
+      newElement = Tree()
+      newElement.value = element
+      toReturn.children.append(newElement)
+
   toReturn.value = value
+  if value == "error":
+    toReturn.errors.append(p[1])
+ 
   return toReturn
+
 
 def p_statements(p):
   '''statements : statements statement'''
   #print p_statements.__doc__
-  p[0] = makeParseTreeNode(p, "statements")
+  if p[1].value == "empty" and p[2].value != "empty":
+    p[0] = p[2]
+  elif p[2].value == "empty" and p[1].value != "empty":
+    p[0] = p[1]
+  else:
+    p[0] = makeParseTreeNode(p, "statements")
+
+def p_error_statement(p):
+  '''statement : error NEWLINE'''
+  p[0] = makeParseTreeNode(p, "error")
 
 def p_statements_empty(p):
   '''statements : empty'''
-  p[0] = makeParseTreeNode(p, "statements")
+  p[0] = p[1]
   #print p_statements_empty.__doc__
 
 def p_statement_block(p):
@@ -108,67 +150,68 @@ def p_empty(p):
 def p_statement_simple_compound(p):
   '''statement : simple_statement
                | compound_statement'''
-  p[0] = makeParseTreeNode(p, "statement")
+  p[0] = p[1]
 
 def p_simple_statement_command(p):
   '''simple_statement : statement_contents NEWLINE'''
   #print p_statement_command.__doc__
-  p[0] = makeParseTreeNode(p, "simple_statement")
+  p[0] = p[1]
 
 def p_statement_newline(p):
   '''simple_statement : NEWLINE'''
   #print p_statement_newline.__doc__
-  p[0] = makeParseTreeNode(p, "simple_statement")
+  p[0] = Tree()
+  p[0].value = "empty"
 
 def p_statement_contents_drive(p):
   '''statement_contents : drive_command'''
   #print p_statement_contents_drive.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
-def p_statement_contents_steer(p):
-  '''statement_contents : steer_command'''
-  #print p_statement_contents_steer.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+def p_statement_contents_turn(p):
+  '''statement_contents : turn_command'''
+  #print p_statement_contents_turn.__doc__
+  p[0] = p[1]
 
-def p_statement_contents_define(p):
-  '''statement_contents : define_command'''
+def p_compound_statement_define(p):
+  '''compound_statement : define_command'''
   #print p_statement_contents_define.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_compound_statement_repeat_if(p):
   '''compound_statement : repeat_if_command'''
   #print p_statement_contents_repeat_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_repeat_times(p):
   '''compound_statement : repeat_times_command'''
   #print p_statement_contents_repeat_times.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_compound_statement_if(p):
   '''compound_statement : if_command'''
   #print p_statement_contents_if.__doc__
-  p[0] = makeParseTreeNode(p, "compound_statement")
+  p[0] = p[1]
 
 def p_statement_contents_print(p):
   '''statement_contents : print_command'''
   #print p_statement_contents_print.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_statement_contents_assignment(p):
   '''statement_contents : assignment_command'''
   #print p_statement_contents_assignment.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_statement_contents_declaration(p):
   '''statement_contents : declaration_command'''
   #print p_statement_contents_declaration.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_statement_contents_function(p):
   '''statement_contents : function_command'''
   #print p_statement_contents_function.__doc__
-  p[0] = makeParseTreeNode(p, "statement_contents")
+  p[0] = p[1]
 
 def p_expression(p):
   '''expression : expression OR and_expression'''
@@ -178,7 +221,7 @@ def p_expression(p):
 def p_expression_to_and(p):
   '''expression : and_expression'''
   #print p_expression_to_and.__doc__
-  p[0] = makeParseTreeNode(p, "expression")
+  p[0] = p[1]
 
 def p_and_expression(p):
   '''and_expression : and_expression AND not_expression'''
@@ -189,7 +232,7 @@ def p_and_expression(p):
 def p_and_expr_to_not(p):
   '''and_expression : not_expression'''
   #print p_and_expr_to_not.__doc__
-  p[0] = makeParseTreeNode(p, "and_expression")
+  p[0] = p[1]
 
 def p_not_expression_not(p):
   '''not_expression : NOT not_expression'''
@@ -200,7 +243,7 @@ def p_not_expression_true_false(p):
   '''not_expression : TRUE
                     | FALSE'''
   #print p_not_expression_true.__doc__
-  p[0] = makeParseTreeNode(p, "not_expression")
+  p[0] = p[1]
 
 def p_not_expression_can_move(p):
   '''not_expression : CAN_MOVE can_move_direction'''
@@ -210,11 +253,11 @@ def p_not_expression_can_move(p):
 def p_not_expression_comparison(p):
   '''not_expression : comparison'''
   #print p_not_expression_comparison.__doc__
-  p[0] = makeParseTreeNode(p, "not_expression")
+  p[0] = p[1]
 
 def p_can_move_direction(p):
   '''can_move_direction : drive_direction
-                        | steer_direction'''
+                        | turn_direction'''
   #print p_can_move_direction.__doc__
   p[0] = makeParseTreeNode(p, "can_move_direction")
 
@@ -226,7 +269,7 @@ def p_comparison_with_operator(p):
 def p_comparison_plus(p):
   '''comparison : plus_expression'''
   #print p_comparison_plus.__doc__
-  p[0] = makeParseTreeNode(p, "comparison")
+  p[0] = p[1]
 
 def p_comparison_operator(p):
   '''comparison_operator : IS
@@ -237,7 +280,7 @@ def p_comparison_operator(p):
                    | GEQ
                    | LEQ'''
   #print p_comparison_operator.__doc__
-  p[0] = makeParseTreeNode(p, "comparison_operator")
+  p[0] = p[1]
 
 def p_plus_expression_plus_minus(p):
   '''plus_expression : plus_expression '+' times_expression
@@ -248,7 +291,7 @@ def p_plus_expression_plus_minus(p):
 def p_plus_expression_times_expression(p):
   '''plus_expression : times_expression'''
   #print p_plus_expression_times_expression.__doc__
-  p[0] = makeParseTreeNode(p, "plus_expression")
+  p[0] = p[1]
 
 def p_times_expression_times_divide(p):
   '''times_expression : times_expression '*' word_expression
@@ -259,7 +302,7 @@ def p_times_expression_times_divide(p):
 def p_times_expression_word_expression(p):
   '''times_expression : word_expression'''
   #print p_times_expression_word_expression.__doc__
-  p[0] = makeParseTreeNode(p, "times_expression")
+  p[0] = p[1]
 
 def p_word_expression_concat(p):
   '''word_expression : word_expression CONCAT primary_expression'''
@@ -269,7 +312,7 @@ def p_word_expression_concat(p):
 def p_word_expression_primary_expression(p):
   '''word_expression : primary_expression'''
   #print p_word_expression_primary_expression.__doc__
-  p[0] = makeParseTreeNode(p, "word_expression")
+  p[0] = p[1]
 
 def p_primary_expression_parens(p):
   """primary_expression : '(' expression ')'"""
@@ -283,13 +326,17 @@ def p_primary_expression_token(p):
                | GET_WHEEL_DIRECTION
                | ID'''
   #print p_primary_expression_token.__doc__
-  p[0] = makeParseTreeNode(p, "primary_expression")
+  p[0] = p[1]
 
 def p_function_command(p):
-  '''function_command : function_command primary_expression
-                   | primary_expression'''
+  '''function_command : primary_expression opt_parameters'''
   #print p_function_command.__doc__
   p[0] = makeParseTreeNode(p, "function_command")
+
+def p_opt_parameters(p):
+  '''opt_parameters : opt_parameters primary_expression
+                    | empty'''
+  p[0] = makeParseTreeNode(p, "opt_parameters")
 
 def p_drive_command(p):
   '''drive_command : DRIVE drive_direction plus_expression opt_steps'''
@@ -298,30 +345,26 @@ def p_drive_command(p):
 
 def p_drive_direction(p):
   '''drive_direction : FORWARD
-           | FORWARDS
-           | BACKWARD
-           | BACKWARDS'''
+           | BACKWARD'''
   #print p_drive_direction.__doc__
-  p[0] = makeParseTreeNode(p, "drive_direction")
+  p[0] = p[1]
 
 def p_opt_steps(p):
   '''opt_steps : STEP
-            | STEPS
             | empty'''
   #print p_opt_steps.__doc__
-  p[0] = makeParseTreeNode(p, "opt_steps")
+  p[0] = p[1]
 
-def p_steer_command(p):
-  '''steer_command : STEER steer_direction'''
-  #print p_steer_command.__doc__
-  p[0] = makeParseTreeNode(p, "steer_command")
+def p_turn_command(p):
+  '''turn_command : TURN turn_direction'''
+  #print p_turn_command.__doc__
+  p[0] = makeParseTreeNode(p, "turn_command")
 
-def p_steer_direction(p):
-  '''steer_direction : LEFT
-                 | RIGHT
-                 | STRAIGHT'''
-  #print p_steer_direction.__doc__
-  p[0] = makeParseTreeNode(p, "steer_direction")
+def p_turn_direction(p):
+  '''turn_direction : LEFT
+                 | RIGHT'''
+  #print p_turn_direction.__doc__
+  p[0] = p[1]
 
 def p_define_command(p):
   """define_command : DEFINE ID opt_param_list NEWLINE statement_block"""
@@ -379,7 +422,7 @@ def p_print_command(p):
   p[0] = makeParseTreeNode(p, "print")
 
 def p_declaration_command(p):
-  """declaration_command : ID IS_A type_enum"""
+  """declaration_command : ID IS A type_enum"""
   #print p_declaration_command.__doc__
   p[0] = makeParseTreeNode(p, "declaration_command")
 
@@ -404,6 +447,11 @@ if __name__ == "__main__":
 			break
 
 		else:
-			result = parser.parse(inputString)
-			result.printTree()
-			print
+                        try:
+                          result = parser.parse(inputString)
+                        except SyntaxError as e:
+                          print "Error: ", e
+                        else:
+                          result.printTree()
+                          print
+                          print "errors: ",result.errors

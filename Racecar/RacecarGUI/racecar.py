@@ -50,12 +50,14 @@ class Car:
         self.image = None
         self.image_tk = None
         self.car_object = None
+	self.width = 97
+	self.height = 54
     
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
-    def update_position(self, steps):
-        self.position_x += self.car_direction.get_direction()[0] * steps
-        self.position_y += self.car_direction.get_direction()[1] * steps
+    def update_position(self, steps, movement_direction):
+        self.position_x += self.car_direction.get_direction()[0] * steps * movement_direction
+        self.position_y += self.car_direction.get_direction()[1] * steps * movement_direction
     
     #Decided on a 10:1 pixels to steps ratio
 
@@ -75,17 +77,7 @@ def translate_car(steps, direction):
         canvas.move(car.car_object, direction * car.car_direction.get_direction()[0], direction * car.car_direction.get_direction()[1])
         canvas.update()
 
-    car.update_position(steps_to_pixels(steps))
-
-#Demo movement
-def demo(steps):
-
-    #translate_car(steps, CarDirection.FORWARDS)
-    #rotate_car(WheelDirection.LEFT)
-    #translate_car(steps, CarDirection.FORWARDS)
-    #rotate_car(WheelDirection.RIGHT)
-    #translate_car(steps, CarDirection.FORWARDS)
-    print_to_console(str(car.position_x) + ", " + str(car.position_y))
+    car.update_position(steps_to_pixels(steps), direction)
 
 #direction must be WheelDirection.LEFT or WheelDirection.RIGHT
 def rotate_car(direction):
@@ -99,9 +91,8 @@ def rotate_car(direction):
         elif direction == WheelDirection.RIGHT:
           car.car_direction.turn_right()
         else:
-          return
-        
-
+	  return
+	
         for i in range(0,45):
                 time.sleep(0.025)
                 canvas.delete(car.car_object)
@@ -209,10 +200,9 @@ def clear():
         code.delete(1.0,END)
 
 def clear_console():
-    if console.get(1.0,END) == '':
-        return
-    else:
-        console.delete(1.0,END)
+    console.config(state=NORMAL)
+    console.delete(1.0,END)
+    console.config(state=DISABLED)
 
 #Code generation and compilation
 #Runs code
@@ -220,14 +210,67 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-        exec(Racecar.Compiler.getPythonCode(code), globals())
+	python_code, errors, correct = verify_program(code)
+	if(correct):
+	    #Print message to console saying program is executing
+	    print_to_console("Program executing")
+	    console.tag_add("Correct", "1.0", "1.end")
+	    console.tag_config("Correct", foreground="Green")
+	    
+	    exec(python_code, globals())
+	    
+	    #Print message to console saying program is finished executing
+	    print_to_console("Done running program")
+	    console.tag_add("End", "end -2 l", END)
+	    console.tag_config("End", foreground="Green")
+	    print "OUTPUT: " + console.index("end -1 l")
+	else:
+	    #Print message to console saying program has errors
+	    print_to_console("You have " + str(len(errors)) + " error(s) in your program")
+	    console.tag_add("Error", "1.0", "1.end")
+	    console.tag_config("Error", foreground="Red")
+	    
+	    for error in errors:
+		print_to_console(error)
     else:
         print "Blank"
 
-#Checks if program is a valid Racecar program
+#Checks if program is a valid Racecar program and returns corresponding python
+#code if necessary
 def verify_program(code):
-    pass
+    clear_console()
+    if len(code) < 2:
+    	return ("BLANK", False)
+    code, errors = Racecar.Compiler.getPythonCode(code)
+    if errors:
+    	return (code, errors, False)
+    else:
+    	return (code, errors, True)
 
+#Called when verify program is called
+def verify_program_callback(code):
+    verification = verify_program(code)
+    if verification[2]:
+	print_to_console("Program syntax correct")
+	console.tag_add("Correct", "1.0", "1.end")
+	console.tag_config("Correct", foreground="Green")
+    else:
+    	errors = verification[1]
+	print_to_console("You have " + str(len(errors)) + " error(s) in your program")
+	console.tag_add("Error", "1.0", "1.end")
+	console.tag_config("Error", foreground="Red")
+	    
+	for error in errors:
+	    print_to_console(error)
+
+#Resets car's position and orientation to original position
+def reset_car_position():
+	global car
+	canvas.delete(car.car_object)
+	car.car_object = canvas.create_image(30, 250, image = car.image_tk)
+	car.position_x = 30
+	car.position_y = 250
+	
 #car object
 car = Car()
 
@@ -249,7 +292,7 @@ menu.add_command(label="Quit", command = exit)
 menu_bar.add_cascade(label="File",menu=menu)
 
 menu = Menu(menu_bar, tearoff=0)
-menu.add_command(label="Verify Code", command= lambda: verify_program(code.get(1.0,END)))
+menu.add_command(label="Verify Code", command= lambda: verify_program_callback(code.get(1.0,END)))
 menu.add_command(label="Run Code", command = lambda: generate_program(code.get(1.0,END)))
 menu.add_command(label="Clear Code", command = clear)
 menu.add_command(label="Clear Console", command = clear_console)
@@ -280,14 +323,24 @@ code_frame = Frame(left_frame)
 code_scrollbar = Scrollbar(code_frame)
 code_scrollbar.pack(side=RIGHT, fill=Y)
 
+print "WINDOW WIDTH: " + str(window_width)
+print "WINDOW HEIGHT: " + str(window_height)
+
 #code is the window in which the code is written
-code = Text(code_frame, width=50, height = 30, wrap=WORD, yscrollcommand=code_scrollbar.set)
+code = Text(code_frame, width=50, height = window_height/20, wrap=WORD, yscrollcommand=code_scrollbar.set)
+
+#Frame for buttons
+button_frame = Frame(left_frame)
 
 #run_button passes code into a run program method
-run_button = Button(left_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
+run_button = Button(button_frame, text = "Run Code", pady=5, padx=5, command = lambda: generate_program(code.get(1.0,END)))
+
+#reset car position button puts the car back in its original position and
+#orientation
+reset_car_position_button = Button(button_frame, text = "Reset Car Position", pady=5, padx=5, command = reset_car_position)
 
 #clear_button clears the code in the text box
-clear_button = Button(left_frame, text = "Clear Code", command = clear)
+clear_button = Button(button_frame, text = "Clear Code", command = clear)
 
 #canvas is where the car will go
 canvas_frame= Frame(root, width = window_width/1.5, height = window_height-300,padx=2,pady=2)
@@ -323,8 +376,10 @@ code_label.pack()
 code_frame.pack(fill=BOTH)
 code.pack(fill=BOTH)
 
-run_button.pack(side=LEFT)
-clear_button.pack(side=RIGHT)
+button_frame.pack(fill=BOTH)
+run_button.grid(row = 1, column = 1)
+reset_car_position_button.grid(row = 1, column = 2)
+clear_button.grid(row = 1, column = 3)
 
 canvas_frame.pack(fill=BOTH)
 canvas.pack(fill=BOTH)

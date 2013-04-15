@@ -2,6 +2,7 @@ class Tree:
   def __init__(self):
     self.children = []
     self.value = None
+    self.errors = []
 
   def printTree_old(self):
     print "(value: ", self.value,
