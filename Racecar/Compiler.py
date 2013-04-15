@@ -45,10 +45,14 @@ def generatePythonCode(ast):
     elif ast.value == "backward":
         pythonCode += "CarDirection.BACKWARDS"
 
-    elif ast.value == "turn":
+    elif ast.value == "turn_command":
         pythonCode += "rotate_car("
         pythonCode += generatePythonCode(ast.children[1])
         pythonCode += ")\n"
+    elif ast.value == "left":
+        pythonCode += "WheelDirection.LEFT"
+    elif ast.value == "right":
+        pythonCode += "WheelDirection.RIGHT"
 
 
     elif ast.value == "declaration_command":
