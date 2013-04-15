@@ -4,10 +4,10 @@ def getPythonCode(code):
 
     #return "translate_car(5, CarDirection.FORWARDS)"
     # first parse the string
-    ast, errors = parseString(code)
+    ast = parseString(code)
 
-    if errors:
-      return (None, errors)
+    if len(ast.errors) > 0:
+      return (None, ast.errors)
 
     # then run the string through the semantic analyzer
     # ast = runSemanticAnalyzer(ast)

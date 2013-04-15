@@ -78,7 +78,6 @@ def t_NEWLINE(t):
 def t_error(t):
   print "Illegal character '%s' at line '%s'" % (t.value[0], t.lexer.lineno)
   t.lexer.skip(1)
-  t.value = (None, t.value)
   return t
 
 lexer = lex.lex()
@@ -97,13 +96,14 @@ def p_error(p):
     #  if not tok or tok.type == 'NEWLINE': break
     #yacc.restart()
 
-def makeParseTreeNode(p, value, errors = []):
+def makeParseTreeNode(p, value):
   '''Returns a Tree object containing
      as children p[1:] and a value of value'''
   toReturn = Tree()
   for element in p[1:]:
-    if type(element) == type((Tree(), [])):
-      toReturn.children.append(element[0])
+    if type(element) == type(toReturn):
+      toReturn.children.append(element)
+      toReturn.errors += element.errors
     else:
       # the element is not a tree. wrap it in a tree
       newElement = Tree()
@@ -111,15 +111,9 @@ def makeParseTreeNode(p, value, errors = []):
       toReturn.children.append(newElement)
 
   toReturn.value = value
-
+  if value == "error":
+    toReturn.errors.append(p[1])
  
-  for errorList in p[1:]:
-    if type(errorList) == type((Tree(), [])):
-      errorList = errorList[1]
-      errors += errorList
-
-  toReturn = (toReturn, errors)
-
   return toReturn
 
 
@@ -130,7 +124,7 @@ def p_statements(p):
 
 def p_error_statement(p):
   '''statement : error NEWLINE'''
-  p[0] = makeParseTreeNode(p, "error", [p[1]])
+  p[0] = makeParseTreeNode(p, "error")
 
 def p_statements_empty(p):
   '''statements : empty'''
@@ -145,8 +139,8 @@ def p_statement_block(p):
 def p_empty(p):
   '''empty :'''
   #print p_empty.__doc__
-  p[0] = (Tree(), [])
-  p[0][0].value = "empty"
+  p[0] = Tree()
+  p[0].value = "empty"
 
 def p_statement_simple_compound(p):
   '''statement : simple_statement
@@ -161,8 +155,8 @@ def p_simple_statement_command(p):
 def p_statement_newline(p):
   '''simple_statement : NEWLINE'''
   #print p_statement_newline.__doc__
-  p[0] = (Tree(), [])
-  p[0][0].value = "empty"
+  p[0] = Tree()
+  p[0].value = "empty"
 
 def p_statement_contents_drive(p):
   '''statement_contents : drive_command'''
@@ -453,5 +447,6 @@ if __name__ == "__main__":
                         except SyntaxError as e:
                           print "Error: ", e
                         else:
-                          result[0].printTree()
+                          result.printTree()
                           print
+                          print "errors: ",result.errors

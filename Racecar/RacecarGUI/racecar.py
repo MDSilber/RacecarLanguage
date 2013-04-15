@@ -222,7 +222,7 @@ def generate_program(code):
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
-	python_code, errors, correct = verify_program(code)
+	python_code, list_of_errors, correct = verify_program(code)
 	if(correct):
 	    #Print message to console saying program is executing
 	    print_to_console("Program executing")
@@ -237,11 +237,11 @@ def generate_program(code):
 	    console.tag_config("End", foreground="Green")
 	else:
 	    #Print message to console saying program has errors
-	    print_to_console("You have " + str(len(errors)) + " errors in your program")
+	    print_to_console("You have " + str(len(list_of_errors)) + " errors in your program")
 	    console.tag_add("Error", "1.0", "1.end")
 	    console.tag_config("Error", foreground="Red")
 	    
-	    for error in errors:
+	    for error in list_of_errors:
 		print_to_console(error)
     else:
         print "Blank"
@@ -251,11 +251,11 @@ def verify_program(code):
     clear_console()
     if len(code) < 2:
     	return ("BLANK", False)
-    code, errors = Racecar.Compiler.getPythonCode(code)
-    if errors:
-    	return (code, errors, False)
+    code, list_of_errors = Racecar.Compiler.getPythonCode(code)
+    if list_of_errors:
+    	return (code, list_of_errors, False)
     else:
-    	return (code, errors, True)
+    	return (code, list_of_errors, True)
 
 #car object
 car = Car()
