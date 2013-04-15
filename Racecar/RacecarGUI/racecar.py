@@ -323,8 +323,11 @@ code_frame = Frame(left_frame)
 code_scrollbar = Scrollbar(code_frame)
 code_scrollbar.pack(side=RIGHT, fill=Y)
 
+print "WINDOW WIDTH: " + str(window_width)
+print "WINDOW HEIGHT: " + str(window_height)
+
 #code is the window in which the code is written
-code = Text(code_frame, width=50, height = 30, wrap=WORD, yscrollcommand=code_scrollbar.set)
+code = Text(code_frame, width=50, height = window_height/20, wrap=WORD, yscrollcommand=code_scrollbar.set)
 
 #Frame for buttons
 button_frame = Frame(left_frame)
