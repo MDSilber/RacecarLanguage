@@ -349,7 +349,7 @@ canvas = Canvas(canvas_frame, width = window_width/1.5, height = window_height-3
 car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 
-car.car_object = canvas.create_image(30,int(canvas.cget("height"))/2,image=car.image_tk)
+car.car_object = canvas.create_image(30,int(canvas.winfo_reqheight())/2,image=car.image_tk)
 car.position_x = 30
 car.position_y = 250
 
