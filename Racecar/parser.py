@@ -112,7 +112,12 @@ def makeParseTreeNode(p, value):
 def p_statements(p):
   '''statements : statements statement'''
   #print p_statements.__doc__
-  p[0] = makeParseTreeNode(p, "statements")
+  if p[1].value == "empty" and p[2].value != "empty":
+    p[0] = p[2]
+  elif p[2].value == "empty" and p[1].value != "empty":
+    p[0] = p[1]
+  else:
+    p[0] = makeParseTreeNode(p, "statements")
 
 def p_statements_empty(p):
   '''statements : empty'''
