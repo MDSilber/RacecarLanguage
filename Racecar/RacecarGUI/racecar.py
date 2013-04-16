@@ -327,7 +327,7 @@ print "WINDOW WIDTH: " + str(window_width)
 print "WINDOW HEIGHT: " + str(window_height)
 
 #code is the window in which the code is written
-code = Text(code_frame, width=50, height = window_height/20, wrap=WORD, yscrollcommand=code_scrollbar.set)
+code = Text(code_frame, width=50, height = window_height/16-8, wrap=WORD, yscrollcommand=code_scrollbar.set)
 
 #Frame for buttons
 button_frame = Frame(left_frame)
@@ -348,7 +348,8 @@ canvas_frame.configure(borderwidth=1.5,background='black')
 canvas = Canvas(canvas_frame, width = window_width/1.5, height = window_height-300)
 car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
-car.car_object = canvas.create_image(30,250,image=car.image_tk)
+
+car.car_object = canvas.create_image(30,int(canvas.winfo_reqheight())/2,image=car.image_tk)
 car.position_x = 30
 car.position_y = 250
 
