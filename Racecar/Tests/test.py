@@ -121,6 +121,17 @@ def moveForwardThenBackward():
     moveBackwardFive()
 moveForwardThenBackward()
 """
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_function_invocation_with_parameters(self):
+        test_string = """
+move5Steps "forwards"
+"""
+        correct_translation = """move5Steps("forwards", )\n"""
+
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
 
 
 
