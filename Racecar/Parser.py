@@ -32,7 +32,6 @@ reserved = {
   'false' : 'FALSE',
   'a' : 'A',
   'is' : 'IS',
-  'is not' : 'IS_NOT',
   'not' : 'NOT',
   'set' : 'SET',
   'to' : 'TO',
@@ -275,14 +274,16 @@ def p_comparison_plus(p):
 
 def p_comparison_operator(p):
   '''comparison_operator : IS
-                   | IS_NOT
-                   | NOT
+                   | IS NOT
                    | GT
                    | LT
                    | GEQ
                    | LEQ'''
   #print p_comparison_operator.__doc__
-  p[0] = p[1]
+  if len(p) == 3: # i.e. token is IS NOT
+    p[0] = p[1] + " " + p[2]
+  else: # any other token
+    p[0] = p[1]
 
 def p_plus_expression_plus_minus(p):
   '''plus_expression : plus_expression '+' times_expression
