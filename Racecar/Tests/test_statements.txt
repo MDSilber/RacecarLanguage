@@ -15,11 +15,11 @@ drive backward 10 step
 
 drive backwards 10 step
 
-steer left
+turn left
 
-steer right
+turn right
 
-steer straight
+turn straight
 
 canMove left
 
@@ -58,7 +58,7 @@ if wheelDirection is "left"
 {
     print "Wheel direction is left"
 }
-else if wheelDirection is "right"
+elseIf wheelDirection is "right"
 {
     print "Wheel direction is right"
 }
