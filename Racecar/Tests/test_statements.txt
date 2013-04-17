@@ -51,7 +51,7 @@ if wheelDirection is "left"
 }
 else
 {
-    steer left
+    turn left
 }
 
 if wheelDirection is "left"
@@ -127,9 +127,9 @@ repeat 5 times
 
 define turnLeft
 {
-steer left
+turn left
 drive forward 2 steps
-steer straight
+turn straight
 }
 drive 10 steps
 turnLeft
@@ -137,9 +137,9 @@ drive 10 steps
 
 define turnLeft using numSteps (number)
 {
-    steer left
+    turn left
     drive numSteps steps
-    steer straight
+    turn straight
 }
 turnLeft 8
 drive forward 10 steps
@@ -147,9 +147,9 @@ turnLeft 4
 
 define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
 {
-steer left
+turn left
 drive numSteps steps
-steer straight
+turn straight
 drive numStepsDrive
 }
 turnLeftThenDriveStraight 5 10
