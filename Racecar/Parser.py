@@ -5,13 +5,13 @@ from Tree import *
 reserved = {
   'drive' : 'DRIVE',
   'forward' : 'FORWARD',
-  'forwards' : 'FORWARDS', # never passed on to parser
+  'forwards' : 'FORWARD', # never passed on to parser
   'backward' : 'BACKWARD',
-  'backwards' : 'BACKWARDS',# never passed on to parser 
+  'backwards' : 'BACKWARD',# never passed on to parser 
   'number' : 'NUMBER_TYPE',
   'word' : 'WORD_TYPE',
   'step' : 'STEP',
-  'steps' : 'STEPS',# never passed on to parser
+  'steps' : 'STEP',# never passed on to parser
   'turn' : 'TURN',
   'left' : 'LEFT',
   'right' : 'RIGHT',
@@ -47,7 +47,7 @@ tokens = [ "NUMBER",
            "LEQ",
            "CONCAT",
            "NEWLINE",
-] + list(reserved.values())
+] + list(set(reserved.values()))
 
 literals = "{}()+-*/"
 
@@ -61,12 +61,8 @@ t_CONCAT = r'\+\+'
 t_ignore = ' \t'
 
 def t_ID(t):
-  r'[A-Za-z][A-Za-z0-9]*( a)?'
+  r'[A-Za-z][A-Za-z0-9]*'
   t.type = reserved.get(t.value, 'ID')
-  # get rid of forward/forwards, backward/backwards, and step/steps ambiguity
-  if t.type == "FORWARDS" or t.type == "BACKWARDS" or t.type == "STEPS":
-    t.type = t.type[:-1]
-    t.value = t.value[:-1]
   return t
   
 def t_NEWLINE(t):
