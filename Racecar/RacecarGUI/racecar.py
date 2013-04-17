@@ -131,8 +131,6 @@ def print_to_console(message):
 
 #Course generation functions
 def course_one():
-    #clear the obstacles array
-    obstacles[:] = []
     cone_1 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 150, int(canvas.winfo_reqheight())/2)
     obstacles.append(cone_1)
     cone_2 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 350, int(canvas.winfo_reqheight())/2)
@@ -151,7 +149,12 @@ def course_five():
     pass
 
 def clear_course():
-    pass
+    #remove obstacles from the course
+    for obstacle in obstacles:
+    	canvas.delete(obstacle.image_object)
+
+    #clear the obstacles array
+    obstacles[:] = []
 
 #Menu functions
 def open_file():
