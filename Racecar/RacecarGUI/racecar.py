@@ -13,6 +13,17 @@ class Program:
         self.name = ''
         self.file_obj = None
 
+#List of obstacles on the course at any given time
+obstacles = []
+
+class Obstacle:
+    def __init__(self, image_path=None, x=0, y=0):
+    	self.image = Image.open(image_path)
+	#position is tuple of x,y
+	self.position = (x,y)
+	#add object to canvas and then to obstacles list
+	obstacles.append(canvas.create_image(x,y,self.image)
+    	
 #Static variables for turning the car
 class WheelDirection:
   LEFT=1
