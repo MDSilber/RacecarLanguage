@@ -316,7 +316,7 @@ def p_word_expression_primary_expression(p):
 def p_primary_expression_parens(p):
   """primary_expression : '(' expression ')'"""
   #print p_primary_expression_parens.__doc__
-  p[0] = makeParseTreeNode(p, "primary_expression")
+  p[0] = p[2]
 
 def p_primary_expression_token(p):
   '''primary_expression : NUMBER
@@ -335,7 +335,7 @@ def p_function_command(p):
 def p_opt_parameters(p):
   '''opt_parameters : opt_parameters primary_expression
                     | empty'''
-  if p[1].value == "empty":
+  if len(p) == 2:
     p[0] = makeParseTreeNode(p, "empty")
   else:
     p[0] = makeParseTreeNode(p, "opt_parameters")

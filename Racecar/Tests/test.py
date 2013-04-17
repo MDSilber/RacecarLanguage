@@ -133,6 +133,26 @@ move5Steps "forwards"
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+    def test_plus_expression(self):
+        test_string = "print (2 + 3)\n"
+        correct_translation = "print_to_console(((2) + (3)))\n"
+
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+    
+    def test_times_expression(self):
+        test_string = "print (2 * 3)\n"
+        correct_translation = "print_to_console(((2) * (3)))\n"
+
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_all_expression(self):
+        test_string = "print (1 + 2 * (3 + 4))\n"
+        correct_translation = "print_to_console(((1) + (((2) * (((3) + (4)))))))\n"
+
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
 
 
 class SymbolTableTests(unittest.TestCase):

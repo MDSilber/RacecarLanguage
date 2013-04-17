@@ -23,22 +23,26 @@ def generatePythonCode(ast):
 
     # potential AST values and their associated translation functions
     astTranslators = {
-      "empty" : emptyTranslator,
-      "statements" : statementsTranslator,
-      "drive_command" : driveCommandTranslator,
-      "forward" : forwardTranslator,
-      "backward" : backwardTranslator,
-      "turn_command" : turnCommandTranslator,
-      "left" : leftTranslator,
-      "right" : rightTranslator,
-      "declaration_command" : declarationCommandTranslator,
       "ID" : idTranslator,
       "assignment_command" : assignmentCommandTranslator,
-      "print" : printTranslator,
-      "statement_block" : statementBlockTranslator,
+      "backward" : backwardTranslator,
+      "backwards" : backwardTranslator,
+      "declaration_command" : declarationCommandTranslator,
       "define_command" : defineCommandTranslator,
+      "drive_command" : driveCommandTranslator,
+      "empty" : emptyTranslator,
+      "forward" : forwardTranslator,
+      "forwards" : forwardTranslator,
       "function_command" : functionCommandTranslator,
+      "left" : leftTranslator,
       "opt_parameters" : optParametersTranslator,
+      "plus_expression" : plusExpressionTranslator,
+      "print" : printTranslator,
+      "right" : rightTranslator,
+      "statement_block" : statementBlockTranslator,
+      "statements" : statementsTranslator,
+      "times_expression" : timesExpressionTranslator,
+      "turn_command" : turnCommandTranslator,
     }
 
     # "declare" pythonCode
@@ -56,6 +60,14 @@ def generatePythonCode(ast):
     else:
         pythonCode = translator(ast)
 
+    return pythonCode
+
+
+def indentLines(unindentedLines):
+    # Insert 4 spaces (i.e. 1 tab) at the beginning of every line
+    splitCode = unindentedLines.splitlines(True)
+
+    pythonCode = "    " + "    ".join(splitCode)
     return pythonCode
 
 def emptyTranslator(ast):
@@ -130,10 +142,9 @@ def defineCommandTranslator(ast):
 
 def statementBlockTranslator(ast):
     prelimPythonCode = generatePythonCode(ast.children[1])
-    # Insert 4 spaces (i.e. 1 tab) at the beginning of every line
-    splitCode = prelimPythonCode.splitlines(True)
 
-    pythonCode = "    " + "    ".join(splitCode)
+    pythonCode = indentLines(prelimPythonCode)
+
     return pythonCode
 
 def functionCommandTranslator(ast):
@@ -151,6 +162,20 @@ def optParametersTranslator(ast):
         return pythonCode
     else:
         return ""
+
+def binaryOperatorTranslator(ast, op):
+    pythonCode = "(("
+    pythonCode += generatePythonCode(ast.children[0])
+    pythonCode += ") " + op + " ("
+    pythonCode += generatePythonCode(ast.children[2])
+    pythonCode += "))"
+    return pythonCode
+    
+def plusExpressionTranslator(ast):
+    return binaryOperatorTranslator(ast, "+")
+
+def timesExpressionTranslator(ast):
+    return binaryOperatorTranslator(ast, "*")
             
 
 if __name__ == "__main__":
