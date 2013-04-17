@@ -86,7 +86,7 @@ def translate_car(steps, direction):
     direction = int(direction)
     
     for _ in range(0,steps_to_pixels(int(steps))):
-        time.sleep(0.025)
+        time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
         canvas.move(car.car_object, direction * car.car_direction.get_direction()[0], direction * car.car_direction.get_direction()[1])
         canvas.update()
@@ -108,7 +108,7 @@ def rotate_car(direction):
 	  return
 	
         for i in range(0,45):
-                time.sleep(0.025)
+                time.sleep(0.01)
                 canvas.delete(car.car_object)
                 
                 if direction == WheelDirection.LEFT:
@@ -131,22 +131,24 @@ def print_to_console(message):
 
 #Course generation functions
 def course_one():
+    clear_course()
     cone_1 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 150, int(canvas.winfo_reqheight())/2)
     obstacles.append(cone_1)
     cone_2 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 350, int(canvas.winfo_reqheight())/2)
     obstacles.append(cone_2)
 
+#TODO -- Fill in the rest of the courses
 def course_two():
-    pass
+    clear_course()
 
 def course_three():
-    pass
+    clear_course()
 
 def course_four():
-    pass
+    clear_course()
 
 def course_five():
-    pass
+    clear_course()
 
 def clear_course():
     #remove obstacles from the course
