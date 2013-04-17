@@ -244,7 +244,7 @@ def p_not_expression_true_false(p):
   '''not_expression : TRUE
                     | FALSE'''
   #print p_not_expression_true.__doc__
-  p[0] = p[1]
+  p[0] = makeParseTreeNode(p, "not_expression")
 
 def p_not_expression_can_move(p):
   '''not_expression : CAN_MOVE can_move_direction'''
@@ -260,7 +260,7 @@ def p_can_move_direction(p):
   '''can_move_direction : drive_direction
                         | turn_direction'''
   #print p_can_move_direction.__doc__
-  p[0] = makeParseTreeNode(p, "can_move_direction")
+  p[0] = p[1]
 
 def p_comparison_with_operator(p):
   '''comparison : comparison comparison_operator plus_expression'''
@@ -339,7 +339,10 @@ def p_function_command(p):
 def p_opt_parameters(p):
   '''opt_parameters : opt_parameters primary_expression
                     | empty'''
-  p[0] = makeParseTreeNode(p, "opt_parameters")
+  if p[1].value == "empty":
+    p[0] = makeParseTreeNode(p, "empty")
+  else:
+    p[0] = makeParseTreeNode(p, "opt_parameters")
 
 def p_drive_command(p):
   '''drive_command : DRIVE drive_direction plus_expression opt_steps'''
@@ -390,7 +393,7 @@ def p_type_enum(p):
   '''type_enum : WORD_TYPE
             | NUMBER_TYPE'''
   #print p_type_enum.__doc__
-  p[0] = makeParseTreeNode(p, "type_enum")
+  p[0] = p[1]
 
 def p_repeat_if_command(p):
   """repeat_if_command : REPEAT IF expression NEWLINE statement_block"""

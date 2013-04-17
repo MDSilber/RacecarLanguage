@@ -19,13 +19,26 @@ turn left
 
 turn right
 
-turn straight
 
-canMove left
+if canMove left 
+{
+  turn left
+}
 
-canMove right
+if canMove right
+{
+  turn right
+}
 
-canMove straight
+if canMove forward
+{
+  drive forward 1 step
+}
+
+if true
+{
+  drive forward 1 step
+}
 
 getWheelDirection
 
