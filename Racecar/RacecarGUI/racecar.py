@@ -19,11 +19,12 @@ obstacles = []
 
 class Obstacle:
     def __init__(self, image_path=None, x=0, y=0):
-    	self.image = ImageTk.PhotoImage(Image.open(image_path))
+    	self.image = Image.open(image_path)
+    	self.image_tk = ImageTk.PhotoImage(self.image)
 	#position is tuple of x,y
 	self.position = (x,y)
 	#add object to canvas and then to obstacles list
-	obstacles.append(canvas.create_image(x,y,image=self.image))
+	self.image_object = canvas.create_image(x,y,image=self.image_tk)
 	print str(self.position)
 
 #Static variables for turning the car
@@ -132,9 +133,10 @@ def print_to_console(message):
 def course_one():
     #clear the obstacles array
     obstacles[:] = []
-    cone_1 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 70, 250)
-    cone_2 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 110, 250)
-    pass
+    cone_1 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 150, int(canvas.winfo_reqheight())/2)
+    obstacles.append(cone_1)
+    cone_2 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 350, int(canvas.winfo_reqheight())/2)
+    obstacles.append(cone_2)
 
 def course_two():
     pass

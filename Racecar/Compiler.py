@@ -53,7 +53,7 @@ def generatePythonCode(ast):
     translator = astTranslators.get(ast.value, ast.value)
 
     # If the "translator" is just a string, then return that translator
-    if type(translator) == type(""):
+    if type(translator) == type("") or type(translator) == type(u''):
         pythonCode = ast.value
 
     # if the translator is a real function then invoke it
