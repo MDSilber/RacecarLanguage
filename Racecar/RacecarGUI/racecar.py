@@ -13,17 +13,19 @@ class Program:
         self.name = ''
         self.file_obj = None
 
+
 #List of obstacles on the course at any given time
 obstacles = []
 
 class Obstacle:
     def __init__(self, image_path=None, x=0, y=0):
-    	self.image = Image.open(image_path)
+    	self.image = ImageTk.PhotoImage(Image.open(image_path))
 	#position is tuple of x,y
 	self.position = (x,y)
 	#add object to canvas and then to obstacles list
-	obstacles.append(canvas.create_image(x,y,self.image)
-    	
+	obstacles.append(canvas.create_image(x,y,image=self.image))
+	print str(self.position)
+
 #Static variables for turning the car
 class WheelDirection:
   LEFT=1
@@ -128,6 +130,10 @@ def print_to_console(message):
 
 #Course generation functions
 def course_one():
+    #clear the obstacles array
+    obstacles[:] = []
+    cone_1 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 70, 250)
+    cone_2 = Obstacle('Racecar/RacecarGUI/images/trafficcone.png', 110, 250)
     pass
 
 def course_two():
