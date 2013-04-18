@@ -2,16 +2,19 @@ from Parser import parseString
 
 
 def getPythonCode(code):
+    '''Convert the given Racecar code into the Python code that will
+    run in the GUI.'''
 
-    #return "translate_car(5, CarDirection.FORWARDS)"
     # first parse the string
     ast = parseString(code)
 
+    # then check for errors
     if len(ast.errors) > 0:
         return (None, ast.errors)
 
     # then run the string through the semantic analyzer
     # ast = runSemanticAnalyzer(ast)
+
     # then generate python code!
     pythonCode = generatePythonCode(ast)
 
@@ -23,6 +26,7 @@ def generatePythonCode(ast):
     to execute in the GUI.'''
 
     # potential AST values and their associated translation functions
+    # use astTranslators.get() instead of a long chain of else-ifs
     astTranslators = {
         "ID": idTranslator,
         "assignment_command": assignmentCommandTranslator,
@@ -46,15 +50,17 @@ def generatePythonCode(ast):
         "turn_command": turnCommandTranslator,
     }
 
-    # "declare" pythonCode
-    pythonCode = None
+    # "declare" pythonCode since otherwise its first use is inside
+    # an if statement
+    pythonCode = ""
 
     # Fetch the appropriate translator function from astTranslators
     # If there is no translator for ast.value then just let the
-    # translator be ast.value
+    # "translator" be ast.value
     translator = astTranslators.get(ast.value, ast.value)
 
-    # If the "translator" is just a string, then return that translator
+    # If the "translator" is just a string (inherits from basestring),
+    # then return that translator
     if isinstance(translator, basestring):
         pythonCode = ast.value
 
@@ -66,7 +72,8 @@ def generatePythonCode(ast):
 
 
 def indentLines(unindentedLines):
-    # Insert 4 spaces (i.e. 1 tab) at the beginning of every line
+    '''Insert 4 spaces (i.e. 1 tab) at the beginning of every line'''
+
     splitCode = unindentedLines.splitlines(True)
 
     pythonCode = "    " + "    ".join(splitCode)
