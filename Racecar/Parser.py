@@ -300,7 +300,7 @@ def p_opt_parameters(p):
 
 def p_drive_command(p):
   '''drive_command : DRIVE drive_direction plus_expression opt_steps'''
-  p[0] = makeParseTreeNode(p, "drive_command")
+  p[0] = makeParseTreeNode([p[0], p[2], p[3]], "drive_command")
 
 def p_drive_direction(p):
   '''drive_direction : FORWARD

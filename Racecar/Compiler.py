@@ -87,8 +87,8 @@ def driveCommandTranslator(ast):
     # drive numSteps direction steps -->
     # translate_car(numSteps, direction)\n
     pythonCode = "translate_car("
-    pythonCode += generatePythonCode(ast.children[2])
-    pythonCode += ", " + generatePythonCode(ast.children[1])
+    pythonCode += generatePythonCode(ast.children[1])
+    pythonCode += ", " + generatePythonCode(ast.children[0])
     pythonCode += ")\n"
     return pythonCode
 
