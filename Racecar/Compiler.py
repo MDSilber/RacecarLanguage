@@ -32,6 +32,7 @@ def generatePythonCode(ast):
         "assignment_command": assignmentCommandTranslator,
         "backward": backwardTranslator,
         "backwards": backwardTranslator,
+        "comparison" : comparisonTranslator,
         "declaration_command": declarationCommandTranslator,
         "define_command": defineCommandTranslator,
         "drive_command": driveCommandTranslator,
@@ -41,6 +42,8 @@ def generatePythonCode(ast):
         "function_command": functionCommandTranslator,
         "if_command" : ifCommandTranslator,
         "left": leftTranslator,
+        "opt_else" : optElseTranslator,
+        "opt_else_if" : optElseIfTranslator,
         "opt_parameters": optParametersTranslator,
         "plus_expression": plusExpressionTranslator,
         "print": printTranslator,
@@ -117,20 +120,46 @@ def turnCommandTranslator(ast):
     pythonCode += ")\n"
     return pythonCode
 
-def ifCommandTranslator(ast):
-    pythonCode = "if "
+def comparisonTranslator(ast):
+    pythonCode = generatePythonCode(ast.children[0])
+    if ast.children[2].value == "not":
+        pythonCode += "!="
+        pythonCode += (ast.children[3])
+    elif ast.children[1].value == "is":
+        pythonCode += " = "
+        pythonCode += generatePythonCode(ast.children[2])
+    else:
+        pythonCode += generatePythonCode(ast.children[1])
+        pythonCode += generatePythonCode(ast.children[2])
+    
+    return pythonCode
+
+def optElseIfTranslator(ast):
+    pythonCode = "elif "
     pythonCode += generatePythonCode(ast.children[1]) + ":\n"
-    prelimPythonCode = generatePythonCode(ast.children[3])
-    pythonCode += indentLines(prelimPythonCode)
+    pythonCode += generatePythonCode(ast.children[3])
 
     if ast.children[4].value != "empty":
-        pythonCode += "\nelif "
-        prelimPythonCode = generatePythonCode(ast.children[4])
-        pythonCode += indentLines(prelimPythonCode) + ": "
+        pythonCode += generatePythonCode(ast.children[4])
+
+    return pythonCode
+
+def optElseTranslator(ast):
+    pythonCode = "else:\n"
+    prelimPythonCode = generatePythonCode(ast.children[2])
+    pythonCode += generatePythonCode(ast.children[2])
+    return pythonCode
+
+def ifCommandTranslator(ast):
+    pythonCode = "if " + generatePythonCode(ast.children[1]) + ":\n"
+    pythonCode += generatePythonCode(ast.children[3])
+
+    if ast.children[4].value != "empty":
+        pythonCode += generatePythonCode(ast.children[4])
     
     if ast.children[5].value != "empty":
-        pythonCode += "else: "
         pythonCode += generatePythonCode(ast.children[5])
+    return pythonCode
 
 def leftTranslator(ast):
     pythonCode = "WheelDirection.LEFT"
@@ -140,7 +169,6 @@ def leftTranslator(ast):
 def rightTranslator(ast):
     pythonCode = "WheelDirection.RIGHT"
     return pythonCode
-
 
 def declarationCommandTranslator(ast):
     # id is a whatever -->

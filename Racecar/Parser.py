@@ -420,19 +420,20 @@ def p_opt_else_if(p):
     """opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
        | empty"""
 
-    if p[1] is str:
-        p[0] = makeParseTreeNode(p, "opt_else_if")
-    else:
+    if len(p) == 2:
         p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else_if")
 
 
 def p_opt_else(p):
     """opt_else : ELSE NEWLINE statement_block
        | empty"""
-    if p[1] is str:
-        p[0] = makeParseTreeNode(p, "opt_else")
-    else:
+
+    if len(p) == 2:
         p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else")
 
 def p_print_command(p):
     """print_command : PRINT word_expression"""
