@@ -39,6 +39,7 @@ def generatePythonCode(ast):
         "forward": forwardTranslator,
         "forwards": forwardTranslator,
         "function_command": functionCommandTranslator,
+        "if_command" : ifCommandTranslator,
         "left": leftTranslator,
         "opt_parameters": optParametersTranslator,
         "plus_expression": plusExpressionTranslator,
@@ -116,6 +117,20 @@ def turnCommandTranslator(ast):
     pythonCode += ")\n"
     return pythonCode
 
+def ifCommandTranslator(ast):
+    pythonCode = "if "
+    pythonCode += generatePythonCode(ast.children[1]) + ":\n"
+    prelimPythonCode = generatePythonCode(ast.children[3])
+    pythonCode += indentLines(prelimPythonCode)
+
+    if ast.children[4].value != "empty":
+        pythonCode += "\nelif "
+        prelimPythonCode = generatePythonCode(ast.children[4])
+        pythonCode += indentLines(prelimPythonCode) + ": "
+    
+    if ast.children[5].value != "empty":
+        pythonCode += "else: "
+        pythonCode += generatePythonCode(ast.children[5])
 
 def leftTranslator(ast):
     pythonCode = "WheelDirection.LEFT"
