@@ -419,13 +419,19 @@ def p_if_command(p):
 def p_opt_else_if(p):
     """opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
        | empty"""
-    p[0] = makeParseTreeNode(p, "opt_else_if")
+    if(p[1].value == "empty"):
+        p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else_if")
 
 
 def p_opt_else(p):
     """opt_else : ELSE NEWLINE statement_block
        | empty"""
-    p[0] = makeParseTreeNode(p, "opt_else")
+    if(p[1].value == "empty"):
+        p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else")
 
 
 def p_print_command(p):
