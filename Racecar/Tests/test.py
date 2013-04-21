@@ -3,6 +3,7 @@ import unittest
 import Racecar.Compiler as Compiler
 import Racecar.SymbolTable as SymbolTable
 
+
 class TranslatorTests(unittest.TestCase):
     def test_empty_statement(self):
         test_string = \
@@ -67,7 +68,6 @@ class TranslatorTests(unittest.TestCase):
         self.assertEqual(result3[0], correct_translation)
         self.assertEqual(result4[0], correct_translation)
 
-
     def test_turn_left(self):
         test_string = \
 """turn left
@@ -120,9 +120,8 @@ class TranslatorTests(unittest.TestCase):
 """myVar = otherThing
 """
         result = Compiler.getPythonCode(test_string)
-
         self.assertEqual(result[0], correct_translation)
-    
+
     def test_define(self):
         test_string = \
 """define moveForwardFive
@@ -181,7 +180,7 @@ moveForwardThenBackward()
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
-    
+
     def test_times_expression(self):
         test_string = \
 """print (2 * 3)
@@ -250,7 +249,7 @@ print_to_console(color)
 {
     print "yay"
 }
-else 
+else
 {
     print "no"
 }
@@ -325,7 +324,6 @@ while myCounter != 5:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-
     def test_function_invocation_with_two_parameters(self):
         test_string = \
 """define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
@@ -348,9 +346,6 @@ turnLeftThenDriveStraight(5, 10, )
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-
-
-
     def test_template(self):
         test_string = \
 """
@@ -361,19 +356,11 @@ turnLeftThenDriveStraight(5, 10, )
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-
-
-
-
-
-
-
 #still to test:
 #
 #test wheel direction left and right
 #test getLocation and compare it to others
 #test can move left/right etc
-
 
 
 class SymbolTableTests(unittest.TestCase):
@@ -391,7 +378,7 @@ class SymbolTableTests(unittest.TestCase):
         self.assertFalse(entry1.validateWithTableEntry(entry2))
         self.assertFalse(entry2.validateWithTableEntry(entry1))
 
-        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
 
         self.assertTrue(entry3.validateWithTableEntry(entry1))
         self.assertFalse(entry3.validateWithTableEntry(entry2))
@@ -403,7 +390,7 @@ class SymbolTableTests(unittest.TestCase):
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
 
         table.addEntry(entry1)
-        
+
         self.assertRaises(Exception, table.addEntry, entry1)
 
     def test_symbol_table_verify(self):
@@ -417,8 +404,8 @@ class SymbolTableTests(unittest.TestCase):
 
         self.assertTrue(table.verifyEntry(entry1))
         self.assertFalse(table.verifyEntry(entry2))
-        
-        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+
+        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
 
         self.assertTrue(table.verifyEntry(entry3))
         self.assertFalse(table.verifyEntry(entry2))
@@ -429,12 +416,12 @@ class SymbolTableTests(unittest.TestCase):
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
         entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
-        entry3 = SymbolTable.SymbolTableEntry("name1","","global")
+        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
 
         table.addEntry(entry1)
 
         entry4 = table.getEntry(entry3)
-        
+
         self.assertTrue(entry3.validateWithTableEntry(entry4))
         self.assertRaises(Exception, table.getEntry, entry2)
 
