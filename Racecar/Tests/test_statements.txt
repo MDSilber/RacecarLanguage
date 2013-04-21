@@ -161,7 +161,7 @@ turnLeft 4
 define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
 {
 turn left
-drive numSteps steps
+drive numStepsTurn steps
 turn straight
 drive numStepsDrive
 }
