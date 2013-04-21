@@ -104,10 +104,31 @@ class Car:
 def get_position(x, y):
     return 1000 * int(x) + int(y)
 
+
 #Checks if there is going to be a collision on the upcoming path
-def is_collision(dest_x, dest_y):
-   pass
-    
+def can_move(dest_x, dest_y, num_steps):
+    global car
+    curr_x = int(car.position_x)
+    curr_y = int(car.position_y)
+    direction = car.car_direction()
+    path = []
+
+    #Create path coordinates
+    for i in range(0, num_steps):
+        pos = get_position(
+            (curr_x + i) * direction[0],
+            (curr_y + i) * direction[1])
+        path.append(pos)
+
+    #Check each point in the path to see if it collides with any of the
+    #obstacles
+    for pos in path:
+        if pos in obstacles:
+            return False
+
+    return True
+
+
 #Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
     return 10*steps
@@ -175,8 +196,8 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
-def create_obstacle(path, x, y):
-    obstacle = Obstacle(path, x, y)
+def create_obstacle(image_path, x, y):
+    obstacle = Obstacle(image_path, x, y)
     obstacles[get_position(x, y)] = obstacle
 
 
