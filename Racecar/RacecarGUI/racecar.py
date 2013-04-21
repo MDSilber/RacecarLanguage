@@ -112,7 +112,7 @@ def can_move(num_steps):
     curr_y = int(car.position_y)
     direction = car.car_direction.get_direction()
     path = []
-    
+
     #Create path coordinates
     for i in range(0, steps_to_pixels(num_steps)):
         pos = get_position(
@@ -147,7 +147,7 @@ def translate_car(steps, direction):
     for _ in range(0, steps_to_pixels(int(steps))):
         time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
-        
+
         if is_collision(curr_x, curr_y):
             print_to_console("COLLISION")
             return
