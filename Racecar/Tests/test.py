@@ -265,7 +265,7 @@ else:
 
     def test_comment_singleline(self):
         test_string = \
-            """:) this is a single line comment
+            """:) this is a single line comment :-(
 drive forward 5 steps
 """
         correct_translation = \

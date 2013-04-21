@@ -25,7 +25,7 @@ class Program:
 
 
 #List of obstacles on the course at any given time
-obstacles = []
+obstacles = dict()
 
 
 class Obstacle:
@@ -36,6 +36,7 @@ class Obstacle:
         self.position = (x, y)
         #add object to canvas (need reference in order for it to show up)
         self.image_object = canvas.create_image(x, y, image=self.image_tk)
+        obstacles[get_position(x, y)] = self
 
 
 #Static variables for turning the car
@@ -98,9 +99,16 @@ class Car:
             * steps
             * movement_direction)
 
-    #Decided on a 10:1 pixels to steps ratio
 
+#Function to get a unique position of object, in order to detect for collisions
+def get_position(x, y):
+    return 1000 * int(x) + int(y)
 
+#Checks if there is going to be a collision on the upcoming path
+def is_collision(dest_x, dest_y):
+   pass
+    
+#Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
     return 10*steps
 
@@ -154,13 +162,12 @@ def rotate_car(direction):
 
         car.car_object = canvas.create_image(
             car.position_x,
-            car.position_y, 
+            car.position_y,
             image=car.image_tk)
         canvas.update()
 
 
 def print_to_console(message):
-
 #Should console be cleared each time the program is restart?
 #Or should there be a button?
     console.config(state=NORMAL)
@@ -168,19 +175,22 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
+def create_obstacle(path, x, y):
+    obstacle = Obstacle(path, x, y)
+    obstacles[get_position(x, y)] = obstacle
+
+
 #Course generation functions
 def course_one():
     clear_course()
-    cone_1 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         150,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_1)
-    cone_2 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         350,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_2)
 
 
 #TODO -- Fill in the rest of the courses
@@ -207,12 +217,14 @@ def course_five():
 
 
 def clear_course():
+    global obstacles
+
     #remove obstacles from the course
-    for obstacle in obstacles:
+    for obstacle in obstacles.values():
         canvas.delete(obstacle.image_object)
 
     #clear the obstacles array
-    obstacles[:] = []
+    obstacles = dict()
 
 
 #Menu functions
@@ -361,10 +373,11 @@ def verify_program_callback(code):
             print_to_console(error)
 
 
-#Resets car's position and orientation to original position
+#Resets car's position and orientation to original
 def reset_car_position():
         global car
         canvas.delete(car.car_object)
+        car.image_tk = ImageTk.PhotoImage(car.image)
         car.car_object = canvas.create_image(30, 250, image=car.image_tk)
         car.position_x = 30
         car.position_y = 250
