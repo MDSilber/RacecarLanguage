@@ -47,6 +47,8 @@ def generatePythonCode(ast):
         "opt_parameters": optParametersTranslator,
         "plus_expression": plusExpressionTranslator,
         "print": printTranslator,
+        "repeat_times_command" : repeatTimesTranslator,
+        "repeat_if_command" : repeatIfTranslator,
         "right": rightTranslator,
         "statement_block": statementBlockTranslator,
         "statements": statementsTranslator,
@@ -122,15 +124,15 @@ def turnCommandTranslator(ast):
 
 def comparisonTranslator(ast):
     pythonCode = generatePythonCode(ast.children[0])
-    if ast.children[2].value == "not":
-        pythonCode += "!="
-        pythonCode += (ast.children[3])
+    if ast.children[1].value == "is not":
+        pythonCode += " != "
+        pythonCode += ast.children[2].value
     elif ast.children[1].value == "is":
         pythonCode += " = "
         pythonCode += generatePythonCode(ast.children[2])
     else:
-        pythonCode += generatePythonCode(ast.children[1])
-        pythonCode += generatePythonCode(ast.children[2])
+        pythonCode += " " + generatePythonCode(ast.children[1])
+        pythonCode += " " + generatePythonCode(ast.children[2])
     
     return pythonCode
 
@@ -169,6 +171,20 @@ def leftTranslator(ast):
 def rightTranslator(ast):
     pythonCode = "WheelDirection.RIGHT"
     return pythonCode
+
+
+def repeatTimesTranslator(ast):
+    if ast.children[2].value == "times":
+        pythonCode = "for x in range(" + ast.children[1].value + "):\n"
+        pythonCode += generatePythonCode(ast.children[4])
+    return pythonCode
+
+
+def repeatIfTranslator(ast):
+    pythonCode = "while " + generatePythonCode(ast.children[2]) + ":\n"
+    pythonCode += generatePythonCode(ast.children[4])
+    return pythonCode
+
 
 def declarationCommandTranslator(ast):
     # id is a whatever -->
