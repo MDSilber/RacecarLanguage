@@ -106,18 +106,18 @@ def get_position(x, y):
 
 
 #Checks if there is going to be a collision on the upcoming path
-def can_move(dest_x, dest_y, num_steps):
+def can_move(num_steps):
     global car
     curr_x = int(car.position_x)
     curr_y = int(car.position_y)
-    direction = car.car_direction()
+    direction = car.car_direction.get_direction()
     path = []
-
+    
     #Create path coordinates
-    for i in range(0, num_steps):
+    for i in range(0, steps_to_pixels(num_steps)):
         pos = get_position(
-            (curr_x + i) * direction[0],
-            (curr_y + i) * direction[1])
+            curr_x + i * direction[0],
+            curr_y + i * direction[1])
         path.append(pos)
 
     #Check each point in the path to see if it collides with any of the
@@ -147,6 +147,7 @@ def translate_car(steps, direction):
     for _ in range(0, steps_to_pixels(int(steps))):
         time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
+        
         if is_collision(curr_x, curr_y):
             print_to_console("COLLISION")
             return
@@ -214,7 +215,6 @@ def print_to_console(message):
 
 
 def create_obstacle(image_path, x, y):
-    print "Position: " + str(x) + ", " + str(y)
     obstacle = Obstacle(image_path, x, y)
     obstacles[get_position(x, y)] = obstacle
 
@@ -414,12 +414,17 @@ def verify_program_callback(code):
 
 #Resets car's position and orientation to original
 def reset_car_position():
-        global car
+        '''global car
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image)
         car.car_object = canvas.create_image(30, 250, image=car.image_tk)
         car.position_x = 30
-        car.position_y = 250
+        car.position_y = 250'''
+        if can_move(20):
+            print_to_console("CAN MOVE")
+        else:
+            print_to_console("CAN'T MOVE")
+
 
 #car object
 car = Car()
@@ -477,9 +482,6 @@ code_frame = Frame(left_frame)
 #scrollbar for code window
 code_scrollbar = Scrollbar(code_frame)
 code_scrollbar.pack(side=RIGHT, fill=Y)
-
-print "WINDOW WIDTH: " + str(window_width)
-print "WINDOW HEIGHT: " + str(window_height)
 
 #code is the window in which the code is written
 code = Text(
