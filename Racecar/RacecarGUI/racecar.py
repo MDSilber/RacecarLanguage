@@ -25,7 +25,7 @@ class Program:
 
 
 #List of obstacles on the course at any given time
-obstacles = []
+obstacles = dict()
 
 
 class Obstacle:
@@ -36,7 +36,7 @@ class Obstacle:
         self.position = (x, y)
         #add object to canvas (need reference in order for it to show up)
         self.image_object = canvas.create_image(x, y, image=self.image_tk)
-
+        obstacles[get_position(x,y)] = self
 
 #Static variables for turning the car
 class WheelDirection:
@@ -98,9 +98,11 @@ class Car:
             * steps
             * movement_direction)
 
-    #Decided on a 10:1 pixels to steps ratio
+#Function to get a unique position of object, in order to detect for collisions
+def get_position(x,y):
+    return 1000 * int(x) + int(y)
 
-
+#Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
     return 10*steps
 
@@ -160,7 +162,6 @@ def rotate_car(direction):
 
 
 def print_to_console(message):
-
 #Should console be cleared each time the program is restart?
 #Or should there be a button?
     console.config(state=NORMAL)
@@ -168,10 +169,14 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
+def create_obstacle(path, x, y):
+    obstacle = Obstacle(path, x, y)
+    obstacles[get_position(x, y)] = obstacle
+
 #Course generation functions
 def course_one():
     clear_course()
-    cone_1 = Obstacle(
+    '''cone_1 = Obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         150,
         int(canvas.winfo_reqheight())/2)
@@ -180,8 +185,11 @@ def course_one():
         'Racecar/RacecarGUI/images/trafficcone.png',
         350,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_2)
-
+    obstacles.append(cone_2)'''
+    create_obstacle('Racecar/RacecarGUI/images/trafficcone.png', 150,
+    int(canvas.winfo_reqheight())/2)
+    create_obstacle('Racecar/RacecarGUI/images/trafficcone.png', 350,
+    int(canvas.winfo_reqheight())/2)
 
 #TODO -- Fill in the rest of the courses
 def course_two():
@@ -207,12 +215,14 @@ def course_five():
 
 
 def clear_course():
+    global obstacles
+
     #remove obstacles from the course
-    for obstacle in obstacles:
+    for obstacle in obstacles.values():
         canvas.delete(obstacle.image_object)
 
     #clear the obstacles array
-    obstacles[:] = []
+    obstacles = dict()
 
 
 #Menu functions
