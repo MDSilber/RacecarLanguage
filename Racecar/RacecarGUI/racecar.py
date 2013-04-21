@@ -104,7 +104,10 @@ class Car:
 def get_position(x, y):
     return 1000 * int(x) + int(y)
 
-
+#Checks if there is going to be a collision on the upcoming path
+def is_collision(dest_x, dest_y):
+   pass
+    
 #Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
     return 10*steps
@@ -370,10 +373,11 @@ def verify_program_callback(code):
             print_to_console(error)
 
 
-#Resets car's position and orientation to original position
+#Resets car's position and orientation to original
 def reset_car_position():
         global car
         canvas.delete(car.car_object)
+        car.image_tk = ImageTk.PhotoImage(car.image)
         car.car_object = canvas.create_image(30, 250, image=car.image_tk)
         car.position_x = 30
         car.position_y = 250
