@@ -36,7 +36,8 @@ class Obstacle:
         self.position = (x, y)
         #add object to canvas (need reference in order for it to show up)
         self.image_object = canvas.create_image(x, y, image=self.image_tk)
-        obstacles[get_position(x,y)] = self
+        obstacles[get_position(x, y)] = self
+
 
 #Static variables for turning the car
 class WheelDirection:
@@ -98,9 +99,11 @@ class Car:
             * steps
             * movement_direction)
 
+
 #Function to get a unique position of object, in order to detect for collisions
-def get_position(x,y):
+def get_position(x, y):
     return 1000 * int(x) + int(y)
+
 
 #Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
@@ -156,7 +159,7 @@ def rotate_car(direction):
 
         car.car_object = canvas.create_image(
             car.position_x,
-            car.position_y, 
+            car.position_y,
             image=car.image_tk)
         canvas.update()
 
@@ -173,23 +176,19 @@ def create_obstacle(path, x, y):
     obstacle = Obstacle(path, x, y)
     obstacles[get_position(x, y)] = obstacle
 
+
 #Course generation functions
 def course_one():
     clear_course()
-    '''cone_1 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         150,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_1)
-    cone_2 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         350,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_2)'''
-    create_obstacle('Racecar/RacecarGUI/images/trafficcone.png', 150,
-    int(canvas.winfo_reqheight())/2)
-    create_obstacle('Racecar/RacecarGUI/images/trafficcone.png', 350,
-    int(canvas.winfo_reqheight())/2)
+
 
 #TODO -- Fill in the rest of the courses
 def course_two():
