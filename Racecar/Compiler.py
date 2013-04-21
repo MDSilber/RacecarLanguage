@@ -81,7 +81,7 @@ def indentLines(unindentedLines):
 
 
 def emptyTranslator(ast):
-    return ""
+    return "\n"
 
 
 def statementsTranslator(ast):

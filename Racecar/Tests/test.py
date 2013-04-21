@@ -210,7 +210,7 @@ set num to num*2
         correct_translation = \
 """num = None
 num = 10
-num = num*2
+num = ((num) * (2))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -266,9 +266,11 @@ else:
     def test_comment_singleline(self):
         test_string = \
 """:) this is a single line comment
+drive forward 5 steps
 """
         correct_translation = \
-"""
+"""\
+translate_car(5, CarDirection.FORWARDS)
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -319,7 +321,7 @@ repeat if myCounter is not 5
 myCounter = 1
 while myCounter != 5:
     translate_car(1, CarDirection.FORWARDS)
-    myCounter = myCounter + 1
+    myCounter = ((myCounter) + (1))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)

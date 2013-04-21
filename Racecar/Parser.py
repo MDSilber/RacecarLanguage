@@ -69,7 +69,12 @@ def t_ID(t):
 
 
 def t_NEWLINE(t):
-    r'\n|;'  # semicolon for debugging interpreter use
+    r'\n|;|:-\(((:-)*[^)]|:|[^)])*:-\)|:\).*'
+    # \n is for actual newlines
+    # ; is for debugging use
+    # the next expression is for multiline comments. it is an adaptation of
+    # hw1, problem 2.
+    # the last expression :\).* matches single-line comments
     t.lexer.lineno += 1
     return t
 
