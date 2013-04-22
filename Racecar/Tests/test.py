@@ -364,6 +364,8 @@ turnLeftThenDriveStraight(5, 10, )
 #test wheel direction left and right
 #test getLocation and compare it to others
 #test can move left/right etc
+#nested ifs and loops
+#more complicated nested things
 
 
 class SymbolTableTests(unittest.TestCase):
