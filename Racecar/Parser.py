@@ -349,6 +349,7 @@ def p_opt_parameters(p):
     else:
         p[0] = makeParseTreeNode(p, "opt_parameters")
 
+
 def p_opt_parameters_empty(p):
     '''opt_parameters : empty'''
     p[0] = p[1]
@@ -448,6 +449,7 @@ def p_opt_else(p):
         p[0] = p[1]
     else:
         p[0] = makeParseTreeNode(p, "opt_else")
+
 
 def p_print_command(p):
     """print_command : PRINT word_expression"""
