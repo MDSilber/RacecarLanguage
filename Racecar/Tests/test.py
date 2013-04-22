@@ -166,7 +166,7 @@ moveForwardThenBackward()
 """move5Steps "forwards"
 """
         correct_translation = \
-"""move5Steps("forwards", )
+"""move5Steps("forwards")
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -210,7 +210,7 @@ set num to num*2
         correct_translation = \
 """num = None
 num = 10
-num = num*2
+num = ((num) * (2))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -329,19 +329,19 @@ while myCounter != 5:
 """define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
 {
 turn left
-drive numStepsTurn steps
-turn straight
-drive numStepsDrive
+drive forward numStepsTurn steps
+turn right
+drive forward numStepsDrive steps
 }
 turnLeftThenDriveStraight 5 10
 """
         correct_translation = \
-"""def: turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
+"""def turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
     rotate_car(WheelDirection.LEFT)
+    translate_car(numStepsTurn, CarDirection.FORWARDS)
+    rotate_car(WheelDirection.RIGHT)
     translate_car(numStepsDrive, CarDirection.FORWARDS)
-    rotate_car(WheelDirectionR.RIGHT)
-    translate_car(numStepsDrive, CarDirection.FORWARDS)
-turnLeftThenDriveStraight(5, 10, )
+turnLeftThenDriveStraight(5, 10)
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)

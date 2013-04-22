@@ -44,11 +44,13 @@ def generatePythonCode(ast):
         "left": leftTranslator,
         "opt_else" : optElseTranslator,
         "opt_else_if" : optElseIfTranslator,
+        "opt_extra_params": optExtraParamsTranslator,
+        "opt_param_list": optParamListTranslator,
         "opt_parameters": optParametersTranslator,
         "plus_expression": plusExpressionTranslator,
         "print": printTranslator,
-        "repeat_times_command" : repeatTimesTranslator,
         "repeat_if_command" : repeatIfTranslator,
+        "repeat_times_command" : repeatTimesTranslator,
         "right": rightTranslator,
         "statement_block": statementBlockTranslator,
         "statements": statementsTranslator,
@@ -217,8 +219,26 @@ def printTranslator(ast):
 def defineCommandTranslator(ast):
     pythonCode = "def "
     pythonCode += generatePythonCode(ast.children[1])
-    pythonCode += "():\n"
+    pythonCode += "("
+    if ast.children[2].value == "opt_param_list":
+        pythonCode += generatePythonCode(ast.children[2])
+    pythonCode += "):\n"
     pythonCode += generatePythonCode(ast.children[4])
+    return pythonCode
+
+
+def optParamListTranslator(ast):
+    pythonCode = generatePythonCode(ast.children[1])
+    if ast.children[5].value == "opt_extra_params":
+        pythonCode += generatePythonCode(ast.children[5])
+    return pythonCode
+
+
+def optExtraParamsTranslator(ast):
+    pythonCode = ", "
+    pythonCode += generatePythonCode(ast.children[1])
+    if ast.children[5].value == "opt_extra_params":
+        pythonCode += generatePythonCode(ast.children[5])
     return pythonCode
 
 
@@ -233,16 +253,19 @@ def statementBlockTranslator(ast):
 def functionCommandTranslator(ast):
     pythonCode = generatePythonCode(ast.children[0])
     pythonCode += "("
-    pythonCode += generatePythonCode(ast.children[1])
+    if len(ast.children) > 1:
+        pythonCode += generatePythonCode(ast.children[1])
     pythonCode += ")\n"
     return pythonCode
 
 
 def optParametersTranslator(ast):
-    if len(ast.children) > 1:
+    numChildren = len(ast.children)
+    if numChildren > 0:
         pythonCode = generatePythonCode(ast.children[0])
-        pythonCode += generatePythonCode(ast.children[1])
-        pythonCode += ", "
+        if numChildren == 2: 
+            pythonCode += ", "
+            pythonCode += generatePythonCode(ast.children[1])
         return pythonCode
     else:
         return ""
