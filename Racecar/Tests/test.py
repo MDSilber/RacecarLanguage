@@ -171,6 +171,29 @@ moveForwardThenBackward()
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+    def test_function_invocation_with_two_parameters(self):
+        test_string = \
+            """define turnLeftThenDriveStraight using numStepsTurn \
+            (number) and numStepsDrive (number)
+{
+turn left
+drive forward numStepsTurn steps
+turn right
+drive forward numStepsDrive steps
+}
+turnLeftThenDriveStraight 5 10
+"""
+        correct_translation = \
+            """def turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
+    rotate_car(WheelDirection.LEFT)
+    translate_car(numStepsTurn, CarDirection.FORWARDS)
+    rotate_car(WheelDirection.RIGHT)
+    translate_car(numStepsDrive, CarDirection.FORWARDS)
+turnLeftThenDriveStraight(5, 10)
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
     def test_plus_expression(self):
         test_string = \
             """print (2 + 3)
@@ -187,6 +210,26 @@ moveForwardThenBackward()
 """
         correct_translation = \
             """print_to_console(((2) * (3)))
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_minus_expression(self):
+        test_string = \
+            """print (2 - 3)
+"""
+        correct_translation = \
+            """print_to_console(((2) - (3)))
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_divide_expression(self):
+        test_string = \
+            """print (2 / 3)
+"""
+        correct_translation = \
+            """print_to_console(((2) / (3)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -263,6 +306,202 @@ else:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+    def test_if_statement_nested(self):
+        test_string = \
+            """if 1
+{
+    print "yay"
+    if 1
+    {
+        print "yahoo"
+    }
+}
+"""
+        correct_translation = \
+            """if 1:
+    print_to_console("yay")
+    if 1:
+        print_to_console("yahoo")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_if_else_statement_nested(self):
+        test_string = \
+            """if 1
+{
+    print "yay"
+    if 1
+    {
+        print "yahoo"
+    }
+    else
+    {
+        print "oh no"
+    }
+}
+else
+{
+    print "no"
+}
+"""
+        correct_translation = \
+            """if 1:
+    print_to_console("yay")
+    if 1:
+        print_to_console("yahoo")
+    else:
+        print_to_console("oh no")
+else:
+    print_to_console("no")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_if_elseif_else_statement(self):
+        test_string = \
+            """if 1
+{
+    print "yay"
+}
+elseIf 2
+{
+    print "no"
+}
+else
+{
+    print "done"
+}
+"""
+        correct_translation = \
+            """if 1:
+    print_to_console("yay")
+elif 2:
+    print_to_console("no")
+else:
+    print_to_console("done")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_if_elseif_else_statement_nested(self):
+        test_string = \
+            """if 1
+{
+    print "yay"
+    if 1
+    {
+        print "yahoo"
+    }
+    elseIf 2
+    {
+        print "oh no"
+    }
+    else
+    {
+        print "here"
+    }
+}
+elseIf 2
+{
+    print "no"
+}
+else
+{
+    print "done"
+}
+"""
+        correct_translation = \
+            """if 1:
+    print_to_console("yay")
+    if 1:
+        print_to_console("yahoo")
+    elif 2:
+        print_to_console("oh no")
+    else:
+        print_to_console("here")
+elif 2:
+    print_to_console("no")
+else:
+    print_to_console("done")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_if_if_else_complicated(self):
+        test_string = \
+            """if 1
+{
+    print "yay"
+    if 1
+    {
+        print "yahoo"
+    }
+    else
+    {
+        print "oh no"
+        if 1
+        {
+            print "good"
+        }
+        if 1
+        {
+            print "yay"
+        }
+        elseIf 2
+        {
+            print "no"
+            if 1
+            {
+                print "hi"
+            }
+        }
+        elseIf 3
+        {
+            print "yes"
+        }
+        else
+        {
+            if 5
+            {
+                print "works"
+            }
+            print "end"
+        }
+    }
+}
+else
+{
+    print "no"
+}
+"""
+        correct_translation = \
+            """if 1:
+    print_to_console("yay")
+    if 1:
+        print_to_console("yahoo")
+    else:
+        print_to_console("oh no")
+        if 1:
+            print_to_console("good")
+        if 1:
+            print_to_console("yay")
+        elif 2:
+            print_to_console("no")
+            if 1:
+                print_to_console("hi")
+        elif 3:
+            print_to_console("yes")
+        else:
+            if 5:
+                print_to_console("works")
+            print_to_console("end")
+else:
+    print_to_console("no")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
     def test_comment_singleline(self):
         test_string = \
             """:) this is a single line comment
@@ -304,6 +543,34 @@ for x in range(myCounter):
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+    def test_loop_for_nested(self):
+        test_string = \
+            """myCounter is a number
+set myCounter to 10
+myCounter2 is a number
+set myCounter2 to 10
+repeat myCounter times
+{
+    drive forward 1 step
+    repeat myCounter2 times
+    {
+        drive forward 1 step
+    }
+}
+"""
+        correct_translation = \
+            """myCounter = None
+myCounter = 10
+myCounter2 = None
+myCounter2 = 10
+for x in range(myCounter):
+    translate_car(1, CarDirection.FORWARDS)
+    for x in range(myCounter2):
+        translate_car(1, CarDirection.FORWARDS)
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
     def test_loop_while(self):
         test_string = \
             """myCounter is a number
@@ -324,25 +591,100 @@ while myCounter != 5:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-    def test_function_invocation_with_two_parameters(self):
+    def test_loop_while_nested(self):
         test_string = \
-            """define turnLeftThenDriveStraight using numStepsTurn \
-            (number) and numStepsDrive (number)
+            """myCounter is a number
+set myCounter to 1
+myCounter2 is a number
+repeat if myCounter is not 5
 {
-turn left
-drive forward numStepsTurn steps
-turn right
-drive forward numStepsDrive steps
+    drive forward 1 step
+    set myCounter2 to 0
+    repeat if myCounter2 is not 5
+    {
+        drive forward 1 step
+        set myCounter2 to myCounter2 + 1
+    }
+    set myCounter to myCounter + 1
 }
-turnLeftThenDriveStraight 5 10
 """
         correct_translation = \
-            """def turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
-    rotate_car(WheelDirection.LEFT)
-    translate_car(numStepsTurn, CarDirection.FORWARDS)
-    rotate_car(WheelDirection.RIGHT)
-    translate_car(numStepsDrive, CarDirection.FORWARDS)
-turnLeftThenDriveStraight(5, 10)
+            """myCounter = None
+myCounter = 1
+myCounter2 = None
+while myCounter != 5:
+    translate_car(1, CarDirection.FORWARDS)
+    myCounter2 = 0
+    while myCounter2 != 5:
+        translate_car(1, CarDirection.FORWARDS)
+        myCounter2 = ((myCounter2) + (1))
+    myCounter = ((myCounter) + (1))
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_boolean_opeartors(self):
+        test_string = \
+            """if 1 < 2
+{
+    print "yes"
+}
+elseIf 1 is 2
+{
+    print "yes"
+}
+if 1 >= 2
+{
+    print "no"
+}
+elseIf 1 is not 2
+{
+    print "yes"
+}
+elseIf 1 > 2
+{
+    print "yes"
+}
+elseIf 1 < 2
+{
+    print "yes"
+}
+"""
+        correct_translation = \
+            """if 1 < 2:
+    print_to_console("yes")
+elif 1 == 2:
+    print_to_console("yes")
+if 1 >= 2:
+    print_to_console("no")
+elif 1 != 2:
+    print_to_console("yes")
+elif 1 > 2:
+    print_to_console("yes")
+elif 1 < 2:
+    print_to_console("yes")
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_can_move_forward(self):
+        test_string = \
+            """
+"""
+        correct_translation = \
+            """
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
+
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+        correct_translation = \
+            """
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -361,7 +703,7 @@ turnLeftThenDriveStraight(5, 10)
 #
 #test wheel direction left and right
 #test getLocation and compare it to others
-#test can move left/right etc
+#test can move back and forward
 #nested ifs and loops
 #more complicated nested things
 

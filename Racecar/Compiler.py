@@ -130,7 +130,7 @@ def comparisonTranslator(ast):
         pythonCode += " != "
         pythonCode += ast.children[2].value
     elif ast.children[1].value == "is":
-        pythonCode += " = "
+        pythonCode += " == "
         pythonCode += generatePythonCode(ast.children[2])
     else:
         pythonCode += " " + generatePythonCode(ast.children[1])
