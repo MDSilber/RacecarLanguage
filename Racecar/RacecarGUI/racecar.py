@@ -25,7 +25,7 @@ class Program:
 
 
 #List of obstacles on the course at any given time
-obstacles = []
+obstacles = dict()
 
 
 class Obstacle:
@@ -36,6 +36,7 @@ class Obstacle:
         self.position = (x, y)
         #add object to canvas (need reference in order for it to show up)
         self.image_object = canvas.create_image(x, y, image=self.image_tk)
+        obstacles[get_position(x, y)] = self
 
 
 #Static variables for turning the car
@@ -98,9 +99,37 @@ class Car:
             * steps
             * movement_direction)
 
-    #Decided on a 10:1 pixels to steps ratio
+
+#Function to get a unique position of object, in order to detect for collisions
+def get_position(x, y):
+    return 1000 * int(x) + int(y)
 
 
+#Checks if there is going to be a collision on the upcoming path
+def can_move(num_steps):
+    global car
+    curr_x = int(car.position_x)
+    curr_y = int(car.position_y)
+    direction = car.car_direction.get_direction()
+    path = []
+
+    #Create path coordinates
+    for i in range(0, steps_to_pixels(num_steps)):
+        pos = get_position(
+            curr_x + i * direction[0],
+            curr_y + i * direction[1])
+        path.append(pos)
+
+    #Check each point in the path to see if it collides with any of the
+    #obstacles
+    for pos in path:
+        if pos in obstacles:
+            return False
+
+    return True
+
+
+#Decided on a 10:1 pixels to steps ratio
 def steps_to_pixels(steps):
     return 10*steps
 
@@ -112,17 +141,27 @@ def translate_car(steps, direction):
     steps = int(steps)
     direction = int(direction)
 
+    curr_x = car.position_x
+    curr_y = car.position_y
+
     for _ in range(0, steps_to_pixels(int(steps))):
         time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
-        canvas.move(
-            car.car_object,
-            direction * car.car_direction.get_direction()[0],
-            direction * car.car_direction.get_direction()[1])
 
-        canvas.update()
+        if is_collision(curr_x, curr_y):
+            print_to_console("COLLISION")
+            return
+        else:
+            canvas.move(
+                car.car_object,
+                direction * car.car_direction.get_direction()[0],
+                direction * car.car_direction.get_direction()[1])
 
-    car.update_position(steps_to_pixels(steps), direction)
+            curr_x = curr_x + direction * car.car_direction.get_direction()[0]
+            curr_y = curr_y + direction * car.car_direction.get_direction()[1]
+            canvas.update()
+
+        car.update_position(1, direction)
 
 
 #direction must be WheelDirection.LEFT or WheelDirection.RIGHT
@@ -154,13 +193,20 @@ def rotate_car(direction):
 
         car.car_object = canvas.create_image(
             car.position_x,
-            car.position_y, 
+            car.position_y,
             image=car.image_tk)
         canvas.update()
 
 
-def print_to_console(message):
+def is_collision(curr_x, curr_y):
+    global car
+    if get_position(curr_x, curr_y) in obstacles:
+        return True
+    else:
+        return False
 
+
+def print_to_console(message):
 #Should console be cleared each time the program is restart?
 #Or should there be a button?
     console.config(state=NORMAL)
@@ -168,19 +214,22 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
+def create_obstacle(image_path, x, y):
+    obstacle = Obstacle(image_path, x, y)
+    obstacles[get_position(x, y)] = obstacle
+
+
 #Course generation functions
 def course_one():
     clear_course()
-    cone_1 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         150,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_1)
-    cone_2 = Obstacle(
+    create_obstacle(
         'Racecar/RacecarGUI/images/trafficcone.png',
         350,
         int(canvas.winfo_reqheight())/2)
-    obstacles.append(cone_2)
 
 
 #TODO -- Fill in the rest of the courses
@@ -207,12 +256,14 @@ def course_five():
 
 
 def clear_course():
+    global obstacles
+
     #remove obstacles from the course
-    for obstacle in obstacles:
+    for obstacle in obstacles.values():
         canvas.delete(obstacle.image_object)
 
     #clear the obstacles array
-    obstacles[:] = []
+    obstacles = dict()
 
 
 #Menu functions
@@ -361,13 +412,19 @@ def verify_program_callback(code):
             print_to_console(error)
 
 
-#Resets car's position and orientation to original position
+#Resets car's position and orientation to original
 def reset_car_position():
-        global car
+        '''global car
         canvas.delete(car.car_object)
+        car.image_tk = ImageTk.PhotoImage(car.image)
         car.car_object = canvas.create_image(30, 250, image=car.image_tk)
         car.position_x = 30
-        car.position_y = 250
+        car.position_y = 250'''
+        if can_move(20):
+            print_to_console("CAN MOVE")
+        else:
+            print_to_console("CAN'T MOVE")
+
 
 #car object
 car = Car()
@@ -425,9 +482,6 @@ code_frame = Frame(left_frame)
 #scrollbar for code window
 code_scrollbar = Scrollbar(code_frame)
 code_scrollbar.pack(side=RIGHT, fill=Y)
-
-print "WINDOW WIDTH: " + str(window_width)
-print "WINDOW HEIGHT: " + str(window_height)
 
 #code is the window in which the code is written
 code = Text(
@@ -487,7 +541,7 @@ car.car_object = canvas.create_image(
     image=car.image_tk)
 
 car.position_x = 30
-car.position_y = 250
+car.position_y = int(canvas.winfo_reqheight())/2
 
 #label above the console
 console_label = Label(root, text="Console", anchor=W, pady=5)

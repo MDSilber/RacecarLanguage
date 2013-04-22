@@ -336,16 +336,22 @@ def p_primary_expression_token(p):
 
 def p_function_command(p):
     '''function_command : primary_expression opt_parameters'''
-    p[0] = makeParseTreeNode(p, "function_command")
+    if p[2].value == "empty":
+        p[0] = makeParseTreeNode([p[0], p[1]], "function_command")
+    else:
+        p[0] = makeParseTreeNode(p, "function_command")
 
 
 def p_opt_parameters(p):
-    '''opt_parameters : opt_parameters primary_expression
-       | empty'''
-    if len(p) == 2:
-        p[0] = makeParseTreeNode(p, "empty")
+    '''opt_parameters : opt_parameters primary_expression'''
+    if p[1].value == "empty":
+        p[0] = makeParseTreeNode([p[0], p[2]], "opt_parameters")
     else:
         p[0] = makeParseTreeNode(p, "opt_parameters")
+
+def p_opt_parameters_empty(p):
+    '''opt_parameters : empty'''
+    p[0] = p[1]
 
 
 def p_drive_command(p):
@@ -382,15 +388,23 @@ def p_define_command(p):
 
 
 def p_opt_param_list(p):
-    '''opt_param_list : empty
-       | USING ID '(' type_enum ')' opt_extra_params'''
+    '''opt_param_list : USING ID '(' type_enum ')' opt_extra_params'''
     p[0] = makeParseTreeNode(p, "opt_param_list")
 
 
+def p_opt_param_list_empty(p):
+    '''opt_param_list : empty'''
+    p[0] = p[1]
+
+
 def p_opt_extra_params(p):
-    '''opt_extra_params : empty
-       | AND ID '(' type_enum ')' opt_extra_params'''
+    '''opt_extra_params : AND ID '(' type_enum ')' opt_extra_params'''
     p[0] = makeParseTreeNode(p, "opt_extra_params")
+
+
+def p_opt_extra_params_empty(p):
+    '''opt_extra_params : empty'''
+    p[0] = p[1]
 
 
 def p_type_enum(p):
@@ -419,14 +433,21 @@ def p_if_command(p):
 def p_opt_else_if(p):
     """opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
        | empty"""
-    p[0] = makeParseTreeNode(p, "opt_else_if")
+
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else_if")
 
 
 def p_opt_else(p):
     """opt_else : ELSE NEWLINE statement_block
        | empty"""
-    p[0] = makeParseTreeNode(p, "opt_else")
 
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = makeParseTreeNode(p, "opt_else")
 
 def p_print_command(p):
     """print_command : PRINT word_expression"""
