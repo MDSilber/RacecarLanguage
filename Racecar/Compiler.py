@@ -276,21 +276,23 @@ def optParametersTranslator(ast):
         return ""
 
 
-def binaryOperatorTranslator(ast, op):
+def binaryOperatorTranslator(ast):
     pythonCode = "(("
     pythonCode += generatePythonCode(ast.children[0])
-    pythonCode += ") " + op + " ("
+    pythonCode += ") "
+    pythonCode += generatePythonCode(ast.children[1])
+    pythonCode += " ("
     pythonCode += generatePythonCode(ast.children[2])
     pythonCode += "))"
     return pythonCode
 
 
 def plusExpressionTranslator(ast):
-    return binaryOperatorTranslator(ast, "+")
+    return binaryOperatorTranslator(ast)
 
 
 def timesExpressionTranslator(ast):
-    return binaryOperatorTranslator(ast, "*")
+    return binaryOperatorTranslator(ast)
 
 
 if __name__ == "__main__":
