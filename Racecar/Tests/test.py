@@ -7,10 +7,10 @@ import Racecar.SymbolTable as SymbolTable
 class TranslatorTests(unittest.TestCase):
     def test_empty_statement(self):
         test_string = \
-"""
+            """
 """
         correct_translation = \
-"""
+            """
 """
         result = Compiler.getPythonCode(test_string)
 
@@ -18,19 +18,19 @@ class TranslatorTests(unittest.TestCase):
 
     def test_drive_forwards(self):
         test_string1 = \
-"""drive forwards 10 steps
+            """drive forwards 10 steps
 """
         test_string2 = \
-"""drive forward 10 steps
+            """drive forward 10 steps
 """
         test_string3 = \
-"""drive forwards 10 step
+            """drive forwards 10 step
 """
         test_string4 = \
-"""drive forward 10 step
+            """drive forward 10 step
 """
         correct_translation = \
-"""translate_car(10, CarDirection.FORWARDS)
+            """translate_car(10, CarDirection.FORWARDS)
 """
         result1 = Compiler.getPythonCode(test_string1)
         result2 = Compiler.getPythonCode(test_string2)
@@ -44,19 +44,19 @@ class TranslatorTests(unittest.TestCase):
 
     def test_drive_backwards(self):
         test_string1 = \
-"""drive backwards 10 steps
+            """drive backwards 10 steps
 """
         test_string2 = \
-"""drive backward 10 steps
+            """drive backward 10 steps
 """
         test_string3 = \
-"""drive backwards 10 step
+            """drive backwards 10 step
 """
         test_string4 = \
-"""drive backward 10 step
+            """drive backward 10 step
 """
         correct_translation = \
-"""translate_car(10, CarDirection.BACKWARDS)
+            """translate_car(10, CarDirection.BACKWARDS)
 """
         result1 = Compiler.getPythonCode(test_string1)
         result2 = Compiler.getPythonCode(test_string2)
@@ -70,10 +70,10 @@ class TranslatorTests(unittest.TestCase):
 
     def test_turn_left(self):
         test_string = \
-"""turn left
+            """turn left
 """
         correct_translation = \
-"""rotate_car(WheelDirection.LEFT)
+            """rotate_car(WheelDirection.LEFT)
 """
         result = Compiler.getPythonCode(test_string)
 
@@ -81,10 +81,10 @@ class TranslatorTests(unittest.TestCase):
 
     def test_turn_right(self):
         test_string = \
-"""turn right
+            """turn right
 """
         correct_translation = \
-"""rotate_car(WheelDirection.RIGHT)
+            """rotate_car(WheelDirection.RIGHT)
 """
         result = Compiler.getPythonCode(test_string)
 
@@ -92,10 +92,10 @@ class TranslatorTests(unittest.TestCase):
 
     def test_print(self):
         test_string = \
-"""print "hello world"
+            """print "hello world"
 """
         correct_translation = \
-"""print_to_console("hello world")
+            """print_to_console("hello world")
 """
         result = Compiler.getPythonCode(test_string)
 
@@ -103,10 +103,10 @@ class TranslatorTests(unittest.TestCase):
 
     def test_declare(self):
         test_string = \
-"""myNum is a number
+            """myNum is a number
 """
         correct_translation = \
-"""myNum = None
+            """myNum = None
 """
         result = Compiler.getPythonCode(test_string)
 
@@ -114,23 +114,23 @@ class TranslatorTests(unittest.TestCase):
 
     def test_assign(self):
         test_string = \
-"""set myVar to otherThing
+            """set myVar to otherThing
 """
         correct_translation = \
-"""myVar = otherThing
+            """myVar = otherThing
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_define(self):
         test_string = \
-"""define moveForwardFive
+            """define moveForwardFive
 {
     drive forward 5
 }
 """
         correct_translation = \
-"""def moveForwardFive():
+            """def moveForwardFive():
     translate_car(5, CarDirection.FORWARDS)
 """
 
@@ -139,7 +139,7 @@ class TranslatorTests(unittest.TestCase):
 
     def test_function_invocation_no_params(self):
         test_string = \
-"""define moveBackwardFive
+            """define moveBackwardFive
 {
     drive backward 5
 }
@@ -151,7 +151,7 @@ define moveForwardThenBackward
 moveForwardThenBackward
 """
         correct_translation = \
-"""def moveBackwardFive():
+            """def moveBackwardFive():
     translate_car(5, CarDirection.BACKWARDS)
 def moveForwardThenBackward():
     translate_car(5, CarDirection.FORWARDS)
@@ -163,52 +163,52 @@ moveForwardThenBackward()
 
     def test_function_invocation_with_parameters(self):
         test_string = \
-"""move5Steps "forwards"
+            """move5Steps "forwards"
 """
         correct_translation = \
-"""move5Steps("forwards")
+            """move5Steps("forwards")
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_plus_expression(self):
         test_string = \
-"""print (2 + 3)
+            """print (2 + 3)
 """
         correct_translation = \
-"""print_to_console(((2) + (3)))
+            """print_to_console(((2) + (3)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_times_expression(self):
         test_string = \
-"""print (2 * 3)
+            """print (2 * 3)
 """
         correct_translation = \
-"""print_to_console(((2) * (3)))
+            """print_to_console(((2) * (3)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_all_expression(self):
         test_string = \
-"""print (1 + 2 * (3 + 4))
+            """print (1 + 2 * (3 + 4))
 """
         correct_translation = \
-"""print_to_console(((1) + (((2) * (((3) + (4)))))))
+            """print_to_console(((1) + (((2) * (((3) + (4)))))))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_assign_num_change(self):
         test_string = \
-"""num is a number
+            """num is a number
 set num to 10
 set num to num*2
 """
         correct_translation = \
-"""num = None
+            """num = None
 num = 10
 num = ((num) * (2))
 """
@@ -217,12 +217,12 @@ num = ((num) * (2))
 
     def test_assign_word_print(self):
         test_string = \
-"""color is a word
+            """color is a word
 set color to "blue"
 print color
 """
         correct_translation = \
-"""color = None
+            """color = None
 color = "blue"
 print_to_console(color)
 """
@@ -231,13 +231,13 @@ print_to_console(color)
 
     def test_if_statement(self):
         test_string = \
-"""if 1
+            """if 1
 {
     print "yay"
 }
 """
         correct_translation = \
-"""if 1:
+            """if 1:
     print_to_console("yay")
 """
         result = Compiler.getPythonCode(test_string)
@@ -245,7 +245,7 @@ print_to_console(color)
 
     def test_if_else_statement(self):
         test_string = \
-"""if 1
+            """if 1
 {
     print "yay"
 }
@@ -255,7 +255,7 @@ else
 }
 """
         correct_translation = \
-"""if 1:
+            """if 1:
     print_to_console("yay")
 else:
     print_to_console("no")
@@ -265,30 +265,30 @@ else:
 
     def test_comment_singleline(self):
         test_string = \
-""":) this is a single line comment
+            """:) this is a single line comment
 """
         correct_translation = \
-"""
+            """
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_comment_multiline(self):
         test_string = \
-""":-( this is
+            """:-( this is
 a multiline
 comment
 :-)
 """
         correct_translation = \
-"""
+            """
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_loop_for(self):
         test_string = \
-"""myCounter is a number
+            """myCounter is a number
 set myCounter to 10
 repeat myCounter times
 {
@@ -296,7 +296,7 @@ repeat myCounter times
 }
 """
         correct_translation = \
-"""myCounter = None
+            """myCounter = None
 myCounter = 10
 for x in range(myCounter):
     translate_car(1, CarDirection.FORWARDS)
@@ -306,7 +306,7 @@ for x in range(myCounter):
 
     def test_loop_while(self):
         test_string = \
-"""myCounter is a number
+            """myCounter is a number
 set myCounter to 1
 repeat if myCounter is not 5
 {
@@ -315,7 +315,7 @@ repeat if myCounter is not 5
 }
 """
         correct_translation = \
-"""myCounter = None
+            """myCounter = None
 myCounter = 1
 while myCounter != 5:
     translate_car(1, CarDirection.FORWARDS)
@@ -326,7 +326,8 @@ while myCounter != 5:
 
     def test_function_invocation_with_two_parameters(self):
         test_string = \
-"""define turnLeftThenDriveStraight using numStepsTurn (number) and numStepsDrive (number)
+            """define turnLeftThenDriveStraight using numStepsTurn \
+            (number) and numStepsDrive (number)
 {
 turn left
 drive forward numStepsTurn steps
@@ -336,7 +337,7 @@ drive forward numStepsDrive steps
 turnLeftThenDriveStraight 5 10
 """
         correct_translation = \
-"""def turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
+            """def turnLeftThenDriveStraight(numStepsTurn, numStepsDrive):
     rotate_car(WheelDirection.LEFT)
     translate_car(numStepsTurn, CarDirection.FORWARDS)
     rotate_car(WheelDirection.RIGHT)
@@ -348,10 +349,10 @@ turnLeftThenDriveStraight(5, 10)
 
     def test_template(self):
         test_string = \
-"""
+            """
 """
         correct_translation = \
-"""
+            """
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -371,8 +372,8 @@ class SymbolTableTests(unittest.TestCase):
         '''Tests the SymbolTableEntry.validateWithTableEntry() function.
         In particular, ensures two same-named entries with different scopes
         are not equal, and an entry without a type matches an existing entry
-        that has a type and the same name and scope, but not one with a different
-        scope.'''
+        that has a type and the same name and scope, but not one with a
+        different scope.'''
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
         entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
