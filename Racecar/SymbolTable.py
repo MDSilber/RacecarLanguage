@@ -33,7 +33,8 @@ class SymbolLookupTable:
         '''Returns the entry corresponding to the specified id and scope.
         This is really only useful to find out the type of a particular id.'''
 
-        matches = [y for (x,y) in self.table.iteritems() if self.verifyEntry(entryQuery)]
+        matches = [y for (x, y) in self.table.iteritems()
+                   if self.verifyEntry(entryQuery)]
         if len(matches) == 1:
             return matches[0]
         else:

@@ -32,7 +32,7 @@ def generatePythonCode(ast):
         "assignment_command": assignmentCommandTranslator,
         "backward": backwardTranslator,
         "backwards": backwardTranslator,
-        "comparison" : comparisonTranslator,
+        "comparison": comparisonTranslator,
         "declaration_command": declarationCommandTranslator,
         "define_command": defineCommandTranslator,
         "drive_command": driveCommandTranslator,
@@ -40,17 +40,17 @@ def generatePythonCode(ast):
         "forward": forwardTranslator,
         "forwards": forwardTranslator,
         "function_command": functionCommandTranslator,
-        "if_command" : ifCommandTranslator,
+        "if_command": ifCommandTranslator,
         "left": leftTranslator,
-        "opt_else" : optElseTranslator,
-        "opt_else_if" : optElseIfTranslator,
+        "opt_else": optElseTranslator,
+        "opt_else_if": optElseIfTranslator,
         "opt_extra_params": optExtraParamsTranslator,
         "opt_param_list": optParamListTranslator,
         "opt_parameters": optParametersTranslator,
         "plus_expression": plusExpressionTranslator,
         "print": printTranslator,
-        "repeat_if_command" : repeatIfTranslator,
-        "repeat_times_command" : repeatTimesTranslator,
+        "repeat_if_command": repeatIfTranslator,
+        "repeat_times_command": repeatTimesTranslator,
         "right": rightTranslator,
         "statement_block": statementBlockTranslator,
         "statements": statementsTranslator,
@@ -124,6 +124,7 @@ def turnCommandTranslator(ast):
     pythonCode += ")\n"
     return pythonCode
 
+
 def comparisonTranslator(ast):
     pythonCode = generatePythonCode(ast.children[0])
     if ast.children[1].value == "is not":
@@ -135,8 +136,9 @@ def comparisonTranslator(ast):
     else:
         pythonCode += " " + generatePythonCode(ast.children[1])
         pythonCode += " " + generatePythonCode(ast.children[2])
-    
+
     return pythonCode
+
 
 def optElseIfTranslator(ast):
     pythonCode = "elif "
@@ -148,11 +150,13 @@ def optElseIfTranslator(ast):
 
     return pythonCode
 
+
 def optElseTranslator(ast):
     pythonCode = "else:\n"
     prelimPythonCode = generatePythonCode(ast.children[2])
     pythonCode += generatePythonCode(ast.children[2])
     return pythonCode
+
 
 def ifCommandTranslator(ast):
     pythonCode = "if " + generatePythonCode(ast.children[1]) + ":\n"
@@ -160,10 +164,11 @@ def ifCommandTranslator(ast):
 
     if ast.children[4].value != "empty":
         pythonCode += generatePythonCode(ast.children[4])
-    
+
     if ast.children[5].value != "empty":
         pythonCode += generatePythonCode(ast.children[5])
     return pythonCode
+
 
 def leftTranslator(ast):
     pythonCode = "WheelDirection.LEFT"
@@ -263,7 +268,7 @@ def optParametersTranslator(ast):
     numChildren = len(ast.children)
     if numChildren > 0:
         pythonCode = generatePythonCode(ast.children[0])
-        if numChildren == 2: 
+        if numChildren == 2:
             pythonCode += ", "
             pythonCode += generatePythonCode(ast.children[1])
         return pythonCode
