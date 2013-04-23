@@ -17,6 +17,8 @@ random.seed()
 #to that file
 current_program = None
 
+#Variable that serves as an interrupt to stop the program
+should_stop = False
 
 class Program:
     def __init__(self):
@@ -138,18 +140,26 @@ def steps_to_pixels(steps):
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
+    global should_stop
+
     steps = int(steps)
     direction = int(direction)
 
     curr_x = car.position_x
     curr_y = car.position_y
 
-    for _ in range(0, steps_to_pixels(int(steps))):
+    for _ in range(0, steps_to_pixels(int(steps))): 
+        #Check interrupt variable
+        if should_stop:
+            return
+
         time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
 
         if is_collision(curr_x, curr_y):
             print_to_console("COLLISION")
+            #Stop execution of program
+            should_stop = True
             return
         else:
             canvas.move(
@@ -165,8 +175,15 @@ def translate_car(steps, direction):
 
 
 #direction must be WheelDirection.LEFT or WheelDirection.RIGHT
+#Note: only check interrupt variable at the beginning, because
+#we shouldn't allow partial rotations
 def rotate_car(direction):
     global car
+    global should_stop
+
+    #Check interrupt variable
+    if should_stop:
+        return
 
     #This is current index in DIRECTIONS array
     current_direction_deg = car.car_direction.direction*45
@@ -236,11 +253,10 @@ def course_one():
 def course_two():
     clear_course()
     for _ in range(0, 10):
-        obstacle = Obstacle(
+        create_obstacle(
             'Racecar/RacecarGUI/images/bomb.png',
             random.randint(0, 500),
             random.randint(0, 500))
-        obstacles.append(obstacle)
 
 
 def course_three():
@@ -343,10 +359,16 @@ def clear_console():
     console.delete(1.0, END)
     console.config(state=DISABLED)
 
+def stop_program():
+   global should_stop
+   should_stop = True
 
 #Code generation and compilation
 #Runs code
 def generate_program(code):
+    global should_stop
+    #Set the interrupt variable whenever a program is run
+    should_stop = False
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
@@ -356,9 +378,12 @@ def generate_program(code):
             print_to_console("Program executing")
             console.tag_add("Correct", "1.0", "1.end")
             console.tag_config("Correct", foreground="Green")
-
+            
+            #Toggle the buttons on the bottom and run program
+            toggle_buttons(True)
             exec(python_code, globals())
-
+            toggle_buttons(False)
+            
             #Print message to console saying program is finished executing
             print_to_console("Done running program")
             console.tag_add("End", "end -2 l", END)
@@ -414,22 +439,32 @@ def verify_program_callback(code):
 
 #Resets car's position and orientation to original
 def reset_car_position():
-        '''global car
+        global car
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image)
         car.car_object = canvas.create_image(30, 250, image=car.image_tk)
         car.position_x = 30
-        car.position_y = 250'''
-        if can_move(20):
-            print_to_console("CAN MOVE")
-        else:
-            print_to_console("CAN'T MOVE")
-
+        car.position_y = 250
+        car.car_direction = CarDirection()
 
 #car object
 car = Car()
 
+
 #User interface
+#Toggle enabled and disabled buttons when program is run and stopped
+def toggle_buttons(stop_button_should_be_enabled):
+    if stop_button_should_be_enabled:
+        run_button.config(state=DISABLED)
+        stop_button.config(state=NORMAL)
+        reset_car_position_button.config(state=DISABLED)
+        clear_button.config(state=DISABLED)
+    else:
+        run_button.config(state=NORMAL)
+        stop_button.config(state=DISABLED)
+        reset_car_position_button.config(state=NORMAL)
+        clear_button.config(state=NORMAL)
+
 root = Tk()
 root.title('Racecar')
 window_width = root.winfo_screenwidth()
@@ -502,6 +537,15 @@ run_button = Button(
     pady=5,
     padx=5,
     command=command)
+
+#Stop execution of running program
+stop_button = Button(
+    button_frame,
+    text="Stop Program",
+    padx=5,
+    pady=5,
+    command=stop_program)
+stop_button.config(state=DISABLED)
 
 #reset car position button puts the car back in its original position and
 #orientation
@@ -576,8 +620,9 @@ code.pack(fill=BOTH)
 
 button_frame.pack(fill=BOTH)
 run_button.grid(row=1, column=1)
-reset_car_position_button.grid(row=1, column=2)
-clear_button.grid(row=1, column=3)
+stop_button.grid(row=1, column=2)
+reset_car_position_button.grid(row=1, column=3)
+clear_button.grid(row=1, column=4)
 
 canvas_frame.pack(fill=BOTH)
 canvas.pack(fill=BOTH)
