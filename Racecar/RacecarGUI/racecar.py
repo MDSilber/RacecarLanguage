@@ -20,6 +20,7 @@ current_program = None
 #Variable that serves as an interrupt to stop the program
 should_stop = False
 
+
 class Program:
     def __init__(self):
         self.name = ''
@@ -148,7 +149,7 @@ def translate_car(steps, direction):
     curr_x = car.position_x
     curr_y = car.position_y
 
-    for _ in range(0, steps_to_pixels(int(steps))): 
+    for _ in range(0, steps_to_pixels(int(steps))):
         #Check interrupt variable
         if should_stop:
             return
@@ -359,9 +360,12 @@ def clear_console():
     console.delete(1.0, END)
     console.config(state=DISABLED)
 
+
+#Triggers interrupt
 def stop_program():
-   global should_stop
-   should_stop = True
+    global should_stop
+    should_stop = True
+
 
 #Code generation and compilation
 #Runs code
@@ -378,12 +382,12 @@ def generate_program(code):
             print_to_console("Program executing")
             console.tag_add("Correct", "1.0", "1.end")
             console.tag_config("Correct", foreground="Green")
-            
+
             #Toggle the buttons on the bottom and run program
             toggle_buttons(True)
             exec(python_code, globals())
             toggle_buttons(False)
-            
+
             #Print message to console saying program is finished executing
             print_to_console("Done running program")
             console.tag_add("End", "end -2 l", END)
