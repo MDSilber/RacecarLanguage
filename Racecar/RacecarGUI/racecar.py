@@ -24,23 +24,14 @@ should_stop = False
 #List of obstacles on the course at any given time
 obstacles = dict()
 
+#list of walls on the course at any given time
+walls = []
 
 class Program:
     def __init__(self):
         self.name = ''
         self.file_obj = None
 
-'''
-class Obstacle:
-    def __init__(self, image_path=None, x=0, y=0):
-        self.image = Image.open(image_path)
-        self.image_tk = ImageTk.PhotoImage(self.image)
-        #position is tuple of x,y
-        self.position = (x, y)
-        #add object to canvas (need reference in order for it to show up)
-        self.image_object = canvas.create_image(x, y, image=self.image_tk)
-        obstacles[get_position(x, y)] = self
-'''
 
 #Static variables for turning the car
 class WheelDirection:
@@ -250,6 +241,7 @@ def print_to_console(message):
 
 #Course one is a slalom of blocks
 def course_one():
+    clear_course()
     obstacle_coord_x = 123
     obstacle_coord_y = int(canvas.winfo_reqheight())/2
     while obstacle_coord_x < anti_origin[0]:
@@ -264,9 +256,42 @@ def course_one():
 
 
 #TODO -- Fill in the rest of the courses
+#Course two is a simple maze
 def course_two():
     clear_course()
-
+    wall_coord_x = 123
+    wall_length = 4*int(canvas.winfo_reqheight())/5
+    put_wall_on_top = True
+    while wall_coord_x < anti_origin[0]:
+        if put_wall_on_top:
+            wall = canvas.create_line(
+                wall_coord_x,
+                0,
+                wall_coord_x,
+                wall_length,
+                fill="black",
+                width=2)
+            walls.append(wall)
+        else:
+            wall = canvas.create_line(
+                wall_coord_x, 
+                int(canvas.winfo_reqheight())/5+23,
+                wall_coord_x,
+                int(canvas.winfo_reqheight())+23,
+                fill="black",
+                width=2)
+        put_wall_on_top = not put_wall_on_top
+        wall_coord_x = wall_coord_x+100
+    
+    wall_coord_x = wall_coord_x-100
+    wall = canvas.create_line(
+        wall_coord_x,
+        wall_length,
+        wall_coord_x,
+        canvas.winfo_reqheight()+23,
+        fill="black",
+        dash=(4,4))
+    walls.append(wall)
 
 def course_three():
     clear_course()
@@ -282,13 +307,17 @@ def course_five():
 
 def clear_course():
     global obstacles
-
+    global walls
     #remove obstacles from the course
     for obstacle in obstacles.values():
-        canvas.delete(obstacle.image_object)
+        canvas.delete(obstacle)
+    
+    for wall in walls:
+        canvas.delete(wall)
 
     #clear the obstacles array
     obstacles = dict()
+    walls = []
 
 
 #Menu functions
