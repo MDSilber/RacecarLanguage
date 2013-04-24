@@ -29,7 +29,7 @@ walls = []
 
 
 class Obstacle:
-    def __init__(self,x,y,width,height):
+    def __init__(self, x, y, width, height):
         obstacle_object = canvas.create_rectangle(
             x-width/2,
             y-height/2,
@@ -39,6 +39,7 @@ class Obstacle:
         self.width = width
         self.height = height
         self.center = (x, y)
+
 
 class Program:
     def __init__(self):
