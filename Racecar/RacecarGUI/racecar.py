@@ -107,6 +107,7 @@ class Car:
 def get_position(x, y):
     return 1000 * int(x) + int(y)
 
+
 def getCurrentPosition():
     global car
     return get_position(car.position_x, car.position_y)
@@ -477,9 +478,10 @@ def toggle_buttons(stop_button_should_be_enabled):
 
 root = Tk()
 root.title('Racecar')
-window_width = root.winfo_screenwidth()
-window_height = root.winfo_screenheight()
-root.geometry("%dx%d" % (window_width-100, window_height-100))
+#Height is always three fourths the width of the window
+window_width = root.winfo_screenwidth() - 100
+window_height = 3*(window_width-100)/4
+root.geometry("%dx%d" % (window_width, window_height))
 
 menu_bar = Menu(root)
 
@@ -522,7 +524,10 @@ left_frame = Frame(root)
 code_label = Label(left_frame, text="Enter code here", anchor=W, pady=5)
 
 #frame for code window to hold textbox and scrollbar
-code_frame = Frame(left_frame)
+code_frame = Frame(left_frame,
+    width=int(0.3*window_width),
+    height=4*window_height/5)
+code_frame.grid_propagate(False)
 
 #scrollbar for code window
 code_scrollbar = Scrollbar(code_frame)
@@ -576,7 +581,7 @@ clear_button = Button(
 canvas_frame = Frame(
     root,
     width=window_width/1.5,
-    height=window_height-300,
+    height=3*window_height/4,
     padx=2,
     pady=2)
 
@@ -584,7 +589,7 @@ canvas_frame.configure(borderwidth=1.5, background='black')
 canvas = Canvas(
     canvas_frame,
     width=window_width/1.5,
-    height=window_height-300)
+    height=2*window_height/3)
 
 car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
@@ -611,7 +616,7 @@ console_scrollbar.pack(side=RIGHT, fill=Y)
 console = Text(
     console_frame,
     width=int(window_width/1.5),
-    height=10,
+    height=8,
     padx=2,
     pady=2,
     wrap=WORD,
