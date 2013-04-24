@@ -22,11 +22,23 @@ current_program = None
 should_stop = False
 
 #List of obstacles on the course at any given time
-obstacles = dict()
+obstacles = []
 
 #list of walls on the course at any given time
 walls = []
 
+
+class Obstacle:
+    def __init__(self,x,y,width,height):
+        obstacle_object = canvas.create_rectangle(
+            x-width/2,
+            y-height/2,
+            x+width/2,
+            y+height/2,
+            fill="#000")
+        self.width = width
+        self.height = height
+        self.center = (x, y)
 
 class Program:
     def __init__(self):
@@ -246,13 +258,8 @@ def course_one():
     obstacle_coord_x = 123
     obstacle_coord_y = int(canvas.winfo_reqheight())/2
     while obstacle_coord_x < anti_origin[0]:
-        obstacle = canvas.create_rectangle(
-            obstacle_coord_x-15,
-            obstacle_coord_y-15,
-            obstacle_coord_x+15,
-            obstacle_coord_y+15,
-            fill="#000")
-        obstacles[get_position(obstacle_coord_x, obstacle_coord_y)] = obstacle
+        obstacle = Obstacle(obstacle_coord_x, obstacle_coord_y, 30, 30)
+        obstacles.append(obstacle)
         obstacle_coord_x = obstacle_coord_x + 150
 
 
@@ -281,6 +288,7 @@ def course_two():
                 int(canvas.winfo_reqheight())+23,
                 fill="black",
                 width=2)
+            walls.append(wall)
         put_wall_on_top = not put_wall_on_top
         wall_coord_x = wall_coord_x+100
 
@@ -311,14 +319,14 @@ def clear_course():
     global obstacles
     global walls
     #remove obstacles from the course
-    for obstacle in obstacles.values():
+    for obstacle in obstacles:
         canvas.delete(obstacle)
 
     for wall in walls:
         canvas.delete(wall)
 
-    #clear the obstacles array
-    obstacles = dict()
+    #clear the obstacles and walls array
+    obstacles = []
     walls = []
 
 
