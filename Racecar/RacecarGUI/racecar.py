@@ -107,6 +107,10 @@ class Car:
 def get_position(x, y):
     return 1000 * int(x) + int(y)
 
+def getCurrentPosition():
+    global car
+    return get_position(car.position_x, car.position_y)
+
 
 #Checks if there is going to be a collision on the upcoming path
 def can_move(num_steps):
