@@ -41,6 +41,27 @@ class Obstacle:
         self.center = (x, y)
 
 
+#Wall class: can only be vertical or horizontal
+class Wall:
+    def __init__(self, start_x, start_y, length, is_horizontal):
+        if is_horizontal:
+            wall_object = canvas.create_line(
+                start_x,
+                start_y,
+                start_x+length,
+                start_y)
+            self.start = start_x
+            self.end = start_x+length
+        else:
+            wall_object = canvas.create_line(
+                start_x,
+                start_y,
+                start_x,
+                start_y+length)
+            self.start = start_y
+            self.end = start_y+length
+        self.is_horizontal = is_horizontal
+
 class Program:
     def __init__(self):
         self.name = ''
@@ -270,29 +291,30 @@ def course_two():
     clear_course()
     wall_coord_x = 123
     wall_length = 4*int(canvas.winfo_reqheight())/5
+    
+    #used to toggle position of line
     put_wall_on_top = True
+    
+    #walls
     while wall_coord_x < anti_origin[0]:
         if put_wall_on_top:
-            wall = canvas.create_line(
+            wall = Wall(
                 wall_coord_x,
                 0,
-                wall_coord_x,
                 wall_length,
-                fill="black",
-                width=2)
+                False)
             walls.append(wall)
         else:
-            wall = canvas.create_line(
+            wall = Wall(
                 wall_coord_x,
                 int(canvas.winfo_reqheight())/5+23,
-                wall_coord_x,
-                int(canvas.winfo_reqheight())+23,
-                fill="black",
-                width=2)
+                wall_length,
+                False)
             walls.append(wall)
         put_wall_on_top = not put_wall_on_top
         wall_coord_x = wall_coord_x+100
-
+    
+    #finish line
     wall_coord_x = wall_coord_x-100
     wall = canvas.create_line(
         wall_coord_x,
