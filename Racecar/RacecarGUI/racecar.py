@@ -137,9 +137,9 @@ def can_move(num_steps):
     return True
 
 
-#Decided on a 10:1 pixels to steps ratio
+#Number of steps on screen is proportional to screen size
 def steps_to_pixels(steps):
-    return 10*steps
+    return canvas_frame.winfo_reqwidth()/110*steps
 
 
 #API Functions
@@ -480,7 +480,7 @@ root = Tk()
 root.title('Racecar')
 #Height is always three fourths the width of the window
 window_width = root.winfo_screenwidth() - 100
-window_height = 3*(window_width-100)/4
+window_height = 9*window_width/16
 root.geometry("%dx%d" % (window_width, window_height))
 
 menu_bar = Menu(root)
@@ -524,9 +524,10 @@ left_frame = Frame(root)
 code_label = Label(left_frame, text="Enter code here", anchor=W, pady=5)
 
 #frame for code window to hold textbox and scrollbar
-code_frame = Frame(left_frame,
+code_frame = Frame(
+    left_frame,
     width=int(0.3*window_width),
-    height=4*window_height/5)
+    height=9*window_height/10)
 code_frame.grid_propagate(False)
 
 #scrollbar for code window
@@ -537,7 +538,7 @@ code_scrollbar.pack(side=RIGHT, fill=Y)
 code = Text(
     code_frame,
     width=50,
-    height=window_height/16-8,
+    #height=window_height/16-8,
     wrap=WORD,
     yscrollcommand=code_scrollbar.set)
 
@@ -581,7 +582,7 @@ clear_button = Button(
 canvas_frame = Frame(
     root,
     width=window_width/1.5,
-    height=3*window_height/4,
+    height=window_height/1.5,
     padx=2,
     pady=2)
 
@@ -589,7 +590,7 @@ canvas_frame.configure(borderwidth=1.5, background='black')
 canvas = Canvas(
     canvas_frame,
     width=window_width/1.5,
-    height=2*window_height/3)
+    height=window_height/1.5)
 
 car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
@@ -630,8 +631,8 @@ left_frame.pack(side=LEFT, fill=BOTH)
 
 code_label.pack()
 
-code_frame.pack(fill=BOTH)
-code.pack(fill=BOTH)
+code_frame.pack(expand=1, fill=BOTH)
+code.pack(expand=1, fill=BOTH)
 
 button_frame.pack(fill=BOTH)
 run_button.grid(row=1, column=1)
@@ -644,8 +645,8 @@ canvas.pack(fill=BOTH)
 
 console_label.pack()
 
-console_frame.pack(fill=BOTH)
-console.pack(fill=BOTH)
+console_frame.pack(expand=1, fill=BOTH, pady=(0, 10))
+console.pack(expand=1, fill=BOTH)
 
 code_scrollbar.config(command=code.yview)
 console_scrollbar.config(command=console.yview)
