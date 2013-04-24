@@ -62,6 +62,7 @@ class Wall:
             self.end = start_y+length
         self.is_horizontal = is_horizontal
 
+
 class Program:
     def __init__(self):
         self.name = ''
@@ -290,14 +291,14 @@ def course_one():
 def course_two():
     message = "Try to navigate through the maze and cross the finish line!"
     print_to_console(message)
- 
+
     clear_course()
     wall_coord_x = 123
     wall_length = 4*int(canvas.winfo_reqheight())/5
-    
+
     #used to toggle position of line
     put_wall_on_top = True
-    
+
     #walls
     while wall_coord_x < anti_origin[0]:
         if put_wall_on_top:
@@ -316,7 +317,7 @@ def course_two():
             walls.append(wall)
         put_wall_on_top = not put_wall_on_top
         wall_coord_x = wall_coord_x+100
-    
+
     #finish line
     wall_coord_x = wall_coord_x-100
     wall = canvas.create_line(
