@@ -149,9 +149,11 @@ def translate_car(steps, direction):
     curr_x = car.position_x
     curr_y = car.position_y
 
-    for _ in range(0, steps_to_pixels(int(steps))):
+    one_step = steps_to_pixels(1)
+
+    for i in range(0, steps_to_pixels(int(steps))):
         #Check interrupt variable
-        if should_stop:
+        if should_stop and i % one_step == 0:
             return
 
         time.sleep(0.01)
