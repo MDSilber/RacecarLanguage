@@ -27,6 +27,7 @@ obstacles = dict()
 #list of walls on the course at any given time
 walls = []
 
+
 class Program:
     def __init__(self):
         self.name = ''
@@ -246,8 +247,8 @@ def course_one():
     obstacle_coord_y = int(canvas.winfo_reqheight())/2
     while obstacle_coord_x < anti_origin[0]:
         obstacle = canvas.create_rectangle(
-            obstacle_coord_x-15, 
-            obstacle_coord_y-15, 
+            obstacle_coord_x-15,
+            obstacle_coord_y-15,
             obstacle_coord_x+15,
             obstacle_coord_y+15,
             fill="#000")
@@ -274,7 +275,7 @@ def course_two():
             walls.append(wall)
         else:
             wall = canvas.create_line(
-                wall_coord_x, 
+                wall_coord_x,
                 int(canvas.winfo_reqheight())/5+23,
                 wall_coord_x,
                 int(canvas.winfo_reqheight())+23,
@@ -282,7 +283,7 @@ def course_two():
                 width=2)
         put_wall_on_top = not put_wall_on_top
         wall_coord_x = wall_coord_x+100
-    
+
     wall_coord_x = wall_coord_x-100
     wall = canvas.create_line(
         wall_coord_x,
@@ -290,8 +291,9 @@ def course_two():
         wall_coord_x,
         canvas.winfo_reqheight()+23,
         fill="black",
-        dash=(4,4))
+        dash=(4, 4))
     walls.append(wall)
+
 
 def course_three():
     clear_course()
@@ -311,7 +313,7 @@ def clear_course():
     #remove obstacles from the course
     for obstacle in obstacles.values():
         canvas.delete(obstacle)
-    
+
     for wall in walls:
         canvas.delete(wall)
 
@@ -484,7 +486,10 @@ def reset_car_position():
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image)
         car_height = int(canvas.winfo_reqheight())/2
-        car.car_object = canvas.create_image(23, car_height, image=car.image_tk)
+        car.car_object = canvas.create_image(
+            23,
+            car_height,
+            image=car.image_tk)
         car.position_x = 23
         car.position_y = car_height
         car.car_direction = CarDirection()
