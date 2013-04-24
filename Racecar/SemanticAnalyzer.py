@@ -1,15 +1,15 @@
 # NOTE - this is my code so far for the semantic analyzer.  It will be difficult to understand at this point.  Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.  Functions with X’s next to them have not yet been worked on.
 
-# TODO add attribute to Tree class for “scope number,” which is essentially a count of the “depth” of scopes. NOTE a variable can be created if there is not a variable with the same scope name and a LOWER or EQUAL scope number - a variable can be used as long as there is a variable with the same name, same scope name, and a LOWER or EQUAL scope number
-
-# TODO build a class that can store a scope name as well as a scope number
+# TODO add attribute to SymbolTable class for “scope number,” which is essentially a count of the “depth” of scopes. NOTE a variable can be created if there is not a variable with the same scope name and a LOWER or EQUAL scope number - a variable can be used as long as there is a variable with the same name, same scope name, and a LOWER or EQUAL scope number
 
 from SymbolTable import *
+from Scope import *
 
 table = SymbolLookupTable
+counter = 0
 
 # a list is passed in the first time this is called
-# it has one object that has the string “global” stored in it
+# it has one Scope object with the name "global" and number 0
 def analyze(ast, list):
    '''Traverse the AST and check for semantic errors.'''
 
@@ -166,9 +166,9 @@ X def repeatIfTranslator(ast):
 
 
 def declarationCommandAnalyzer(ast, list):
-   scopeName = list.pop()
-   list.append(scopeName)
-   table.addEntry(SymbolTableEntry(analyze(ast.children[0], list), analyze(ast.children[1], list), scopeName)
+   scopeNode = list.pop()
+   list.append(scopeNode)
+   table.addEntry(SymbolTableEntry(analyze(ast.children[0], list), analyze(ast.children[1], list), scopeNode.name, scopeNode.number, counter)
 
 
 def idAnalyzer(ast, list):
@@ -192,24 +192,28 @@ X def printTranslator(ast):
 
 def defineCommandAnalyzer(ast, list):
    id = analyze(ast.children[1], list)
-   list.append(id)
-   table.addEntry(SymbolTableEntry(id, “function”, “global”))
+   scopeNode = list.pop()
+   table.addEntry(SymbolTableEntry(id, “function”, scopeNode.name, scopeNode.number, counter))
+   list.append(scopeNode)
+   list.append(Scope(id, 0))
    if ast.children[2].value == "opt_param_list":
-       analyze(ast.children[2], list)
+      analyze(ast.children[2], list)
+   analyze(ast.children[4], list)
+   list.pop()                                                                                                                                                                                
 
 
 def optParamListAnalyzer(ast, list):
-   scopeName = list.pop()
-   list.append(scopeName)
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list), analyzer(ast.children[3], list), scopeName)
+   scopeNode = list.pop()
+   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list), analyzer(ast.children[3], list), scopeNode.name, scopeNode.number, counter)
+   list.append(scopeNode)
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list)
 
 
 def optExtraParamsAnalyzer(ast, list):
-   scopeName = list.pop()
-   list.append(scopeName)
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list), analyzer(ast.children[3], list), scopeName)
+   scopeNode = list.pop()
+   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list), analyzer(ast.children[3], list), scopeNode.name, scopeNode.number, counter)
+   list.append(scopeNode)
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list)
 
@@ -217,7 +221,6 @@ def optExtraParamsAnalyzer(ast, list):
 # and we can decrease the scope count by 1
 def statementBlockTranslator(ast, list):
    analyze(ast.children[1], list)
-   list.pop()
 
 X def functionCommandTranslator(ast):
    pythonCode = generatePythonCode(ast.children[0])
