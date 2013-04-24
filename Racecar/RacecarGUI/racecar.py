@@ -479,7 +479,8 @@ def toggle_buttons(stop_button_should_be_enabled):
 root = Tk()
 root.title('Racecar')
 #Height is always three fourths the width of the window
-window_width = root.winfo_screenwidth() - 100
+#window_width = root.winfo_screenwidth() - 100
+window_width = 800
 window_height = 9*window_width/16
 root.geometry("%dx%d" % (window_width, window_height))
 
@@ -596,11 +597,11 @@ car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 
 car.car_object = canvas.create_image(
-    30,
+    23,
     int(canvas.winfo_reqheight())/2,
     image=car.image_tk)
 
-car.position_x = 30
+car.position_x = 23
 car.position_y = int(canvas.winfo_reqheight())/2
 
 #label above the console
@@ -640,8 +641,8 @@ stop_button.grid(row=1, column=2)
 reset_car_position_button.grid(row=1, column=3)
 clear_button.grid(row=1, column=4)
 
-canvas_frame.pack(fill=BOTH)
-canvas.pack(fill=BOTH)
+canvas_frame.pack(expand=1, fill=BOTH)
+canvas.pack(expand=1, fill=BOTH)
 
 console_label.pack()
 
