@@ -47,6 +47,7 @@ tokens = [
     "LEQ",
     "CONCAT",
     "NEWLINE",
+    "SINGLE_LINE_COMMENT",
 ] + list(set(reserved.values()))
 
 literals = "{}()+-*/"
@@ -58,6 +59,7 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
+t_SINGLE_LINE_COMMENT = r':\)[^;]*'
 t_ignore = ' \t'
 
 
@@ -68,7 +70,7 @@ def t_ID(t):
 
 
 def t_NEWLINE(t):
-    r'\n|;|:-\(((:-)*[^)]|:|[^)])*:-\)|:\).*'
+    r'\n|;|:-\((.|\n)*?:-\)'
     # \n is for actual newlines
     # ; is for debugging use
     # the next expression is for multiline comments. it is an adaptation of
@@ -140,7 +142,6 @@ def p_statements_empty(p):
 
 
 def p_statement_block(p):
-    """statement_block : '{' statements '}' NEWLINE"""
     p[0] = makeParseTreeNode(p, "statement_block")
 
 
@@ -150,6 +151,17 @@ def p_empty(p):
     p[0].value = "empty"
 
 
+def p_newline_opt_comment(p):
+    '''newline_opt_comment : opt_comment NEWLINE'''
+    p[0] = p[2]
+
+
+def p_opt_comment(p):
+    '''opt_comment : SINGLE_LINE_COMMENT
+        | empty'''
+    p[0] = p[1]
+
+
 def p_statement_simple_compound(p):
     '''statement : simple_statement
                  | compound_statement'''
@@ -157,12 +169,12 @@ def p_statement_simple_compound(p):
 
 
 def p_simple_statement_command(p):
-    '''simple_statement : statement_contents NEWLINE'''
+    '''simple_statement : statement_contents newline_opt_comment'''
     p[0] = p[1]
 
 
 def p_statement_newline(p):
-    '''simple_statement : NEWLINE'''
+    '''simple_statement : newline_opt_comment'''
     p[0] = Tree()
     p[0].value = "empty"
 
@@ -382,7 +394,8 @@ def p_turn_direction(p):
 
 
 def p_define_command(p):
-    """define_command : DEFINE ID opt_param_list NEWLINE statement_block"""
+    """define_command : DEFINE ID opt_param_list \
+    newline_opt_comment statement_block"""
     p[0] = makeParseTreeNode(p, "define_command")
 
 
@@ -413,24 +426,26 @@ def p_type_enum(p):
 
 
 def p_repeat_if_command(p):
-    """repeat_if_command : REPEAT IF expression NEWLINE statement_block"""
+    """repeat_if_command : REPEAT IF expression newline_opt_comment \
+    statement_block"""
     p[0] = makeParseTreeNode(p, "repeat_if_command")
 
 
 def p_repeat_times_command(p):
     """repeat_times_command : REPEAT plus_expression \
-    TIMES NEWLINE statement_block"""
+    TIMES newline_opt_comment statement_block"""
     p[0] = makeParseTreeNode(p, "repeat_times_command")
 
 
 def p_if_command(p):
-    """if_command : IF expression NEWLINE statement_block \
+    """if_command : IF expression newline_opt_comment statement_block \
     opt_else_if opt_else"""
     p[0] = makeParseTreeNode(p, "if_command")
 
 
 def p_opt_else_if(p):
-    """opt_else_if : ELSE_IF expression NEWLINE statement_block opt_else_if
+    """opt_else_if : ELSE_IF expression newline_opt_comment \
+    statement_block opt_else_if
        | empty"""
 
     if len(p) == 2:
@@ -440,7 +455,7 @@ def p_opt_else_if(p):
 
 
 def p_opt_else(p):
-    """opt_else : ELSE NEWLINE statement_block
+    """opt_else : ELSE newline_opt_comment statement_block
        | empty"""
 
     if len(p) == 2:
