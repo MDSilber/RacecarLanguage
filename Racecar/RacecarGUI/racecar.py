@@ -30,7 +30,7 @@ class Program:
         self.name = ''
         self.file_obj = None
 
-
+'''
 class Obstacle:
     def __init__(self, image_path=None, x=0, y=0):
         self.image = Image.open(image_path)
@@ -40,7 +40,7 @@ class Obstacle:
         #add object to canvas (need reference in order for it to show up)
         self.image_object = canvas.create_image(x, y, image=self.image_tk)
         obstacles[get_position(x, y)] = self
-
+'''
 
 #Static variables for turning the car
 class WheelDirection:
@@ -246,32 +246,26 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
-def create_obstacle(image_path, x, y):
-    obstacle = Obstacle(image_path, x, y)
-    obstacles[get_position(x, y)] = obstacle
-
-
 #Course generation functions
+
+#Course one is a slalom of blocks
 def course_one():
-    clear_course()
-    create_obstacle(
-        'Racecar/RacecarGUI/images/trafficcone.png',
-        150,
-        int(canvas.winfo_reqheight())/2)
-    create_obstacle(
-        'Racecar/RacecarGUI/images/trafficcone.png',
-        350,
-        int(canvas.winfo_reqheight())/2)
+    obstacle_coord_x = 123
+    obstacle_coord_y = int(canvas.winfo_reqheight())/2
+    while obstacle_coord_x < anti_origin[0]:
+        obstacle = canvas.create_rectangle(
+            obstacle_coord_x-15, 
+            obstacle_coord_y-15, 
+            obstacle_coord_x+15,
+            obstacle_coord_y+15,
+            fill="#000")
+        obstacles[get_position(obstacle_coord_x, obstacle_coord_y)] = obstacle
+        obstacle_coord_x = obstacle_coord_x + 150
 
 
 #TODO -- Fill in the rest of the courses
 def course_two():
     clear_course()
-    for _ in range(0, 10):
-        create_obstacle(
-            'Racecar/RacecarGUI/images/bomb.png',
-            random.randint(0, 500),
-            random.randint(0, 500))
 
 
 def course_three():
