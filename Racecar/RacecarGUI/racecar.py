@@ -288,6 +288,9 @@ def course_one():
 #TODO -- Fill in the rest of the courses
 #Course two is a simple maze
 def course_two():
+    message = "Try to navigate through the maze and cross the finish line!"
+    print_to_console(message)
+ 
     clear_course()
     wall_coord_x = 123
     wall_length = 4*int(canvas.winfo_reqheight())/5
