@@ -10,6 +10,7 @@ import time
 import Racecar.Tree
 import Racecar.Compiler
 import random
+import pdb
 
 random.seed()
 
@@ -20,15 +21,14 @@ current_program = None
 #Variable that serves as an interrupt to stop the program
 should_stop = False
 
+#List of obstacles on the course at any given time
+obstacles = dict()
+
 
 class Program:
     def __init__(self):
         self.name = ''
         self.file_obj = None
-
-
-#List of obstacles on the course at any given time
-obstacles = dict()
 
 
 class Obstacle:
@@ -167,7 +167,9 @@ def translate_car(steps, direction):
         if is_collision(curr_x, curr_y):
             print_to_console("COLLISION")
             #Stop execution of program
+            #TODO Deal with delay on collision
             should_stop = True
+            reset_car_position()
             return
         else:
             canvas.move(
@@ -224,8 +226,13 @@ def rotate_car(direction):
 
 
 def is_collision(curr_x, curr_y):
-    global car
+    #Check for collisions with obstacles and walls
+    #pdb.set_trace()
     if get_position(curr_x, curr_y) in obstacles:
+        return True
+    elif not (origin[0] <= curr_x <= anti_origin[0]):
+        return True
+    elif not (origin[1] <= curr_y <= anti_origin[1]):
         return True
     else:
         return False
@@ -453,9 +460,10 @@ def reset_car_position():
         global car
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image)
-        car.car_object = canvas.create_image(30, 250, image=car.image_tk)
-        car.position_x = 30
-        car.position_y = 250
+        car_height = int(canvas.winfo_reqheight())/2
+        car.car_object = canvas.create_image(23, car_height, image=car.image_tk)
+        car.position_x = 23
+        car.position_y = car_height
         car.car_direction = CarDirection()
 
 #car object
@@ -479,8 +487,7 @@ def toggle_buttons(stop_button_should_be_enabled):
 root = Tk()
 root.title('Racecar')
 #Height is always three fourths the width of the window
-#window_width = root.winfo_screenwidth() - 100
-window_width = 800
+window_width = root.winfo_screenwidth() - 100
 window_height = 9*window_width/16
 root.geometry("%dx%d" % (window_width, window_height))
 
@@ -652,4 +659,12 @@ console.pack(expand=1, fill=BOTH)
 code_scrollbar.config(command=code.yview)
 console_scrollbar.config(command=console.yview)
 
+#Origin and antiorigin are limits on the canvas where the car moves
+origin = (23, 26)
+anti_origin = (
+    23+106*canvas_frame.winfo_reqwidth()/110,
+    26+56*canvas_frame.winfo_reqwidth()/110)
+
+print anti_origin
+#Run the GUI
 root.mainloop()
