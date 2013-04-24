@@ -40,6 +40,7 @@ def generatePythonCode(ast):
         "forward": forwardTranslator,
         "forwards": forwardTranslator,
         "function_command": functionCommandTranslator,
+        "getCarPosition": getCarPositionTranslator,
         "if_command": ifCommandTranslator,
         "left": leftTranslator,
         "opt_else": optElseTranslator,
@@ -293,6 +294,9 @@ def plusExpressionTranslator(ast):
 
 def timesExpressionTranslator(ast):
     return binaryOperatorTranslator(ast)
+
+def getCarPositionTranslator(ast):
+    return "getCurrentPosition()"
 
 
 if __name__ == "__main__":

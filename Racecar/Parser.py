@@ -17,7 +17,6 @@ reserved = {
     'right': 'RIGHT',
     'canMove': 'CAN_MOVE',
     'getCarPosition': 'GET_CAR_POSITION',
-    'getWheelDirection': 'GET_WHEEL_DIRECTION',
     'define': 'DEFINE',
     'using': 'USING',
     'and': 'AND',
@@ -329,7 +328,6 @@ def p_primary_expression_token(p):
     '''primary_expression : NUMBER
        | WORD
        | GET_CAR_POSITION
-       | GET_WHEEL_DIRECTION
        | ID'''
     p[0] = p[1]
 
