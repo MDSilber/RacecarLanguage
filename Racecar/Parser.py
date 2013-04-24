@@ -346,7 +346,7 @@ def p_primary_expression_token(p):
 
 
 def p_function_command(p):
-    '''function_command : primary_expression opt_parameters'''
+    '''function_command : ID opt_parameters'''
     if p[2].value == "empty":
         p[0] = makeParseTreeNode([p[0], p[1]], "function_command")
     else:
