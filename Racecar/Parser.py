@@ -27,8 +27,6 @@ reserved = {
     'else': 'ELSE',
     'repeat': 'REPEAT',
     'times': 'TIMES',
-    'true': 'TRUE',
-    'false': 'FALSE',
     'a': 'A',
     'is': 'IS',
     'not': 'NOT',
@@ -264,12 +262,6 @@ def p_not_expression_not(p):
     p[0] = makeParseTreeNode(p, "not_expression")
 
 
-def p_not_expression_true_false(p):
-    '''not_expression : TRUE
-       | FALSE'''
-    p[0] = makeParseTreeNode(p, "not_expression")
-
-
 def p_not_expression_can_move(p):
     '''not_expression : CAN_MOVE can_move_direction'''
     p[0] = makeParseTreeNode(p, "not_expression")
@@ -287,7 +279,7 @@ def p_can_move_direction(p):
 
 
 def p_comparison_with_operator(p):
-    '''comparison : comparison comparison_operator plus_expression'''
+    '''comparison : plus_expression comparison_operator plus_expression'''
     p[0] = makeParseTreeNode(p, "comparison")
 
 
