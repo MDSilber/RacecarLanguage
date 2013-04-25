@@ -37,8 +37,7 @@ not_expression : NOT not_expression
 
 can_move_direction : drive_direction | steer_direction
 
-comparison : comparison bool_operator plus_expression
-           | plus_expression
+comparison : plus_expression bool_operator plus_expression
 
 bool_operator : IS | IS_NOT | GT | LT | GEQ | LEQ
 
