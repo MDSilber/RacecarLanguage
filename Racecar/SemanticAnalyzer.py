@@ -22,20 +22,14 @@ def analyze(ast, list):
    # potential AST values and their associated analysis functions
    # use astAnalzyers.get() instead of a long chain of else-ifs
    astAnalyzers = {
-       "ID": idAnalyzer,
-       "assignment_command": assignmentCommandAnalyzer,
-       "backward": backwardAnalyzer,
-       "backwards": backwardAnalyzer,
+       "assignment_command": assignmentCommandAnalyzer,,
        "comparison": comparisonAnalyzer,
        "declaration_command": declarationCommandAnalyzer,
        "define_command": defineCommandAnalyzer,
        "drive_command": driveCommandAnalyzer,
        "empty": emptyAnalyzer,
-       "forward": forwardAnalyzer,
-       "forwards": forwardAnalyzer,
        "function_command": functionCommandAnalyzer,
        "if_command": ifCommandAnalyzer,
-       "left": leftAnalyzer,
        "opt_else": optElseAnalyzer,
        "opt_else_if": optElseIfAnalyzer,
        "opt_extra_params": optExtraParamsAnalyzer,
@@ -45,7 +39,6 @@ def analyze(ast, list):
        "print": printAnalyzer,
        "repeat_if_command": repeatIfAnalyzer,
        "repeat_times_command": repeatTimesAnalyzer,
-       "right": rightAnalyzer,
        "statement_block": statementBlockAnalyzer,
        "statements": statementsAnalyzer,
        "times_expression": timesExpressionAnalyzer,
@@ -57,48 +50,30 @@ def analyze(ast, list):
    # "analyzer" be ast.value
    analyzer = astAnalyzers.get(ast.value, ast.value)
 
-# I have not dealt with the code between these asterisk lines yet as I need to confer with Sam about it
-*************
-   # If the "anaylzer" is just a string (inherits from basestring),
-   # then return that analyzer
+
+   # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
-       pythonCode = ast.value
+      # not sure what to do here yet
+      # need to check for variable existence
+      # and scope checking
 
    # if the translator is a real function then invoke it
    else:
-       pythonCode = translator(ast)
+       analyze(ast, list)
 
-   return pythonCode
-*************
 
 def statementsAnalyzer(ast, list):
    analyze(ast.children[0], list)
    analyze(ast.children[1], list)
 
 
-X def driveCommandTranslator(ast):
-   # drive numSteps direction steps -->
-   # translate_car(numSteps, direction)\n
-   pythonCode = "translate_car("
-   pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += ", " + generatePythonCode(ast.children[0])
-   pythonCode += ")\n"
-   return pythonCode
+def driveCommandAnalyzer(ast, list):
+   # for "plus_expression"
+   analyze(ast.children[2], list)
 
 
-def forwardAnalyzer(ast, list):
+def turnCommandAnalyzer(ast, list):
    # nothing to do here
-
-
-def backwardAnalyzer(ast, list):
-   # nothing to do here
-
-
-X def turnCommandTranslator(ast):
-   pythonCode = "rotate_car("
-   pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += ")\n"
-   return pythonCode
 
 
 X def comparisonTranslator(ast):
@@ -158,14 +133,6 @@ def ifCommandAnalyzer(ast, list):
        analyze(ast.children[5])
 
 
-def leftAnalyzer(ast, list):
-   # nothing to do here
-
-
-def rightAnalyzer(ast, list):
-   # nothing to do here
-
-
 def repeatTimesAnalyzer(ast, list):
    # for "plus_expression"
    analyze(ast.children[1])
@@ -194,10 +161,6 @@ def declarationCommandAnalyzer(ast, list):
    table.addEntry(SymbolTableEntry(analyze(ast.children[0], list), analyze(ast.children[1], list), scopeNode.name, scopeNode.number, count)
 
 
-def idAnalyzer(ast, list):
-   name = ast.value
-   return name
-
 X def assignmentCommandTranslator(ast):
    pythonCode = generatePythonCode(ast.children[1])
    pythonCode += " = "
@@ -206,11 +169,10 @@ X def assignmentCommandTranslator(ast):
    return pythonCode
 
 
-X def printTranslator(ast):
-   pythonCode = "print_to_console("
-   pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += ")\n"
-   return pythonCode
+def printAnalyzer(ast, list):
+   # for the word or identifier
+   analyze(ast.children[1], list)
+   # check will be done in analyze
 
 
 def defineCommandAnalyzer(ast, list):
