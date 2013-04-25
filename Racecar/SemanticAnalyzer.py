@@ -1,5 +1,7 @@
 # DECLARATION TYPE_ENUM QUESTION
 
+# TODO handle errors for expressions elsewhere (besides just expression)
+
 # NOTE - this is my code so far for the semantic analyzer.  
 # It will be difficult to understand at this point.  
 # Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.
@@ -232,21 +234,38 @@ def optExtraParamsAnalyzer(ast, list1):
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list1)
 
+
 def statementBlockAnalyzer(ast, list1):
    count += 1
    list1.append(count)
    analyze(ast.children[1], list1)
    list1.pop()
 
-X def functionCommandTranslator(ast):
+
+# currently working on this
+def functionCommandAnalyzer(ast, list1):
+   
+   
    pythonCode = generatePythonCode(ast.children[0])
    pythonCode += "("
    if len(ast.children) > 1:
-       pythonCode += generatePythonCode(ast.children[1])
+      pythonCode += generatePythonCode(ast.children[1])
    pythonCode += ")\n"
    return pythonCode
+   
+   
+def functionNameFinder(ast):
+   if len(ast.children) == 1
+      return ast.children[0].value
+   else
+      functionNameFinder(ast.children[0])
+   
+   
+def functionParameterTypeFinder(ast):  
+   # working on this
 
 
+# Unsure when this will be called
 X def optParametersTranslator(ast):
    numChildren = len(ast.children)
    if numChildren > 0:
