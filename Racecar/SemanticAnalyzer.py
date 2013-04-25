@@ -1,6 +1,5 @@
 # TODO make a first pass to get functions
 # TODO handle function parameter number and types
-# TODO handle all errors - list
 
 # Scoping done using a universal count, which is a unique number for every single scope
 
