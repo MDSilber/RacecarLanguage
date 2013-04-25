@@ -3,9 +3,9 @@
 # Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.
 # Functions with X’s next to them have not yet been worked on.
 
-# TODO add attributes to SymbolTable class for “tier number” and for "universal count"
+# OLD TODO add attributes to SymbolTable class for “tier number” and for "universal count"
 
-# Tier number is the "layer" of the scoping.  Universal count is a unique number for every single scope,
+# OLD Tier number is the "layer" of the scoping.  Universal count is a unique number for every single scope,
 # the purpose of which is to differentiate between scopes in the same layer.
 
 from SymbolTable import *
@@ -14,8 +14,9 @@ from Scope import *
 table = SymbolLookupTable
 count = 0
 
-# a list is passed in the first time this is called
-# it has one Scope object with the name "global" and number 0
+# OLD a list is passed in the first time this is called
+# OLD it has one Scope object with the name "global" and number 0
+# List will be a list of numbers, each number is a block's universal count
 def analyze(ast, list1):
    '''Traverse the AST and check for semantic errors.'''
 
@@ -98,9 +99,6 @@ def optElseIfAnalyzer(ast, list1):
    # for "expression"
    if ast.children[1].value != "empty":
       analyze(ast.children[1])
-   scopeNode = list1.pop()
-   scopeNode.number += 1
-   list1.append(scopeNode)
    # for "statement_block"
    if ast.chidlren[3].value != "empty":
       analyze(ast.children[3])
@@ -110,24 +108,16 @@ def optElseIfAnalyzer(ast, list1):
 
 
 def optElseAnalyzer(ast, list1):
-   scopeNode = list1.pop()
-   scopeNode.number += 1
-   list1.append(scopeNode)
    # for "statement_block"
    if ast.children[2].value != "empty":
       analyze(ast.children[2])
-   scopeNode.number -= 1
 
 
 def ifCommandAnalyzer(ast, list1):
    # for "expression"
    analyze(ast.children[1])
-   scopeNode = list1.pop()
-   scopeNode.number += 1
-   list1.append(scopeNode)
    # for "statement_block"
    analyze(ast.children[3])
-   scopeNode.number -= 1
 
    if ast.children[4].value != "empty":
        analyze(ast.children[4])
@@ -139,29 +129,19 @@ def ifCommandAnalyzer(ast, list1):
 def repeatTimesAnalyzer(ast, list1):
    # for "plus_expression"
    analyze(ast.children[1])
-   scopeNode = list1.pop()
-   scopeNode.number += 1
-   list1.append(scopeNode)
    # for "statement_block"
    analyze(ast.children[4])
-   scopeNode.number -= 1
 
 
 def repeatIfAnalyzer(ast, list1):
    # for "expression"
    analyze(ast.children[2])
-   scopeNode = list1.pop()
-   scopeNode.number += 1
-   list1.append(scopeNode)
    # for "statement_block"
    analyze(ast.children[4])
-   scopeNode.number -= 1
 
 
 def declarationCommandAnalyzer(ast, list1):
-   scopeNode = list1.pop()
-   list1.append(scopeNode)
-   table.addEntry(SymbolTableEntry(analyze(ast.children[0], list1), analyze(ast.children[1], list1), scopeNode.name, scopeNode.number, count)
+   table.addEntry(SymbolTableEntry(analyze(ast.children[0], list1), analyze(ast.children[1], list1), list(list1)))
 
 
 def assignmentCommandAnalyzer(ast, list1):
@@ -182,34 +162,31 @@ def printAnalyzer(ast, list1):
 
 def defineCommandAnalyzer(ast, list1):
    id = analyze(ast.children[1], list1)
-   scopeNode = list1.pop()
-   table.addEntry(SymbolTableEntry(id, "function", scopeNode.name, scopeNode.number, count))
-   list1.append(scopeNode)
-   list1.append(Scope(id, 0))
+   table.addEntry(SymbolTableEntry(id, "function", list(list1)))
+   list1.append(count+1)
    if ast.children[2].value == "opt_param_list":
       analyze(ast.children[2], list1)
-   analyze(ast.children[4], list1)
-   list1.pop()                                                                                                                                                                                
+   list1.pop()
+   # for "statement_block"
+   analyze(ast.children[4], list1)                                                                                                                                                                              
 
 
 def optParamListAnalyzer(ast, list1):
-   scopeNode = list1.pop()
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), scopeNode.name, scopeNode.number, count+1)
-   list1.append(scopeNode)
+   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), list(list1)))
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list1)
 
 
 def optExtraParamsAnalyzer(ast, list1):
-   scopeNode = list1.pop()
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), scopeNode.name, scopeNode.number, count+1)
-   list1.append(scopeNode)
+   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), list(list1)))
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list1)
 
 def statementBlockAnalyzer(ast, list1):
    count += 1
+   list1.append(count)
    analyze(ast.children[1], list1)
+   list1.pop()
 
 X def functionCommandTranslator(ast):
    pythonCode = generatePythonCode(ast.children[0])
