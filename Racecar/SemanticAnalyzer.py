@@ -71,7 +71,7 @@ def analyze(ast):
 
    # if the translator is a real function, then invoke it
    else:
-       analyze(ast)
+       analyzer(ast)
 
 
 def statementsAnalyzer(ast):
