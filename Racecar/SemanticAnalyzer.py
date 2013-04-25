@@ -1,4 +1,3 @@
-# TODO handle errors for expressions elsewhere (besides just expression)
 # TODO make a first pass to get functions
 # TODO handle function parameter number and types
 # TODO handle all errors - list
@@ -11,10 +10,12 @@ table = SymbolLookupTable
 count = 0
 inFunction = False
 function = None
+scopeList = [0]
+errorList = []
 
 
 # List will be a list of numbers, each number is a block's universal count
-def analyze(ast, scopeList):
+def analyze(ast):
    '''Traverse the AST and check for semantic errors.'''
 
    # potential AST values and their associated analysis functions
@@ -64,51 +65,43 @@ def analyze(ast, scopeList):
          idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
          if idEntry == None
             # ID does not exist or exists but the scoping is wrong
-            # TODO return (OR PRINT) error
             # this is to be returned to binaryOperatorAnalyzer
             return "ERROR"
          return idEntry.type
 
    # if the translator is a real function, then invoke it
    else:
-       analyze(ast, scopeList)
+       analyze(ast)
 
 
-def statementsAnalyzer(ast, scopeList):
-   analyze(ast.children[0], scopeList)
-   analyze(ast.children[1], scopeList)
+def statementsAnalyzer(ast):
+   analyze(ast.children[0])
+   analyze(ast.children[1])
 
 
-def driveCommandAnalyzer(ast, scopeList):
+def driveCommandAnalyzer(ast):
    # for "plus_expression"
-   analyze(ast.children[2], scopeList)
+   analyze(ast.children[2])
 
 
-def turnCommandAnalyzer(ast, scopeList):
+def turnCommandAnalyzer(ast):
    # nothing to do here
 
 
 def comparisonTranslator(ast):
-   # TODO if the types are both words, check to see if the operator is "IS" or "IS_NOT"
-   # SEND BOTH child 0 and child 2 through binaryOperatorAnalyze
-   
-   # child 0 needs to be an identifier
-   # child 2 could be an identifier
-   # child 2 needs to be of equal type
-   
-   result = binaryOperatorAnalyzer(ast, scopeList)
+   result = binaryOperatorAnalyzer(ast)
    if result == "number"
-      return valid # TODO
+      return valid
    elif result == "word"
       if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
          return valid
       else
-         #TODO return error
+         errorList.append("Error in comparison: words must be compared using 'is' or 'is not')
    else
-      #TODO return error
+      errorList.append("Error in comparison: use only words or only numbers; cannot mix both")
 
 
-def optElseIfAnalyzer(ast, scopeList):
+def optElseIfAnalyzer(ast):
    # for "expression"
    if ast.children[1].value != "empty":
       analyze(ast.children[1])
@@ -120,13 +113,13 @@ def optElseIfAnalyzer(ast, scopeList):
       analyze(ast.children[4])
 
 
-def optElseAnalyzer(ast, scopeList):
+def optElseAnalyzer(ast):
    # for "statement_block"
    if ast.children[2].value != "empty":
       analyze(ast.children[2])
 
 
-def ifCommandAnalyzer(ast, scopeList):
+def ifCommandAnalyzer(ast):
    # for "expression"
    analyze(ast.children[1])
    # for "statement_block"
@@ -139,88 +132,88 @@ def ifCommandAnalyzer(ast, scopeList):
        analyze(ast.children[5])
 
 
-def repeatTimesAnalyzer(ast, scopeList):
+def repeatTimesAnalyzer(ast):
    # for "plus_expression"
    analyze(ast.children[1])
    # for "statement_block"
    analyze(ast.children[4])
 
 
-def repeatIfAnalyzer(ast, scopeList):
+def repeatIfAnalyzer(ast):
    # for "expression"
    analyze(ast.children[2])
    # for "statement_block"
    analyze(ast.children[4])
 
 
-def declarationCommandAnalyzer(ast, scopeList):
+def declarationCommandAnalyzer(ast):
    # Note ast.children[3].type is word
    table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function))
 
 
-def assignmentCommandAnalyzer(ast, scopeList):
+def assignmentCommandAnalyzer(ast):
    # check for the existence of ID - child 1
    # and that it can be accessed in this block
    id = ast.children[1].value
    idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
    if idEntry == None
       # ID does not exist or exists but the scoping is wrong
-      # TODO return error
+      errorList.append("Error in assignment: variable does not exist or cannot be used here")
    
    # do type checking
    # child 3 is an expression - it needs to be evaluated to a type
    child3Evaluation = analyze(ast.children[3])
    if child3Evaluation == "ERROR"
       # type check in expression failed
-      # TODO return error
+      errorList.append("Error in assignment: use only words or only numbers; cannot mix both")
    else
       if idEntry.type != child3Evaluation
          # type check failed
-         # TODO return an error
+          errorList.append("Error in assignment: variable and value must have the same type")
 
 
-def printAnalyzer(ast, scopeList):
+def printAnalyzer(ast):
    # for the word or identifier
-   analyze(ast.children[1], scopeList)
+   analyze(ast.children[1])
    # check will be done in analyze
 
 
-def defineCommandAnalyzer(ast, scopeList):
+def defineCommandAnalyzer(ast):
    id = ast.children[1].value
    table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
    scopeList.append(count+1)
    inFunction = True
    function = id
    if ast.children[2].value == "opt_param_list":
-      analyze(ast.children[2], scopeList)
+      analyze(ast.children[2])
    scopeList.pop()
    # for "statement_block"
-   analyze(ast.children[4], scopeList)
+   analyze(ast.children[4])
    inFunction = False
    function = None
 
 
-def optParamListAnalyzer(ast, scopeList):
+def optParamListAnalyzer(ast):
    table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5], scopeList)
+       analyze(ast.children[5])
 
 
-def optExtraParamsAnalyzer(ast, scopeList):
+def optExtraParamsAnalyzer(ast):
    table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5], scopeList)
+       analyze(ast.children[5])
 
 
-def statementBlockAnalyzer(ast, scopeList):
+def statementBlockAnalyzer(ast):
    count += 1
    scopeList.append(count)
-   analyze(ast.children[1], scopeList)
+   analyze(ast.children[1])
    scopeList.pop()
 
 
 # currently working on this
-def functionCommandAnalyzer(ast, scopeList):
+def functionCommandAnalyzer(ast):
    
    
    pythonCode = generatePythonCode(ast.children[0])
@@ -254,9 +247,9 @@ X def optParametersTranslator(ast):
        return ""
 
 
-def binaryOperatorAnalyzer(ast, scopeList):
-   result1 = analyze(ast.children[0], scopeList)
-   result3 = analyze(ast.children[2], scopeList)
+def binaryOperatorAnalyzer(ast):
+   result1 = analyze(ast.children[0])
+   result3 = analyze(ast.children[2])
    
    if result1 == "ERROR" or result3 == "ERROR"
       return "ERROR"
@@ -268,27 +261,27 @@ def binaryOperatorAnalyzer(ast, scopeList):
       return "ERROR" 
 
 
-def plusExpressionAnalyzer(ast, scopeList):
-   result = binaryOperatorAnalyzer(ast, scopeList)
+def plusExpressionAnalyzer(ast):
+   result = binaryOperatorAnalyzer(ast)
    if result == "number"
-      return valid # TODO
+      return valid
    else
-      # TODO return error
+      errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 
-def timesExpressionAnalyzer(ast, scopeList):
-   result = binaryOperatorAnalyzer(ast, scopeList)
+def timesExpressionAnalyzer(ast):
+   result = binaryOperatorAnalyzer(ast)
    if result == "number"
-      return valid # TODO
+      return valid
    else
-      # TODO return error
+      errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
-def wordExpressionAnalyzer(ast, scopeList):
-   result = binaryOperatorAnalyzer(ast, scopeList)
+def wordExpressionAnalyzer(ast):
+   result = binaryOperatorAnalyzer(ast)
    if result == "word"
-      return valid # TODO
+      return valid
    else
-      # TODO return error
+      errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 
 
