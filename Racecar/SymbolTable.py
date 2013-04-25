@@ -75,7 +75,14 @@ class SymbolTableEntry:
         idEq = (self.id == tableEntry.id)
         topScopeCountTableEntry = tableEntry.scopeList[-1]
         selfScopeAcceptable = topScopeCountTableEntry in self.scopeList
-        if idEq and selfScopeAcceptable and (self.function == tableEntry.function):
+        # if this is a function, it can be used anywhere
+        if self.type == "function"
+            functionScopeAcceptable = True
+        # otherwise, check to make sure we are using variables in the right function
+        # or in a non-function scope
+        else
+            functionScopeAcceptable = (self.function == tableEntry.function)
+        if idEq and selfScopeAcceptable and functionScopeAcceptable:
             return True
         else:
             return False
