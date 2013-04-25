@@ -19,7 +19,7 @@ random.seed()
 current_program = None
 
 #Variable that serves as an interrupt to stop the program
-should_stop = False
+should_stop = False 
 
 #List of obstacles on the course at any given time
 obstacles = []
@@ -30,7 +30,7 @@ walls = []
 
 class Obstacle:
     def __init__(self, x, y, width, height):
-        obstacle_object = canvas.create_rectangle(
+        self.obstacle_object = canvas.create_rectangle(
             x-width/2,
             y-height/2,
             x+width/2,
@@ -45,7 +45,7 @@ class Obstacle:
 class Wall:
     def __init__(self, start_x, start_y, length, is_horizontal):
         if is_horizontal:
-            wall_object = canvas.create_line(
+            self.wall_object = canvas.create_line(
                 start_x,
                 start_y,
                 start_x+length,
@@ -53,7 +53,7 @@ class Wall:
             self.start = start_x
             self.end = start_x+length
         else:
-            wall_object = canvas.create_line(
+            self.wall_object = canvas.create_line(
                 start_x,
                 start_y,
                 start_x,
@@ -288,7 +288,11 @@ def course_one():
 
 #TODO -- Fill in the rest of the courses
 #Course two is a simple maze
+finish_line = None
+
 def course_two():
+    global finish_line
+
     message = "Try to navigate through the maze and cross the finish line!"
     print_to_console(message)
 
@@ -320,15 +324,13 @@ def course_two():
 
     #finish line
     wall_coord_x = wall_coord_x-100
-    wall = canvas.create_line(
+    finish_line = canvas.create_line(
         wall_coord_x,
         wall_length,
         wall_coord_x,
         canvas.winfo_reqheight()+23,
         fill="black",
         dash=(4, 4))
-    walls.append(wall)
-
 
 def course_three():
     clear_course()
@@ -345,16 +347,21 @@ def course_five():
 def clear_course():
     global obstacles
     global walls
+    global finish_line
     #remove obstacles from the course
     for obstacle in obstacles:
-        canvas.delete(obstacle)
+        canvas.delete(obstacle.obstacle_object)
 
+    #Needs to take care of finish line too, which isn't a wall object
     for wall in walls:
-        canvas.delete(wall)
-
+        canvas.delete(wall.wall_object)
+    
+    if finish_line is not None:
+        canvas.delete(finish_line)
     #clear the obstacles and walls array
     obstacles = []
     walls = []
+    finish_line = None
 
 
 #Menu functions
