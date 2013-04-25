@@ -53,23 +53,24 @@ class SymbolTableEntry:
         empty strings'''
         self.id = ""
         self.type = ""
-        self.scopeList = ""
+        self.scopeList = []
+        self.function = None
 
-    def __init__(self, inId, inType, inScopeList):
-        '''Sets the entry's id, type, and scope list'''
+    def __init__(self, inId, inType, inScopeList, inFunction):
+        '''Sets the entry's id, type, scope list, and function string'''
         self.id = inId
         self.type = inType
         self.scopeList = inScopeList
+        self.function = inFunction
 
     def validateWithTableEntry(self, tableEntry):
         '''Returns true if the existence of tableEntry means that
         self cannot be added to the table (same ID and overlapping scopes)
         Ignore type since we don't want to allow different types'''
         idEq = (self.id == tableEntry.id)
-        topScopeCountTableEntry = tableEntry.scopeList.pop()
-        tableEntry.scopeList.append(topScopeCountTableEntry
+        topScopeCountTableEntry = tableEntry.scopeList[-1]
         selfScopeAcceptable = topScopeCountTableEntry in self.scopeList
-        if idEq and selfScopeAcceptable:
+        if idEq and selfScopeAcceptable and (self.function == tableEntry.function):
             return True
         else:
             return False
