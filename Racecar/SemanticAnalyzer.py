@@ -1,4 +1,7 @@
-# NOTE - this is my code so far for the semantic analyzer.  It will be difficult to understand at this point.  Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.  Functions with X’s next to them have not yet been worked on.
+# NOTE - this is my code so far for the semantic analyzer.  
+# It will be difficult to understand at this point.  
+# Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.
+# Functions with X’s next to them have not yet been worked on.
 
 # TODO add attributes to SymbolTable class for “tier number” and for "universal count"
 
