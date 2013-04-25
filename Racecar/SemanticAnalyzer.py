@@ -1,11 +1,7 @@
 # TODO handle errors for expressions elsewhere (besides just expression)
-
 # TODO make a first pass to get functions
-
-# TODO rename list1 to scopelist
-# TODO change types to lowercase
-
-# TODO check if the type is a function, if it is, you can use it wherever you want - IN SYMBOL TABLE CHECKING
+# TODO handle function parameter number and types
+# TODO handle all errors - list
 
 # Scoping done using a universal count, which is a unique number for every single scope
 
@@ -18,7 +14,7 @@ function = None
 
 
 # List will be a list of numbers, each number is a block's universal count
-def analyze(ast, list1):
+def analyze(ast, scopeList):
    '''Traverse the AST and check for semantic errors.'''
 
    # potential AST values and their associated analysis functions
@@ -45,9 +41,8 @@ def analyze(ast, list1):
        "statements": statementsAnalyzer,
        "times_expression": timesExpressionAnalyzer,
        "turn_command": turnCommandAnalyzer,
+       "word_expression": wordExpressionAnalyzer,
    }
-   
-   # word_expession Analyzer needed
 
    # Fetch the appropriate analyzer function from astAnalyzers
    # If there is no analyzer for ast.value, then just let the
@@ -58,15 +53,15 @@ def analyze(ast, list1):
    # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
       # this should only be useful for evaluating the type of an expression
-      if (ast.type == "WORD")
-         return "WORD"
-      else if (ast.type == "NUMBER")
-         return "NUMBER"
+      if (ast.type == "word")
+         return "word"
+      else if (ast.type == "number")
+         return "number"
       else if (ast.type == "ID")
          # do existence and scope checking right here
          # return type if passes
          id = ast.value
-         idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+         idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
          if idEntry == None
             # ID does not exist or exists but the scoping is wrong
             # TODO return (OR PRINT) error
@@ -76,20 +71,20 @@ def analyze(ast, list1):
 
    # if the translator is a real function, then invoke it
    else:
-       analyze(ast, list1)
+       analyze(ast, scopeList)
 
 
-def statementsAnalyzer(ast, list1):
-   analyze(ast.children[0], list1)
-   analyze(ast.children[1], list1)
+def statementsAnalyzer(ast, scopeList):
+   analyze(ast.children[0], scopeList)
+   analyze(ast.children[1], scopeList)
 
 
-def driveCommandAnalyzer(ast, list1):
+def driveCommandAnalyzer(ast, scopeList):
    # for "plus_expression"
-   analyze(ast.children[2], list1)
+   analyze(ast.children[2], scopeList)
 
 
-def turnCommandAnalyzer(ast, list1):
+def turnCommandAnalyzer(ast, scopeList):
    # nothing to do here
 
 
@@ -101,10 +96,10 @@ def comparisonTranslator(ast):
    # child 2 could be an identifier
    # child 2 needs to be of equal type
    
-   result = binaryOperatorAnalyzer(ast, list1)
-   if result == "NUMBER"
+   result = binaryOperatorAnalyzer(ast, scopeList)
+   if result == "number"
       return valid # TODO
-   elif result == "WORD"
+   elif result == "word"
       if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
          return valid
       else
@@ -113,7 +108,7 @@ def comparisonTranslator(ast):
       #TODO return error
 
 
-def optElseIfAnalyzer(ast, list1):
+def optElseIfAnalyzer(ast, scopeList):
    # for "expression"
    if ast.children[1].value != "empty":
       analyze(ast.children[1])
@@ -125,13 +120,13 @@ def optElseIfAnalyzer(ast, list1):
       analyze(ast.children[4])
 
 
-def optElseAnalyzer(ast, list1):
+def optElseAnalyzer(ast, scopeList):
    # for "statement_block"
    if ast.children[2].value != "empty":
       analyze(ast.children[2])
 
 
-def ifCommandAnalyzer(ast, list1):
+def ifCommandAnalyzer(ast, scopeList):
    # for "expression"
    analyze(ast.children[1])
    # for "statement_block"
@@ -144,30 +139,30 @@ def ifCommandAnalyzer(ast, list1):
        analyze(ast.children[5])
 
 
-def repeatTimesAnalyzer(ast, list1):
+def repeatTimesAnalyzer(ast, scopeList):
    # for "plus_expression"
    analyze(ast.children[1])
    # for "statement_block"
    analyze(ast.children[4])
 
 
-def repeatIfAnalyzer(ast, list1):
+def repeatIfAnalyzer(ast, scopeList):
    # for "expression"
    analyze(ast.children[2])
    # for "statement_block"
    analyze(ast.children[4])
 
 
-def declarationCommandAnalyzer(ast, list1):
+def declarationCommandAnalyzer(ast, scopeList):
    # Note ast.children[3].type is word
-   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(list1)))
+   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function))
 
 
-def assignmentCommandAnalyzer(ast, list1):
+def assignmentCommandAnalyzer(ast, scopeList):
    # check for the existence of ID - child 1
    # and that it can be accessed in this block
    id = ast.children[1].value
-   idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+   idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
    if idEntry == None
       # ID does not exist or exists but the scoping is wrong
       # TODO return error
@@ -184,48 +179,48 @@ def assignmentCommandAnalyzer(ast, list1):
          # TODO return an error
 
 
-def printAnalyzer(ast, list1):
+def printAnalyzer(ast, scopeList):
    # for the word or identifier
-   analyze(ast.children[1], list1)
+   analyze(ast.children[1], scopeList)
    # check will be done in analyze
 
 
-def defineCommandAnalyzer(ast, list1):
+def defineCommandAnalyzer(ast, scopeList):
    id = ast.children[1].value
-   table.addEntry(SymbolTableEntry(id, "function", list(list1), function))
-   list1.append(count+1)
+   table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
+   scopeList.append(count+1)
    inFunction = True
    function = id
    if ast.children[2].value == "opt_param_list":
-      analyze(ast.children[2], list1)
-   list1.pop()
+      analyze(ast.children[2], scopeList)
+   scopeList.pop()
    # for "statement_block"
-   analyze(ast.children[4], list1)
+   analyze(ast.children[4], scopeList)
    inFunction = False
    function = None
 
 
-def optParamListAnalyzer(ast, list1):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(list1)))
+def optParamListAnalyzer(ast, scopeList):
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5], list1)
+       analyze(ast.children[5], scopeList)
 
 
-def optExtraParamsAnalyzer(ast, list1):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(list1)))
+def optExtraParamsAnalyzer(ast, scopeList):
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5], list1)
+       analyze(ast.children[5], scopeList)
 
 
-def statementBlockAnalyzer(ast, list1):
+def statementBlockAnalyzer(ast, scopeList):
    count += 1
-   list1.append(count)
-   analyze(ast.children[1], list1)
-   list1.pop()
+   scopeList.append(count)
+   analyze(ast.children[1], scopeList)
+   scopeList.pop()
 
 
 # currently working on this
-def functionCommandAnalyzer(ast, list1):
+def functionCommandAnalyzer(ast, scopeList):
    
    
    pythonCode = generatePythonCode(ast.children[0])
@@ -246,7 +241,7 @@ def functionNameFinder(ast):
 def functionParameterTypeFinder(ast):  
    # working on this
 
-
+# this is for user-defined function parameters
 X def optParametersTranslator(ast):
    numChildren = len(ast.children)
    if numChildren > 0:
@@ -259,9 +254,9 @@ X def optParametersTranslator(ast):
        return ""
 
 
-def binaryOperatorAnalyzer(ast, list1):
-   result1 = analyze(ast.children[0], list1)
-   result3 = analyze(ast.children[2], list1)
+def binaryOperatorAnalyzer(ast, scopeList):
+   result1 = analyze(ast.children[0], scopeList)
+   result3 = analyze(ast.children[2], scopeList)
    
    if result1 == "ERROR" or result3 == "ERROR"
       return "ERROR"
@@ -273,24 +268,24 @@ def binaryOperatorAnalyzer(ast, list1):
       return "ERROR" 
 
 
-def plusExpressionAnalyzer(ast, list1):
-   result = binaryOperatorAnalyzer(ast, list1)
-   if result == "NUMBER"
+def plusExpressionAnalyzer(ast, scopeList):
+   result = binaryOperatorAnalyzer(ast, scopeList)
+   if result == "number"
       return valid # TODO
    else
       # TODO return error
 
 
-def timesExpressionAnalyzer(ast, list1):
-   result = binaryOperatorAnalyzer(ast, list1)
-   if result == "NUMBER"
+def timesExpressionAnalyzer(ast, scopeList):
+   result = binaryOperatorAnalyzer(ast, scopeList)
+   if result == "number"
       return valid # TODO
    else
       # TODO return error
 
-def wordExpressionAnalyzer(ast, list1):
-   result = binaryOperatorAnalyzer(ast, list1)
-   if result == "WORD"
+def wordExpressionAnalyzer(ast, scopeList):
+   result = binaryOperatorAnalyzer(ast, scopeList)
+   if result == "word"
       return valid # TODO
    else
       # TODO return error
