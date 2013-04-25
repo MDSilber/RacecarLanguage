@@ -1,25 +1,20 @@
 # TODO handle errors for expressions elsewhere (besides just expression)
 
-# TODO handle function cannot be nested
+# TODO make a first pass to get functions
 
 # TODO rename list1 to scopelist
 # TODO change types to lowercase
 
 # TODO check if the type is a function, if it is, you can use it wherever you want - IN SYMBOL TABLE CHECKING
 
-# NOTE - this is my code so far for the semantic analyzer.  
-# It will be difficult to understand at this point.  
-# Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.
-# Functions with X’s next to them have not yet been worked on.
-
-# Universal count is a unique number for every single scope,
-# the purpose of which is to differentiate between scopes in the same layer.
+# Scoping done using a universal count, which is a unique number for every single scope
 
 from SymbolTable import *
 
 table = SymbolLookupTable
 count = 0
 inFunction = False
+function = None
 
 
 # List will be a list of numbers, each number is a block's universal count
@@ -197,16 +192,17 @@ def printAnalyzer(ast, list1):
 
 def defineCommandAnalyzer(ast, list1):
    id = ast.children[1].value
-   # TODO fix this
-   table.addEntry(SymbolTableEntry(id, "function", list(list1)))
+   table.addEntry(SymbolTableEntry(id, "function", list(list1), function))
    list1.append(count+1)
    inFunction = True
+   function = id
    if ast.children[2].value == "opt_param_list":
       analyze(ast.children[2], list1)
    list1.pop()
    # for "statement_block"
    analyze(ast.children[4], list1)
    inFunction = False
+   function = None
 
 
 def optParamListAnalyzer(ast, list1):
