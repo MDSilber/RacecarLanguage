@@ -6,7 +6,7 @@
 # TODO add attributes to SymbolTable class for “tier number” and for "universal count"
 
 # Tier number is the "layer" of the scoping.  Universal count is a unique number for every single scope,
-# the purpose of which is to differentiat between scopes in the same layer.
+# the purpose of which is to differentiate between scopes in the same layer.
 
 from SymbolTable import *
 from Scope import *
@@ -57,7 +57,7 @@ def analyze(ast, list):
       # need to check for variable existence
       # and scope checking
 
-   # if the translator is a real function then invoke it
+   # if the translator is a real function, then invoke it
    else:
        analyze(ast, list)
 
@@ -76,19 +76,22 @@ def turnCommandAnalyzer(ast, list):
    # nothing to do here
 
 
-X def comparisonTranslator(ast):
-   pythonCode = generatePythonCode(ast.children[0])
-   if ast.children[1].value == "is not":
-       pythonCode += " != "
-       pythonCode += ast.children[2].value
-   elif ast.children[1].value == "is":
-       pythonCode += " == "
-       pythonCode += generatePythonCode(ast.children[2])
-   else:
-       pythonCode += " " + generatePythonCode(ast.children[1])
-       pythonCode += " " + generatePythonCode(ast.children[2])
-
-   return pythonCode
+def comparisonTranslator(ast):
+   # why do we have a comparison production that does "comaprison -> comparison ..."
+   
+   # child 0 needs to be an identifier
+   # child 2 could be an identifier
+   # child 2 needs to be of equal type
+   
+   # check that child 0 is an identifier
+   if (ast.children[0].type != "ID")
+      # TODO raise error
+   
+   # child 0 is an identifier - check scope
+   # TODO verify scope
+   
+   # check that the type is the same on each
+   # TODO type check
 
 
 def optElseIfAnalyzer(ast, list):
@@ -161,12 +164,14 @@ def declarationCommandAnalyzer(ast, list):
    table.addEntry(SymbolTableEntry(analyze(ast.children[0], list), analyze(ast.children[1], list), scopeNode.name, scopeNode.number, count)
 
 
-X def assignmentCommandTranslator(ast):
-   pythonCode = generatePythonCode(ast.children[1])
-   pythonCode += " = "
-   pythonCode += generatePythonCode(ast.children[3])
-   pythonCode += "\n"
-   return pythonCode
+def assignmentCommandAnalyzer(ast, list):
+   # check for the existence of ID - child 1
+   # and if it exists, check that it can be accessed in this block
+   # TODO verify ID
+   
+   # if these tests pass, do type checking
+   # child 3  is an expression - it needs to be evaluated to a type
+   # TODO type check
 
 
 def printAnalyzer(ast, list):
@@ -238,12 +243,12 @@ X def binaryOperatorTranslator(ast):
    return pythonCode
 
 
-X def plusExpressionTranslator(ast):
-   return binaryOperatorTranslator(ast)
+def plusExpressionAnalyzer(ast, list):
+   return binaryOperatorAnalyzer(ast, list)
 
 
-X def timesExpressionTranslator(ast):
-   return binaryOperatorTranslator(ast)
+def timesExpressionAnalyzer(ast, list):
+   return binaryOperatorAnalyzer(ast, list)
 
 
 
