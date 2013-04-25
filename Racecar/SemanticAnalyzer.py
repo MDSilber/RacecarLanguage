@@ -216,7 +216,7 @@ X def printTranslator(ast):
 def defineCommandAnalyzer(ast, list):
    id = analyze(ast.children[1], list)
    scopeNode = list.pop()
-   table.addEntry(SymbolTableEntry(id, “function”, scopeNode.name, scopeNode.number, count))
+   table.addEntry(SymbolTableEntry(id, "function", scopeNode.name, scopeNode.number, count))
    list.append(scopeNode)
    list.append(Scope(id, 0))
    if ast.children[2].value == "opt_param_list":
