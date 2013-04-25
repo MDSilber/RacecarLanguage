@@ -10,6 +10,11 @@ class SymbolLookupTable:
         '''Add the given entry to the table.  Throws an error if
         there is already an entry with the given name and scope, regardless
         of the type. Also throws an error if entry does not have a type.'''
+        
+        # throws error if a function is attempted to be declared
+        # outside of the global block
+        if entry.type == "function" and entry.scopeList[-1] != 0
+            raise Exception()
 
         if self.verifyEntry(entry):
             raise Exception()
