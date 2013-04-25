@@ -52,8 +52,21 @@ def analyze(ast, list1):
 
    # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
-      # we may be able to completely ignore this part
-      # if we just handle it in the rest of the code
+      # this should only be useful for evaluating the type of an expression
+      if (ast.type == "WORD")
+         return "WORD"
+      else if (ast.type == "NUMBER")
+         return "NUMBER"
+      else if (ast.type == "ID")
+         # do existence and scope checking right here
+         # return type if passes
+         id = ast.value
+         idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+         if idEntry == None
+            # ID does not exist or exists but the scoping is wrong
+            # TODO return (OR PRINT) error
+            # this is to be returned to binaryOperatorAnalyzer
+            return "ERROR"
 
    # if the translator is a real function, then invoke it
    else:
@@ -88,13 +101,37 @@ def comparisonTranslator(ast):
    # check for the existence of child 0 in the symbol table
    # and that it can be accessed in this block
    id = ast.children[0].value
-   idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
-   if idEntry == None
+   idEntryC0 = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+   if idEntryC0 == None
       # child 0 does not exist or exists but the scoping is wrong
       # TODO return error
    
    # check that the type is the same on each
-   # TODO type check
+   # if child 2 is an identifier, check existence and scope
+   # then compare types
+   
+   if (ast.children[2].type == "ID")
+      id = ast.children[2].value
+      idEntryC2 = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+      if idEntryC2 == None
+         # child 0 does not exist or exists but the scoping is wrong
+         # TODO return error
+      # child 0 does exist and scoping is correct
+      # do a type check
+      if idEntryC0.type != idEntryC2.type
+         # TODO return an error
+      # type check passed, break here
+      return
+   
+   # child 2 is an expression - it needs to be evaluated to a type
+   child2Evaluation = analyze(ast.children[2])
+   if child2Evaluation == "ERROR"
+      # type check in expression failed
+      # TODO return error
+   else
+      if idEntryC0.type != child2Evaluation
+         # type check failed
+         # TODO return an error
 
 
 def optElseIfAnalyzer(ast, list1):
@@ -156,8 +193,15 @@ def assignmentCommandAnalyzer(ast, list1):
       # TODO return error
    
    # do type checking
-   # child 3  is an expression - it needs to be evaluated to a type
-   # TODO type check
+   # child 3 is an expression - it needs to be evaluated to a type
+   child3Evaluation = analyze(ast.children[3])
+   if child3Evaluation == "ERROR"
+      # type check in expression failed
+      # TODO return error
+   else
+      if idEntry.type != child3Evaluation
+         # type check failed
+         # TODO return an error
 
 
 def printAnalyzer(ast, list1):
@@ -215,15 +259,36 @@ X def optParametersTranslator(ast):
        return ""
 
 
-X def binaryOperatorTranslator(ast):
-   pythonCode = "(("
-   pythonCode += generatePythonCode(ast.children[0])
-   pythonCode += ") "
-   pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += " ("
-   pythonCode += generatePythonCode(ast.children[2])
-   pythonCode += "))"
-   return pythonCode
+def binaryOperatorAnalyzer(ast, list1):
+   if len(ast.children) == 1
+      if ast.children[0].type == "NUMBER" or ast.children[0].type == "GET_CAR_POSITION"
+         return "NUMBER"
+      else if ast.children[0].type == "WORD"
+         return "WORD"
+   result1 = analyze(ast.children[0])
+   result2 = analyze(ast.children[1])
+   result3 = analyze(ast.children[2])
+   
+   if result1 == "ERROR" or result2 == "ERROR" or result3 == "ERROR"
+      return "ERROR"
+      
+   if result2 == "NUMBER" or result2 == "GET_CAR_POSITION"
+      return "NUMBER"
+   
+   if result2 == "WORD"
+      return "WORD"
+   
+   if result1 == "WORD" and result3 == "WORD"
+      return "WORD"
+   
+   if result1 == "NUMBER" and result3 == "NUMBER"
+      return "NUMBER"
+      
+   if (result1 == "NUMBER" and result3 == "WORD") or (result1 == "WORD" and result3 == "NUMBER")
+      return "ERROR"
+      
+   # should not reach here
+   
 
 
 def plusExpressionAnalyzer(ast, list1):
