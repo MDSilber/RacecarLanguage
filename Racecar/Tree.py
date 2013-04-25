@@ -2,6 +2,7 @@ class Tree:
     def __init__(self):
         self.children = []
         self.value = None
+        self.type = None
         self.errors = []
 
     def printTree_old(self):
@@ -17,10 +18,10 @@ class Tree:
 
     def printTree(self):
         if self.value != "empty" and len(self.children) != 0:
-            print self.value, " -> ",
+            print self.value, "(", self.type, ") -> ",
             for child in self.children:
                 if type(child) == type(self):
-                    print child.value, " ",
+                    print child.value, "(", child.type, ") ",
                 else:
                     print child, " ",
             print

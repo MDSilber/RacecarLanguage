@@ -66,6 +66,7 @@ t_ignore = ' \t'
 def t_ID(t):
     r'[A-Za-z][A-Za-z0-9]*'
     t.type = reserved.get(t.value, 'ID')
+    t.value = (t.value, t.type)
     return t
 
 
@@ -109,10 +110,18 @@ def makeParseTreeNode(p, value):
         else:
             # the element is not a tree. wrap it in a tree
             newElement = Tree()
-            newElement.value = element
+            if isinstance(element, tuple):
+                newElement.value = element[0]
+                newElement.type = element[1]
+            else:
+                newElement.value = element
             toReturn.children.append(newElement)
 
-    toReturn.value = value
+    if isinstance(value, tuple):
+        toReturn.value = value[0]
+        toReturn.type = value[1]
+    else:
+        toReturn.value = value
     if value == "error":
         toReturn.errors.append(p[1])
 
@@ -295,7 +304,7 @@ def p_comparison_operator(p):
            | GEQ
            | LEQ'''
     if len(p) == 3:  # i.e. token is IS NOT
-        p[0] = p[1] + " " + p[2]
+        p[0] = (p[1][0] + " " + p[2][0], p[1][1] + " " + p[2][1])
     else:  # any other token
         p[0] = p[1]
 
