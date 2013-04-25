@@ -1,21 +1,19 @@
+# DECLARATION TYPE_ENUM QUESTION
+
 # NOTE - this is my code so far for the semantic analyzer.  
 # It will be difficult to understand at this point.  
 # Basically I copied Sam’s AST traversal code and am now slowly changing it to adjust for semantic analysis.
 # Functions with X’s next to them have not yet been worked on.
 
-# OLD TODO add attributes to SymbolTable class for “tier number” and for "universal count"
-
-# OLD Tier number is the "layer" of the scoping.  Universal count is a unique number for every single scope,
+# Universal count is a unique number for every single scope,
 # the purpose of which is to differentiate between scopes in the same layer.
 
 from SymbolTable import *
-from Scope import *
 
 table = SymbolLookupTable
 count = 0
 
-# OLD a list is passed in the first time this is called
-# OLD it has one Scope object with the name "global" and number 0
+
 # List will be a list of numbers, each number is a block's universal count
 def analyze(ast, list1):
    '''Traverse the AST and check for semantic errors.'''
@@ -47,16 +45,15 @@ def analyze(ast, list1):
    }
 
    # Fetch the appropriate analyzer function from astAnalyzers
-   # If there is no analyzer for ast.value then just let the
+   # If there is no analyzer for ast.value, then just let the
    # "analyzer" be ast.value
    analyzer = astAnalyzers.get(ast.value, ast.value)
 
 
    # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
-      # not sure what to do here yet
-      # need to check for variable existence
-      # and scope checking
+      # we may be able to completely ignore this part
+      # if we just handle it in the rest of the code
 
    # if the translator is a real function, then invoke it
    else:
@@ -86,10 +83,15 @@ def comparisonTranslator(ast):
    
    # check that child 0 is an identifier
    if (ast.children[0].type != "ID")
-      # TODO raise error
+      # TODO return error
    
-   # child 0 is an identifier - check scope
-   # TODO verify scope
+   # check for the existence of child 0 in the symbol table
+   # and that it can be accessed in this block
+   id = ast.children[0].value
+   idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+   if idEntry == None
+      # child 0 does not exist or exists but the scoping is wrong
+      # TODO return error
    
    # check that the type is the same on each
    # TODO type check
@@ -141,15 +143,19 @@ def repeatIfAnalyzer(ast, list1):
 
 
 def declarationCommandAnalyzer(ast, list1):
-   table.addEntry(SymbolTableEntry(analyze(ast.children[0], list1), analyze(ast.children[1], list1), list(list1)))
+   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[1].value, list(list1)))
 
 
 def assignmentCommandAnalyzer(ast, list1):
    # check for the existence of ID - child 1
-   # and if it exists, check that it can be accessed in this block
-   # TODO verify ID
+   # and that it can be accessed in this block
+   id = ast.children[1].value
+   idEntry = table.getEntry(SymbolTableEntry(id, None, list(list1))))
+   if idEntry == None
+      # ID does not exist or exists but the scoping is wrong
+      # TODO return error
    
-   # if these tests pass, do type checking
+   # do type checking
    # child 3  is an expression - it needs to be evaluated to a type
    # TODO type check
 
@@ -161,7 +167,7 @@ def printAnalyzer(ast, list1):
 
 
 def defineCommandAnalyzer(ast, list1):
-   id = analyze(ast.children[1], list1)
+   id = ast.children[1].value
    table.addEntry(SymbolTableEntry(id, "function", list(list1)))
    list1.append(count+1)
    if ast.children[2].value == "opt_param_list":
@@ -172,13 +178,13 @@ def defineCommandAnalyzer(ast, list1):
 
 
 def optParamListAnalyzer(ast, list1):
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), list(list1)))
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(list1)))
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list1)
 
 
 def optExtraParamsAnalyzer(ast, list1):
-   table.addEntry(SymbolTableEntry(analyzer(ast.children[1], list1), analyzer(ast.children[3], list1), list(list1)))
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(list1)))
    if ast.children[5].value == "opt_extra_params":
        analyze(ast.children[5], list1)
 
