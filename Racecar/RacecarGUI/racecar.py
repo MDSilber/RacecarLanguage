@@ -270,17 +270,18 @@ def collision_with_internal_walls():
             #in rance of wall
             if wall.start <= car.position_x <= wall.end:
                #distance from wall
-               if math.fabs(car.position_y-wall.constant_coord) < car.radius:
-                   return True
+                if math.fabs(car.position_y-wall.constant_coord) < car.radius:
+                    return True
         #vertical wall
         else:
             #in range of wall
             if wall.start <= car.position_y <= wall.end:
                #distance from wall
-               if math.fabs(car.position_x-wall.constant_coord) < car.radius:
-                   return True
+                if math.fabs(car.position_x-wall.constant_coord) < car.radius:
+                    return True
 
     return False
+
 
 def is_collision(curr_x, curr_y):
     #Check for collisions with obstacles and walls
