@@ -678,11 +678,13 @@ elif 1 < 2:
         self.assertEqual(result[0], correct_translation)
 
     def test_can_move_forward(self):
+
+    def test_get_car_position(self):
         test_string = \
-            """
+            """print getCarPosition
 """
         correct_translation = \
-            """
+            """print_to_console(getCurrentPosition())
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -697,9 +699,9 @@ elif 1 < 2:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+
 #still to test:
 #
-#test wheel direction left and right
 #test getLocation and compare it to others
 #test can move back and forward
 

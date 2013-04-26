@@ -10,6 +10,7 @@ import time
 import Racecar.Tree
 import Racecar.Compiler
 import random
+import pdb
 
 random.seed()
 
@@ -17,26 +18,55 @@ random.seed()
 #to that file
 current_program = None
 
+#Variable that serves as an interrupt to stop the program
+should_stop = False 
+
+#List of obstacles on the course at any given time
+obstacles = []
+
+#list of walls on the course at any given time
+walls = []
+
+
+class Obstacle:
+    def __init__(self, x, y, width, height):
+        self.obstacle_object = canvas.create_rectangle(
+            x-width/2,
+            y-height/2,
+            x+width/2,
+            y+height/2,
+            fill="#000")
+        self.width = width
+        self.height = height
+        self.center = (x, y)
+
+
+#Wall class: can only be vertical or horizontal
+class Wall:
+    def __init__(self, start_x, start_y, length, is_horizontal):
+        if is_horizontal:
+            self.wall_object = canvas.create_line(
+                start_x,
+                start_y,
+                start_x+length,
+                start_y)
+            self.start = start_x
+            self.end = start_x+length
+        else:
+            self.wall_object = canvas.create_line(
+                start_x,
+                start_y,
+                start_x,
+                start_y+length)
+            self.start = start_y
+            self.end = start_y+length
+        self.is_horizontal = is_horizontal
+
 
 class Program:
     def __init__(self):
         self.name = ''
         self.file_obj = None
-
-
-#List of obstacles on the course at any given time
-obstacles = dict()
-
-
-class Obstacle:
-    def __init__(self, image_path=None, x=0, y=0):
-        self.image = Image.open(image_path)
-        self.image_tk = ImageTk.PhotoImage(self.image)
-        #position is tuple of x,y
-        self.position = (x, y)
-        #add object to canvas (need reference in order for it to show up)
-        self.image_object = canvas.create_image(x, y, image=self.image_tk)
-        obstacles[get_position(x, y)] = self
 
 
 #Static variables for turning the car
@@ -105,6 +135,11 @@ def get_position(x, y):
     return 1000 * int(x) + int(y)
 
 
+def getCurrentPosition():
+    global car
+    return get_position(car.position_x, car.position_y)
+
+
 #Checks if there is going to be a collision on the upcoming path
 def can_move(num_steps):
     global car
@@ -129,27 +164,39 @@ def can_move(num_steps):
     return True
 
 
-#Decided on a 10:1 pixels to steps ratio
+#Number of steps on screen is proportional to screen size
 def steps_to_pixels(steps):
-    return 10*steps
+    return canvas_frame.winfo_reqwidth()/110*steps
 
 
 #API Functions
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
     global car
+    global should_stop
+
     steps = int(steps)
     direction = int(direction)
 
     curr_x = car.position_x
     curr_y = car.position_y
 
-    for _ in range(0, steps_to_pixels(int(steps))):
+    one_step = steps_to_pixels(1)
+
+    for i in range(0, steps_to_pixels(int(steps))):
+        #Check interrupt variable
+        if should_stop and i % one_step == 0:
+            return
+
         time.sleep(0.01)
         #car_direction is FORWARDS or BACKWARDS (1 and -1 respectively)
 
         if is_collision(curr_x, curr_y):
             print_to_console("COLLISION")
+            #Stop execution of program
+            #TODO Deal with delay on collision
+            should_stop = True
+            reset_car_position()
             return
         else:
             canvas.move(
@@ -165,8 +212,15 @@ def translate_car(steps, direction):
 
 
 #direction must be WheelDirection.LEFT or WheelDirection.RIGHT
+#Note: only check interrupt variable at the beginning, because
+#we shouldn't allow partial rotations
 def rotate_car(direction):
     global car
+    global should_stop
+
+    #Check interrupt variable
+    if should_stop:
+        return
 
     #This is current index in DIRECTIONS array
     current_direction_deg = car.car_direction.direction*45
@@ -199,8 +253,13 @@ def rotate_car(direction):
 
 
 def is_collision(curr_x, curr_y):
-    global car
+    #Check for collisions with obstacles and walls
+    #pdb.set_trace()
     if get_position(curr_x, curr_y) in obstacles:
+        return True
+    elif not (origin[0] <= curr_x <= anti_origin[0]):
+        return True
+    elif not (origin[1] <= curr_y <= anti_origin[1]):
         return True
     else:
         return False
@@ -214,34 +273,64 @@ def print_to_console(message):
     console.config(state=DISABLED)
 
 
-def create_obstacle(image_path, x, y):
-    obstacle = Obstacle(image_path, x, y)
-    obstacles[get_position(x, y)] = obstacle
-
-
 #Course generation functions
+
+#Course one is a slalom of blocks
 def course_one():
     clear_course()
-    create_obstacle(
-        'Racecar/RacecarGUI/images/trafficcone.png',
-        150,
-        int(canvas.winfo_reqheight())/2)
-    create_obstacle(
-        'Racecar/RacecarGUI/images/trafficcone.png',
-        350,
-        int(canvas.winfo_reqheight())/2)
+    obstacle_coord_x = 123
+    obstacle_coord_y = int(canvas.winfo_reqheight())/2
+    while obstacle_coord_x < anti_origin[0]:
+        obstacle = Obstacle(obstacle_coord_x, obstacle_coord_y, 30, 30)
+        obstacles.append(obstacle)
+        obstacle_coord_x = obstacle_coord_x + 150
 
 
 #TODO -- Fill in the rest of the courses
-def course_two():
-    clear_course()
-    for _ in range(0, 10):
-        obstacle = Obstacle(
-            'Racecar/RacecarGUI/images/bomb.png',
-            random.randint(0, 500),
-            random.randint(0, 500))
-        obstacles.append(obstacle)
+#Course two is a simple maze
+finish_line = None
 
+def course_two():
+    global finish_line
+
+    message = "Try to navigate through the maze and cross the finish line!"
+    print_to_console(message)
+
+    clear_course()
+    wall_coord_x = 123
+    wall_length = 4*int(canvas.winfo_reqheight())/5
+
+    #used to toggle position of line
+    put_wall_on_top = True
+
+    #walls
+    while wall_coord_x < anti_origin[0]:
+        if put_wall_on_top:
+            wall = Wall(
+                wall_coord_x,
+                0,
+                wall_length,
+                False)
+            walls.append(wall)
+        else:
+            wall = Wall(
+                wall_coord_x,
+                int(canvas.winfo_reqheight())/5+23,
+                wall_length,
+                False)
+            walls.append(wall)
+        put_wall_on_top = not put_wall_on_top
+        wall_coord_x = wall_coord_x+100
+
+    #finish line
+    wall_coord_x = wall_coord_x-100
+    finish_line = canvas.create_line(
+        wall_coord_x,
+        wall_length,
+        wall_coord_x,
+        canvas.winfo_reqheight()+23,
+        fill="black",
+        dash=(4, 4))
 
 def course_three():
     clear_course()
@@ -257,13 +346,22 @@ def course_five():
 
 def clear_course():
     global obstacles
-
+    global walls
+    global finish_line
     #remove obstacles from the course
-    for obstacle in obstacles.values():
-        canvas.delete(obstacle.image_object)
+    for obstacle in obstacles:
+        canvas.delete(obstacle.obstacle_object)
 
-    #clear the obstacles array
-    obstacles = dict()
+    #Needs to take care of finish line too, which isn't a wall object
+    for wall in walls:
+        canvas.delete(wall.wall_object)
+    
+    if finish_line is not None:
+        canvas.delete(finish_line)
+    #clear the obstacles and walls array
+    obstacles = []
+    walls = []
+    finish_line = None
 
 
 #Menu functions
@@ -344,9 +442,18 @@ def clear_console():
     console.config(state=DISABLED)
 
 
+#Triggers interrupt
+def stop_program():
+    global should_stop
+    should_stop = True
+
+
 #Code generation and compilation
 #Runs code
 def generate_program(code):
+    global should_stop
+    #Set the interrupt variable whenever a program is run
+    should_stop = False
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
@@ -357,7 +464,10 @@ def generate_program(code):
             console.tag_add("Correct", "1.0", "1.end")
             console.tag_config("Correct", foreground="Green")
 
+            #Toggle the buttons on the bottom and run program
+            toggle_buttons(True)
             exec(python_code, globals())
+            toggle_buttons(False)
 
             #Print message to console saying program is finished executing
             print_to_console("Done running program")
@@ -414,27 +524,42 @@ def verify_program_callback(code):
 
 #Resets car's position and orientation to original
 def reset_car_position():
-        '''global car
+        global car
         canvas.delete(car.car_object)
         car.image_tk = ImageTk.PhotoImage(car.image)
-        car.car_object = canvas.create_image(30, 250, image=car.image_tk)
-        car.position_x = 30
-        car.position_y = 250'''
-        if can_move(20):
-            print_to_console("CAN MOVE")
-        else:
-            print_to_console("CAN'T MOVE")
-
+        car_height = int(canvas.winfo_reqheight())/2
+        car.car_object = canvas.create_image(
+            23,
+            car_height,
+            image=car.image_tk)
+        car.position_x = 23
+        car.position_y = car_height
+        car.car_direction = CarDirection()
 
 #car object
 car = Car()
 
+
 #User interface
+#Toggle enabled and disabled buttons when program is run and stopped
+def toggle_buttons(stop_button_should_be_enabled):
+    if stop_button_should_be_enabled:
+        run_button.config(state=DISABLED)
+        stop_button.config(state=NORMAL)
+        reset_car_position_button.config(state=DISABLED)
+        clear_button.config(state=DISABLED)
+    else:
+        run_button.config(state=NORMAL)
+        stop_button.config(state=DISABLED)
+        reset_car_position_button.config(state=NORMAL)
+        clear_button.config(state=NORMAL)
+
 root = Tk()
 root.title('Racecar')
-window_width = root.winfo_screenwidth()
-window_height = root.winfo_screenheight()
-root.geometry("%dx%d" % (window_width-100, window_height-100))
+#Height is always three fourths the width of the window
+window_width = root.winfo_screenwidth() - 100
+window_height = 9*window_width/16
+root.geometry("%dx%d" % (window_width, window_height))
 
 menu_bar = Menu(root)
 
@@ -477,7 +602,11 @@ left_frame = Frame(root)
 code_label = Label(left_frame, text="Enter code here", anchor=W, pady=5)
 
 #frame for code window to hold textbox and scrollbar
-code_frame = Frame(left_frame)
+code_frame = Frame(
+    left_frame,
+    width=int(0.3*window_width),
+    height=9*window_height/10)
+code_frame.grid_propagate(False)
 
 #scrollbar for code window
 code_scrollbar = Scrollbar(code_frame)
@@ -487,7 +616,7 @@ code_scrollbar.pack(side=RIGHT, fill=Y)
 code = Text(
     code_frame,
     width=50,
-    height=window_height/16-8,
+    #height=window_height/16-8,
     wrap=WORD,
     yscrollcommand=code_scrollbar.set)
 
@@ -502,6 +631,15 @@ run_button = Button(
     pady=5,
     padx=5,
     command=command)
+
+#Stop execution of running program
+stop_button = Button(
+    button_frame,
+    text="Stop Program",
+    padx=5,
+    pady=5,
+    command=stop_program)
+stop_button.config(state=DISABLED)
 
 #reset car position button puts the car back in its original position and
 #orientation
@@ -522,7 +660,7 @@ clear_button = Button(
 canvas_frame = Frame(
     root,
     width=window_width/1.5,
-    height=window_height-300,
+    height=window_height/1.5,
     padx=2,
     pady=2)
 
@@ -530,17 +668,17 @@ canvas_frame.configure(borderwidth=1.5, background='black')
 canvas = Canvas(
     canvas_frame,
     width=window_width/1.5,
-    height=window_height-300)
+    height=window_height/1.5)
 
 car.image = Image.open('Racecar/RacecarGUI/images/racecar.png')
 car.image_tk = ImageTk.PhotoImage(car.image)
 
 car.car_object = canvas.create_image(
-    30,
+    23,
     int(canvas.winfo_reqheight())/2,
     image=car.image_tk)
 
-car.position_x = 30
+car.position_x = 23
 car.position_y = int(canvas.winfo_reqheight())/2
 
 #label above the console
@@ -557,7 +695,7 @@ console_scrollbar.pack(side=RIGHT, fill=Y)
 console = Text(
     console_frame,
     width=int(window_width/1.5),
-    height=10,
+    height=8,
     padx=2,
     pady=2,
     wrap=WORD,
@@ -571,23 +709,32 @@ left_frame.pack(side=LEFT, fill=BOTH)
 
 code_label.pack()
 
-code_frame.pack(fill=BOTH)
-code.pack(fill=BOTH)
+code_frame.pack(expand=1, fill=BOTH)
+code.pack(expand=1, fill=BOTH)
 
 button_frame.pack(fill=BOTH)
 run_button.grid(row=1, column=1)
-reset_car_position_button.grid(row=1, column=2)
-clear_button.grid(row=1, column=3)
+stop_button.grid(row=1, column=2)
+reset_car_position_button.grid(row=1, column=3)
+clear_button.grid(row=1, column=4)
 
-canvas_frame.pack(fill=BOTH)
-canvas.pack(fill=BOTH)
+canvas_frame.pack(expand=1, fill=BOTH)
+canvas.pack(expand=1, fill=BOTH)
 
 console_label.pack()
 
-console_frame.pack(fill=BOTH)
-console.pack(fill=BOTH)
+console_frame.pack(expand=1, fill=BOTH, pady=(0, 10))
+console.pack(expand=1, fill=BOTH)
 
 code_scrollbar.config(command=code.yview)
 console_scrollbar.config(command=console.yview)
 
+#Origin and antiorigin are limits on the canvas where the car moves
+origin = (23, 26)
+anti_origin = (
+    23+106*canvas_frame.winfo_reqwidth()/110,
+    26+56*canvas_frame.winfo_reqwidth()/110)
+
+print anti_origin
+#Run the GUI
 root.mainloop()

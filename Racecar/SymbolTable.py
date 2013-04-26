@@ -10,6 +10,11 @@ class SymbolLookupTable:
         '''Add the given entry to the table.  Throws an error if
         there is already an entry with the given name and scope, regardless
         of the type. Also throws an error if entry does not have a type.'''
+        
+        # throws error if a function is attempted to be declared
+        # outside of the global block
+        if entry.type == "function" and entry.scopeList[-1] != 0
+            raise Exception()
 
         if self.verifyEntry(entry):
             raise Exception()
@@ -19,8 +24,11 @@ class SymbolLookupTable:
 
     def verifyEntry(self, entry):
         '''Verify that a given entry is in the table with the appropriate
-        type and scope. Checks entry.validateWithTableEntry() on each
-        entry in the table that has the same id as entry'''
+        scope. Checks entry.validateWithTableEntry() on each
+        entry in the table that has the same id as entry
+        
+        Returns true if entry exists in the table, regardless of type,
+        meaning that addEntry should not work'''
 
         for x, existingEntry in self.table.iteritems():
             if entry.validateWithTableEntry(existingEntry):
@@ -43,28 +51,38 @@ class SymbolLookupTable:
 
 class SymbolTableEntry:
     '''A class representing a SymbolLookupTable entry. Each entry has
-    an id (name), maybe a type, and scope.'''
+    an id (name), maybe a type, and scope list.'''
 
     def __init__(self):
         '''Default constructor, initializes everything to
         empty strings'''
         self.id = ""
         self.type = ""
-        self.scope = ""
+        self.scopeList = []
+        self.function = None
 
-    def __init__(self, inId, inType, inScope):
-        '''Sets the entry's id, type, and scope'''
+    def __init__(self, inId, inType, inScopeList, inFunction):
+        '''Sets the entry's id, type, scope list, and function string'''
         self.id = inId
         self.type = inType
-        self.scope = inScope
+        self.scopeList = inScopeList
+        self.function = inFunction
 
     def validateWithTableEntry(self, tableEntry):
-        '''Returns true if all fields of self are the same as those
-        in tableEntry'''
+        '''Returns true if the existence of tableEntry means that
+        self cannot be added to the table (same ID and overlapping scopes)
+        Ignore type since we don't want to allow different types'''
         idEq = (self.id == tableEntry.id)
-        typeEq = (self.type == tableEntry.type) or not self.type
-        scopeEq = (self.scope == tableEntry.scope)
-        if idEq and typeEq and scopeEq:
+        topScopeCountTableEntry = tableEntry.scopeList[-1]
+        selfScopeAcceptable = topScopeCountTableEntry in self.scopeList
+        # if this is a function, it can be used anywhere
+        if self.type == "function"
+            functionScopeAcceptable = True
+        # otherwise, check to make sure we are using variables in the right function
+        # or in a non-function scope
+        else
+            functionScopeAcceptable = (self.function == tableEntry.function)
+        if idEq and selfScopeAcceptable and functionScopeAcceptable:
             return True
         else:
             return False
