@@ -128,14 +128,7 @@ def makeParseTreeNode(p, value):
 
 def p_statements(p):
     '''statements : statements statement'''
-    if p[1].value == "empty" and p[2].value != "empty":
-        p[0] = p[2]
-    elif p[2].value == "empty" and p[1].value != "empty":
-        p[0] = p[1]
-    elif p[2].value == "empty" and p[1].value == "empty":
-        p[0] = makeParseTreeNode(p, "empty")
-    else:
-        p[0] = makeParseTreeNode(p, "statements")
+    p[0] = makeParseTreeNode(p, "statements")
 
 
 def p_error_statement(p):

@@ -10,8 +10,7 @@ class TranslatorTests(unittest.TestCase):
             """
 """
         correct_translation = \
-            """
-"""
+            """"""
         result = Compiler.getPythonCode(test_string)
 
         self.assertEqual(result[0], correct_translation)
@@ -507,8 +506,7 @@ else:
             """:) this is a single line comment
 """
         correct_translation = \
-            """
-"""
+            """"""
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
@@ -520,8 +518,7 @@ comment
 :-)
 """
         correct_translation = \
-            """
-"""
+            """"""
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
@@ -672,7 +669,7 @@ elif 1 < 2:
             """print "hey" ++ myWord
 """
         correct_translation = \
-            """print_to_console((("hey") + str(myWord)))
+            """print_to_console((str("hey") + str(myWord)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
@@ -702,8 +699,7 @@ elif 1 < 2:
             """
 """
         correct_translation = \
-            """
-"""
+            """"""
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
