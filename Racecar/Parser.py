@@ -50,8 +50,8 @@ tokens = [
 
 literals = "{}()+-*/"
 
-t_NUMBER = r'[0-9]+'
-t_WORD = r'".*?"'
+#t_NUMBER = r'[0-9]+'
+#t_WORD = r'".*?"'
 t_GT = r'>'
 t_LT = r'<'
 t_GEQ = r'>='
@@ -64,6 +64,18 @@ t_ignore = ' \t'
 def t_ID(t):
     r'[A-Za-z][A-Za-z0-9]*'
     t.type = reserved.get(t.value, 'ID')
+    t.value = (t.value, t.type)
+    return t
+
+
+def t_NUMBER(t):
+    r'[0-9]+'
+    t.value = (t.value, t.type)
+    return t
+
+
+def t_WORD(t):
+    r'".*?"'
     t.value = (t.value, t.type)
     return t
 
