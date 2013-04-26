@@ -57,6 +57,7 @@ def generatePythonCode(ast):
         "statements": statementsTranslator,
         "times_expression": timesExpressionTranslator,
         "turn_command": turnCommandTranslator,
+        "word_expression": wordExpressionTranslator,
     }
 
     # "declare" pythonCode since otherwise its first use is inside
@@ -294,6 +295,14 @@ def plusExpressionTranslator(ast):
 
 def timesExpressionTranslator(ast):
     return binaryOperatorTranslator(ast)
+
+def wordExpressionTranslator(ast):
+    pythonCode = "(("
+    pythonCode += generatePythonCode(ast.children[0])
+    pythonCode += ") + str("
+    pythonCode += generatePythonCode(ast.children[2])
+    pythonCode += "))"
+    return pythonCode
 
 def getCarPositionTranslator(ast):
     return "getCurrentPosition()"
