@@ -54,6 +54,7 @@ class Wall:
                 start_y)
             self.start = start_x
             self.end = start_x+length
+            self.constant_coord = start_y
         else:
             self.wall_object = canvas.create_line(
                 start_x,
@@ -62,6 +63,7 @@ class Wall:
                 start_y+length)
             self.start = start_y
             self.end = start_y+length
+            self.constant_coord = start_x
         self.is_horizontal = is_horizontal
 
 
@@ -260,6 +262,26 @@ def rotate_car(direction):
         canvas.update()
 
 
+#Check for collision with walls of the maze and a finish line
+def collision_with_internal_walls():
+    for wall in walls:
+        #horizontal wall
+        if wall.is_horizontal:
+            #in rance of wall
+            if wall.start <= car.position_x <= wall.end:
+               #distance from wall
+               if math.fabs(car.position_y-wall.constant_coord) < car.radius:
+                   return True
+        #vertical wall
+        else:
+            #in range of wall
+            if wall.start <= car.position_y <= wall.end:
+               #distance from wall
+               if math.fabs(car.position_x-wall.constant_coord) < car.radius:
+                   return True
+
+    return False
+
 def is_collision(curr_x, curr_y):
     #Check for collisions with obstacles and walls
     #pdb.set_trace()
@@ -273,8 +295,12 @@ def is_collision(curr_x, curr_y):
         if distance < (car.radius + obstacle.radius):
             pdb.set_trace()
             return True
-    #Check walls
-    if not (origin[0] <= curr_x <= anti_origin[0]):
+    #check internal walls for collision
+    if collision_with_internal_walls():
+        pdb.set_trace()
+        return True
+    #Check boundary walls
+    elif not (origin[0] <= curr_x <= anti_origin[0]):
         return True
     elif not (origin[1] <= curr_y <= anti_origin[1]):
         return True
