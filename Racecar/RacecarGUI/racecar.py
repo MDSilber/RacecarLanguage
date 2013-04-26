@@ -206,7 +206,6 @@ def translate_car(steps, direction):
             #Stop execution of program
             #TODO Deal with delay on collision
             should_stop = True
-            reset_car_position()
             return
         else:
             canvas.move(
@@ -294,11 +293,11 @@ def is_collision(curr_x, curr_y):
             obstacle.center[0],
             obstacle.center[1])
         if distance < (car.radius + obstacle.radius):
-            pdb.set_trace()
+            #pdb.set_trace()
             return True
     #check internal walls for collision
     if collision_with_internal_walls():
-        pdb.set_trace()
+        #pdb.set_trace()
         return True
     #Check boundary walls
     elif not (origin[0] <= curr_x <= anti_origin[0]):
@@ -514,6 +513,12 @@ def generate_program(code):
             toggle_buttons(True)
             exec(python_code, globals())
             toggle_buttons(False)
+
+            #If collision occurred
+            if should_stop:
+                should_stop = False
+                if tkMessageBox.showwarning("Oops!", "You crashed! Try again"):
+                    reset_car_position()
 
             #Print message to console saying program is finished executing
             print_to_console("Done running program")
