@@ -11,6 +11,7 @@ import Racecar.Tree
 import Racecar.Compiler
 import random
 import pdb
+import math
 
 random.seed()
 
@@ -19,7 +20,7 @@ random.seed()
 current_program = None
 
 #Variable that serves as an interrupt to stop the program
-should_stop = False 
+should_stop = False
 
 #List of obstacles on the course at any given time
 obstacles = []
@@ -30,7 +31,7 @@ walls = []
 
 class Obstacle:
     def __init__(self, x, y, width, height):
-        self.obstacle_object = canvas.create_rectangle(
+        self.obstacle_object = canvas.create_oval(
             x-width/2,
             y-height/2,
             x+width/2,
@@ -39,6 +40,7 @@ class Obstacle:
         self.width = width
         self.height = height
         self.center = (x, y)
+        self.radius = width/2
 
 
 #Wall class: can only be vertical or horizontal
@@ -52,6 +54,7 @@ class Wall:
                 start_y)
             self.start = start_x
             self.end = start_x+length
+            self.constant_coord = start_y
         else:
             self.wall_object = canvas.create_line(
                 start_x,
@@ -60,6 +63,7 @@ class Wall:
                 start_y+length)
             self.start = start_y
             self.end = start_y+length
+            self.constant_coord = start_x
         self.is_horizontal = is_horizontal
 
 
@@ -113,8 +117,9 @@ class Car:
         self.image = None
         self.image_tk = None
         self.car_object = None
-        self.width = 97
-        self.height = 54
+        self.width = 27
+        self.height = 27
+        self.radius = 27
 
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
@@ -169,6 +174,11 @@ def steps_to_pixels(steps):
     return canvas_frame.winfo_reqwidth()/110*steps
 
 
+#Function to find the distance between two points
+def distance_between_points(x_1, y_1, x_2, y_2):
+    return math.sqrt(math.pow((x_2-x_1), 2) + math.pow((y_2-y_1), 2))
+
+
 #API Functions
 #direction must be either CarDirection.FORWARDS or CarDirection.BACKWARDS
 def translate_car(steps, direction):
@@ -196,7 +206,6 @@ def translate_car(steps, direction):
             #Stop execution of program
             #TODO Deal with delay on collision
             should_stop = True
-            reset_car_position()
             return
         else:
             canvas.move(
@@ -252,11 +261,45 @@ def rotate_car(direction):
         canvas.update()
 
 
+#Check for collision with walls of the maze and a finish line
+def collision_with_internal_walls():
+    for wall in walls:
+        #horizontal wall
+        if wall.is_horizontal:
+            #in rance of wall
+            if wall.start <= car.position_x <= wall.end:
+               #distance from wall
+                if math.fabs(car.position_y-wall.constant_coord) < car.radius:
+                    return True
+        #vertical wall
+        else:
+            #in range of wall
+            if wall.start <= car.position_y <= wall.end:
+               #distance from wall
+                if math.fabs(car.position_x-wall.constant_coord) < car.radius:
+                    return True
+
+    return False
+
+
 def is_collision(curr_x, curr_y):
     #Check for collisions with obstacles and walls
     #pdb.set_trace()
-    if get_position(curr_x, curr_y) in obstacles:
+    #Check obstacles
+    for obstacle in obstacles:
+        distance = distance_between_points(
+            curr_x,
+            curr_y,
+            obstacle.center[0],
+            obstacle.center[1])
+        if distance < (car.radius + obstacle.radius):
+            #pdb.set_trace()
+            return True
+    #check internal walls for collision
+    if collision_with_internal_walls():
+        #pdb.set_trace()
         return True
+    #Check boundary walls
     elif not (origin[0] <= curr_x <= anti_origin[0]):
         return True
     elif not (origin[1] <= curr_y <= anti_origin[1]):
@@ -289,6 +332,7 @@ def course_one():
 #TODO -- Fill in the rest of the courses
 #Course two is a simple maze
 finish_line = None
+
 
 def course_two():
     global finish_line
@@ -332,6 +376,7 @@ def course_two():
         fill="black",
         dash=(4, 4))
 
+
 def course_three():
     clear_course()
 
@@ -355,7 +400,7 @@ def clear_course():
     #Needs to take care of finish line too, which isn't a wall object
     for wall in walls:
         canvas.delete(wall.wall_object)
-    
+
     if finish_line is not None:
         canvas.delete(finish_line)
     #clear the obstacles and walls array
@@ -468,6 +513,12 @@ def generate_program(code):
             toggle_buttons(True)
             exec(python_code, globals())
             toggle_buttons(False)
+
+            #If collision occurred
+            if should_stop:
+                should_stop = False
+                if tkMessageBox.showwarning("Oops!", "You crashed! Try again"):
+                    reset_car_position()
 
             #Print message to console saying program is finished executing
             print_to_console("Done running program")
