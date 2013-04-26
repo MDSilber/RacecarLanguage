@@ -672,17 +672,17 @@ elif 1 < 2:
             """print "hey" ++ myWord
 """
         correct_translation = \
-            """print_to_console((("hey") + str(myWord)))
+            """print_to_console((str("hey") + str(myWord)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
     def test_string_concatenation_complicated(self):
         test_string = \
-            """print "hey" ++ myWord
+            """print "hey" ++ myWord ++ "now"
 """
         correct_translation = \
-            """print_to_console((str("hey") + str(myWord)))
+            """print_to_console((str((str("hey") + str(myWord))) + str("now")))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
