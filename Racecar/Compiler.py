@@ -297,7 +297,7 @@ def timesExpressionTranslator(ast):
     return binaryOperatorTranslator(ast)
 
 def wordExpressionTranslator(ast):
-    pythonCode = "(("
+    pythonCode = "(str("
     pythonCode += generatePythonCode(ast.children[0])
     pythonCode += ") + str("
     pythonCode += generatePythonCode(ast.children[2])
