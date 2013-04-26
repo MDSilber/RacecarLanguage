@@ -13,7 +13,7 @@ class SymbolLookupTable:
         
         # throws error if a function is attempted to be declared
         # outside of the global block
-        if entry.type == "function" and entry.scopeList[-1] != 0
+        if entry.type == "function" and entry.scopeList[-1] != 0:
             raise Exception()
 
         if self.verifyEntry(entry):
@@ -76,11 +76,11 @@ class SymbolTableEntry:
         topScopeCountTableEntry = tableEntry.scopeList[-1]
         selfScopeAcceptable = topScopeCountTableEntry in self.scopeList
         # if this is a function, it can be used anywhere
-        if self.type == "function"
+        if self.type == "function":
             functionScopeAcceptable = True
         # otherwise, check to make sure we are using variables in the right function
         # or in a non-function scope
-        else
+        else:
             functionScopeAcceptable = (self.function == tableEntry.function)
         if idEq and selfScopeAcceptable and functionScopeAcceptable:
             return True
