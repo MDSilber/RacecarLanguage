@@ -667,7 +667,7 @@ elif 1 < 2:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-    def test_can_move_forward(self):
+    def test_string_concatenation(self):
         test_string = \
             """
 """
@@ -677,9 +677,7 @@ elif 1 < 2:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-
-
-    def test_template(self):
+    def test_can_move_forward(self):
         test_string = \
             """
 """
@@ -704,8 +702,6 @@ elif 1 < 2:
 #test wheel direction left and right
 #test getLocation and compare it to others
 #test can move back and forward
-#nested ifs and loops
-#more complicated nested things
 
 
 class SymbolTableTests(unittest.TestCase):
