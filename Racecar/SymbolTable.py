@@ -14,7 +14,8 @@ class SymbolLookupTable:
         # throws error if a function is attempted to be declared
         # outside of the global block
         if entry.type == "function" and entry.scopeList[-1] != 0:
-            raise Exception()
+            return
+        # this will call an error in the Semantic Analyzer
 
         if self.verifyEntry(entry):
             raise Exception()
@@ -51,11 +52,11 @@ class SymbolLookupTable:
 
 class SymbolTableEntry:
     '''A class representing a SymbolLookupTable entry. Each entry has
-    an id (name), maybe a type, and scope list.'''
+    an id (name), maybe a type, scope list, and function string.'''
 
     def __init__(self):
         '''Default constructor, initializes everything to
-        empty strings'''
+        empty'''
         self.id = ""
         self.type = ""
         self.scopeList = []

@@ -1,4 +1,3 @@
-# TODO make a first pass to get functions
 # TODO handle function parameter number and types
 
 # Scoping done using a universal count, which is a unique number for every single scope
@@ -11,9 +10,13 @@ inFunction = False
 function = None
 scopeList = [0]
 errorList = []
+firstPass = True
 
+def analyzeStart(ast):
+  analyze(ast)
+  firstPass = False
+  analyze(ast)
 
-# List will be a list of numbers, each number is a block's universal count
 def analyze(ast):
    '''Traverse the AST and check for semantic errors.'''
 
@@ -53,9 +56,9 @@ def analyze(ast):
    # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
       # this should only be useful for evaluating the type of an expression
-      if (ast.type == "word")
+      if (ast.type.lower() == "word")
          return "word"
-      else if (ast.type == "number")
+      else if (ast.type.lower() == "number")
          return "number"
       else if (ast.type == "ID")
          # do existence and scope checking right here
@@ -74,8 +77,14 @@ def analyze(ast):
 
 
 def statementsAnalyzer(ast):
-   analyze(ast.children[0])
-   analyze(ast.children[1])
+  if firstPass
+      if ast.children[0].value == "define_command" or ast.children.value == "statements"
+          analyze(ast.children[0])
+      if ast.children[1].value == "define_command" or ast.children[1].value == "statements"
+          analyze(ast.children[1])
+  else
+      analyze(ast.children[0])
+      analyze(ast.children[1])
 
 
 def driveCommandAnalyzer(ast):
@@ -95,8 +104,8 @@ def comparisonTranslator(ast):
       if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
          return valid
       else
-         errorList.append("Error in comparison: words must be compared using 'is' or 'is not')
-   else
+         errorList.append("Error in comparison: words must be compared using 'is' or 'is not'")
+      else
       errorList.append("Error in comparison: use only words or only numbers; cannot mix both")
 
 
@@ -179,7 +188,11 @@ def printAnalyzer(ast):
 
 def defineCommandAnalyzer(ast):
    id = ast.children[1].value
-   table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
+   if firstPass
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
+      return
+   if scopeList[-1] != 0
+      errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
    scopeList.append(count+1)
    inFunction = True
    function = id
@@ -234,7 +247,7 @@ def functionParameterTypeFinder(ast):
    # working on this
 
 # this is for user-defined function parameters
-X def optParametersTranslator(ast):
+def optParametersTranslator(ast):
    numChildren = len(ast.children)
    if numChildren > 0:
        pythonCode = generatePythonCode(ast.children[0])
