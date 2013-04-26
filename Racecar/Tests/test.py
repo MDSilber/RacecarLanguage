@@ -669,15 +669,23 @@ elif 1 < 2:
 
     def test_string_concatenation(self):
         test_string = \
-            """
+            """print "hey" ++ myWord
 """
         correct_translation = \
-            """
+            """print_to_console((("hey") + str(myWord)))
 """
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-    def test_can_move_forward(self):
+    def test_string_concatenation_complicated(self):
+        test_string = \
+            """print "hey" ++ myWord
+"""
+        correct_translation = \
+            """print_to_console((str("hey") + str(myWord)))
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
 
     def test_get_car_position(self):
         test_string = \
