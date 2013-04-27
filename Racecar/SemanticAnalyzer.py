@@ -1,4 +1,3 @@
-# TODO handle function parameter number and types
 
 # Scoping done using a universal count, which is a unique number for every single scope
 
@@ -7,7 +6,6 @@ import Parser
 
 table = None
 count = 0
-inFunction = False
 function = None
 scopeList = [0]
 errorList = []
@@ -15,18 +13,21 @@ firstPass = True
 
 def analyzeStart(ast):
   # this block for testing purposes
-  global table, count, inFunction, function, scopeList, errorList, firstPass
+  global table, count, function, scopeList, errorList, firstPass
   table = SymbolLookupTable()
   count = 0
-  inFunction = False
   function = None
   scopeList = [0]
   errorList = []
   firstPass = True
 
   analyze(ast)
-  # global firstPass 
+  # TODO uncomment after removing testing code
+  # global firstPass, count, function, scopeList
+  count = 0  
+  function = None
   firstPass = False
+  scopeList = [0]
   analyze(ast)
 
 def analyze(ast):
@@ -47,7 +48,6 @@ def analyze(ast):
        "opt_else_if": optElseIfAnalyzer,
        "opt_extra_params": optExtraParamsAnalyzer,
        "opt_param_list": optParamListAnalyzer,
-       "opt_parameters": optParametersAnalyzer,
        "plus_expression": plusExpressionAnalyzer,
        "print": printAnalyzer,
        "repeat_if_command": repeatIfAnalyzer,
@@ -76,7 +76,7 @@ def analyze(ast):
          # do existence and scope checking right here
          # return type if passes
          id = ast.value
-         idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function))
+         idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
          if idEntry == None:
             # ID does not exist or exists but the scoping is wrong
             # this is to be returned to binaryOperatorAnalyzer
@@ -89,19 +89,14 @@ def analyze(ast):
 
 
 def statementsAnalyzer(ast):
-  print firstPass
-  print "in statements analyzer"
   if firstPass:
       if ast.children[0].value == "define_command" or ast.children[0].value == "statements":
           analyze(ast.children[0])
       if ast.children[1].value == "define_command" or ast.children[1].value == "statements":
           analyze(ast.children[1])
   else:
-      print "second pass"
       analyze(ast.children[0])
       analyze(ast.children[1])
-
-  print "end"
 
 
 def driveCommandAnalyzer(ast):
@@ -114,7 +109,7 @@ def turnCommandAnalyzer(ast):
    return
 
 def emptyAnalyzer(ast):
-  return
+  return []
 
 def comparisonAnalyzer(ast):
   result = binaryOperatorAnalyzer(ast)
@@ -175,22 +170,18 @@ def repeatIfAnalyzer(ast):
 
 
 def declarationCommandAnalyzer(ast):
-   print "in declarationCommandAnalyzer"
    # Note ast.children[3].type is word
-   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function))
+   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function, None))
 
 
 def assignmentCommandAnalyzer(ast):
-   print "in assignmentCommandAnalyzer"
    # check for the existence of ID - child 1
    # and that it can be accessed in this block
    id = ast.children[1].value
-   idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function))
+   idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
    if idEntry == None:
       # ID does not exist or exists but the scoping is wrong
       errorList.append("Error in assignment: variable does not exist or cannot be used here")
-   
-   print "here1"
 
    # do type checking
    # child 3 is an expression - it needs to be evaluated to a type
@@ -213,34 +204,36 @@ def printAnalyzer(ast):
 def defineCommandAnalyzer(ast):
    global function
    id = ast.children[1].value
-   if firstPass:
-      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
-      return
    if scopeList[-1] != 0:
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
-   scopeList.append(count+1)
-   global inFunction
-   inFunction = True
    function = id
-   if ast.children[2].value == "opt_param_list":
-      analyze(ast.children[2])
-   scopeList.pop()
+   if firstPass:
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(children[3])))
+      scopeList.pop()
+      return
    # for "statement_block"
    analyze(ast.children[4])
-   inFunction = False
    function = None
 
 
 def optParamListAnalyzer(ast):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
+   scopeList.append(count+1)
+   parameterTypeList = []
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5])
+       return analyze(ast.children[5], parameterTypeList)
+   else
+       return parameterTypeList
 
 
-def optExtraParamsAnalyzer(ast):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
+def optExtraParamsAnalyzer(ast, parameterTypeList):
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5])
+       return analyze(ast.children[5], parameterTypeList)
+   else
+       return parameterTypeList
 
 
 def statementBlockAnalyzer(ast):
@@ -251,40 +244,30 @@ def statementBlockAnalyzer(ast):
    scopeList.pop()
 
 
-# currently working on this
 def functionCommandAnalyzer(ast):
-   
-   
-   pythonCode = generatePythonCode(ast.children[0])
-   pythonCode += "("
-   if len(ast.children) > 1:
-      pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += ")\n"
-   return pythonCode
-   
-   
-def functionNameFinder(ast):
-   if len(ast.children) == 1:
-      return ast.children[0].value
-   else:
-      functionNameFinder(ast.children[0])
-   
-   
-def functionParameterTypeFinder(ast):  
-   # working on this
-   return
+  # check existence of function ID
+  idEntry = table.getEntry(SymbolTableEntry(ast.children[0].value, "function", list(scopeList), function, None))
+         if idEntry.type == "function"
+            parameterTypeList = idEntry.functionParameterTypes
+         else
+            errorList.append("Error in attempt to use function: function does not exist")
+            return
+  optParametersAnalyzer(ast.children[1], parameterTypeList)
+
 
 # this is for user-defined function parameters
-def optParametersAnalyzer(ast):
-   numChildren = len(ast.children)
-   if numChildren > 0:
-       pythonCode = generatePythonCode(ast.children[0])
-       if numChildren == 2:
-           pythonCode += ", "
-           pythonCode += generatePythonCode(ast.children[1])
-       return pythonCode
-   else:
-       return ""
+def optParametersAnalyzer(ast, parameterTypeList):
+  if len(ast.children) == 1
+      if len(parameterTypeList) != 1 or ast.children[0].type != parameterTypeList[0]
+          # Type checking error
+          errorList.append("Error in attempt to use function: wrong type of parameter used")
+  else
+      # More parameters left
+      if ast.children[1].type != parameterTypeList.pop()
+          # Type checking error
+          errorList.append("Error in attempt to use function: wrong type of parameter used")
+      else
+          optParametersAnalyzer(ast.children[0], parameterTypeList)
 
 
 def binaryOperatorAnalyzer(ast):
