@@ -119,7 +119,7 @@ class Car:
         self.car_object = None
         self.width = 27
         self.height = 27
-        self.radius = 27
+        self.radius = 25
 
     #Drive method that updates the car's position (in the model, not on the UI)
     #UI animation will need to be done moving x and y simultaneously
@@ -268,16 +268,33 @@ def collision_with_internal_walls():
         if wall.is_horizontal:
             #in rance of wall
             if wall.start <= car.position_x <= wall.end:
-               #distance from wall
-                if math.fabs(car.position_y-wall.constant_coord) < car.radius:
-                    return True
+                #Current direction of the car
+                direction = car.car_direction.get_direction()
+                #distance from wall
+                dist_to_wall = math.fabs(car.position_y-wall.constant_coord)
+                #Car is horizontally oriented
+                if direction == (1,0) or direction == (-1,0):
+                    if dist_to_wall < car.radius/2:
+                        return True
+                #Car is not horizontally oriented
+                else:
+                    if dist_to_wall < car.radius:
+                        return True
         #vertical wall
         else:
             #in range of wall
             if wall.start <= car.position_y <= wall.end:
-               #distance from wall
-                if math.fabs(car.position_x-wall.constant_coord) < car.radius:
-                    return True
+                direction = car.car_direction.get_direction()
+                #distance from wall
+                dist_to_wall = math.fabs(car.position_x-wall.constant_coord)
+                #Car is vertically oriented
+                if direction == (0,1) or direction == (0,-1):
+                    if dist_to_wall < car.radius/2:
+                        return True
+                #Car is not vertically oriented
+                else:
+                    if dist_to_wall < car.radius:
+                        return True
 
     return False
 

@@ -23,7 +23,7 @@ driveThenFullTurn 0 "right"
 driveThenFullTurn 25 "left"
 driveThenFullTurn 18 "left"
 
-repeat 3 times
+repeat 2 times
 {
 
     driveThenFullTurn 50 "right"
@@ -31,4 +31,10 @@ repeat 3 times
     driveThenFullTurn 50 "left"
     driveThenFullTurn 16 "left"
 }
+
+driveThenFullTurn 50 "right"
+driveThenFullTurn 15 "right"
+driveThenFullTurn 50 "left"
+driveThenFullTurn 10 "left"
+
 
