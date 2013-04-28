@@ -225,12 +225,12 @@ def printTranslator(ast):
 
 def defineCommandTranslator(ast):
     pythonCode = "def "
-    pythonCode += generatePythonCode(ast.children[1])
+    pythonCode += generatePythonCode(ast.children[0])
     pythonCode += "("
-    if ast.children[2].value == "opt_param_list":
-        pythonCode += generatePythonCode(ast.children[2])
+    if ast.children[1].value == "opt_param_list":
+        pythonCode += generatePythonCode(ast.children[1])
     pythonCode += "):\n"
-    pythonCode += generatePythonCode(ast.children[4])
+    pythonCode += generatePythonCode(ast.children[2])
     return pythonCode
 
 

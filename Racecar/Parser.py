@@ -403,7 +403,7 @@ def p_turn_direction(p):
 def p_define_command(p):
     """define_command : DEFINE ID opt_param_list \
     newline_opt_comment statement_block"""
-    p[0] = makeParseTreeNode(p, "define_command")
+    p[0] = makeParseTreeNode([p[0], p[2], p[3], p[5]], "define_command")
 
 
 def p_opt_param_list(p):
