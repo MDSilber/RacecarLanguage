@@ -31,6 +31,7 @@ def analyzeStart(ast):
   firstPass = False
   scopeList = [0]
   analyze(ast)
+  return errorList
 
 def analyze(ast):
    '''Traverse the AST and check for semantic errors.'''
