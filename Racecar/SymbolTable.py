@@ -52,7 +52,8 @@ class SymbolLookupTable:
 
 class SymbolTableEntry:
     '''A class representing a SymbolLookupTable entry. Each entry has
-    an id (name), maybe a type, scope list, and function string.'''
+    an id (name), maybe a type, scope list, function string (to indicate if
+    the entry is a part of a function), and function parameter types (if a function).'''
 
     def __init__(self):
         '''Default constructor, initializes everything to
@@ -61,13 +62,16 @@ class SymbolTableEntry:
         self.type = ""
         self.scopeList = []
         self.function = None
+        self.functionParameterTypes = []
 
-    def __init__(self, inId, inType, inScopeList, inFunction):
-        '''Sets the entry's id, type, scope list, and function string'''
+    def __init__(self, inId, inType, inScopeList, inFunction, inFunctionPTypes):
+        '''Sets the entry's id, type, scope list, function string,
+        and function parameter type list'''
         self.id = inId
         self.type = inType
         self.scopeList = inScopeList
         self.function = inFunction
+        self.functionParameterTypes = inFunctionPTypes
 
     def validateWithTableEntry(self, tableEntry):
         '''Returns true if the existence of tableEntry means that

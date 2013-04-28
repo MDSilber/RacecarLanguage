@@ -1,0 +1,40 @@
+
+define fullTurn using direction (word)
+{
+    if direction is "left"
+    {
+        turn left
+        turn left
+    }
+    else
+    {
+        turn right
+        turn right
+    }
+}
+
+define driveThenFullTurn using numSteps (number) and direction (word)
+{
+    drive forward numSteps steps
+    fullTurn direction
+}
+
+driveThenFullTurn 0 "right"
+driveThenFullTurn 25 "left"
+driveThenFullTurn 18 "left"
+
+repeat 2 times
+{
+
+    driveThenFullTurn 50 "right"
+    driveThenFullTurn 15 "right"
+    driveThenFullTurn 50 "left"
+    driveThenFullTurn 16 "left"
+}
+
+driveThenFullTurn 50 "right"
+driveThenFullTurn 15 "right"
+driveThenFullTurn 50 "left"
+driveThenFullTurn 10 "left"
+
+

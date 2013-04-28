@@ -1,20 +1,33 @@
-# TODO handle function parameter number and types
 
 # Scoping done using a universal count, which is a unique number for every single scope
 
 from SymbolTable import *
+import Parser
 
-table = SymbolLookupTable
+table = None
 count = 0
-inFunction = False
 function = None
 scopeList = [0]
 errorList = []
 firstPass = True
 
 def analyzeStart(ast):
+  # this block for testing purposes
+  global table, count, function, scopeList, errorList, firstPass
+  table = SymbolLookupTable()
+  count = 0
+  function = None
+  scopeList = [0]
+  errorList = []
+  firstPass = True
+
   analyze(ast)
+  # TODO uncomment after removing testing code
+  # global firstPass, count, function, scopeList
+  count = 0  
+  function = None
   firstPass = False
+  scopeList = [0]
   analyze(ast)
 
 def analyze(ast):
@@ -23,7 +36,7 @@ def analyze(ast):
    # potential AST values and their associated analysis functions
    # use astAnalzyers.get() instead of a long chain of else-ifs
    astAnalyzers = {
-       "assignment_command": assignmentCommandAnalyzer,,
+       "assignment_command": assignmentCommandAnalyzer,
        "comparison": comparisonAnalyzer,
        "declaration_command": declarationCommandAnalyzer,
        "define_command": defineCommandAnalyzer,
@@ -35,7 +48,6 @@ def analyze(ast):
        "opt_else_if": optElseIfAnalyzer,
        "opt_extra_params": optExtraParamsAnalyzer,
        "opt_param_list": optParamListAnalyzer,
-       "opt_parameters": optParametersAnalyzer,
        "plus_expression": plusExpressionAnalyzer,
        "print": printAnalyzer,
        "repeat_if_command": repeatIfAnalyzer,
@@ -56,16 +68,16 @@ def analyze(ast):
    # If the "anaylzer" is just a string (inherits from basestring)
    if isinstance(analyzer, basestring):
       # this should only be useful for evaluating the type of an expression
-      if (ast.type.lower() == "word")
+      if (ast.type.lower() == "word"):
          return "word"
-      else if (ast.type.lower() == "number")
+      elif (ast.type.lower() == "number"):
          return "number"
-      else if (ast.type == "ID")
+      elif (ast.type == "ID"):
          # do existence and scope checking right here
          # return type if passes
          id = ast.value
-         idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
-         if idEntry == None
+         idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
+         if idEntry == None:
             # ID does not exist or exists but the scoping is wrong
             # this is to be returned to binaryOperatorAnalyzer
             return "ERROR"
@@ -77,12 +89,12 @@ def analyze(ast):
 
 
 def statementsAnalyzer(ast):
-  if firstPass
-      if ast.children[0].value == "define_command" or ast.children.value == "statements"
+  if firstPass:
+      if ast.children[0].value == "define_command" or ast.children[0].value == "statements":
           analyze(ast.children[0])
-      if ast.children[1].value == "define_command" or ast.children[1].value == "statements"
+      if ast.children[1].value == "define_command" or ast.children[1].value == "statements":
           analyze(ast.children[1])
-  else
+  else:
       analyze(ast.children[0])
       analyze(ast.children[1])
 
@@ -94,57 +106,60 @@ def driveCommandAnalyzer(ast):
 
 def turnCommandAnalyzer(ast):
    # nothing to do here
+   return
 
+def emptyAnalyzer(ast):
+  return []
 
-def comparisonTranslator(ast):
-   result = binaryOperatorAnalyzer(ast)
-   if result == "number"
+def comparisonAnalyzer(ast):
+  result = binaryOperatorAnalyzer(ast)
+  if result == "number":
       return valid
-   elif result == "word"
+  elif result == "word":
       if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
          return valid
-      else
+      else:
          errorList.append("Error in comparison: words must be compared using 'is' or 'is not'")
-      else
+  else:
       errorList.append("Error in comparison: use only words or only numbers; cannot mix both")
 
 
 def optElseIfAnalyzer(ast):
-   # for "expression"
-   if ast.children[1].value != "empty":
+  # for "expression"
+  if ast.children[1].value != "empty":
       analyze(ast.children[1])
    # for "statement_block"
-   if ast.chidlren[3].value != "empty":
+  if ast.chidlren[3].value != "empty":
       analyze(ast.children[3])
    # for "optional_else_if"
-   if ast.children[4].value != "empty":
+  if ast.children[4].value != "empty":
       analyze(ast.children[4])
 
 
 def optElseAnalyzer(ast):
-   # for "statement_block"
-   if ast.children[2].value != "empty":
+  # for "statement_block"
+  if ast.children[2].value != "empty":
       analyze(ast.children[2])
 
 
 def ifCommandAnalyzer(ast):
-   # for "expression"
-   analyze(ast.children[1])
-   # for "statement_block"
-   analyze(ast.children[3])
+  # for "expression"
+  analyze(ast.children[1])
+  # for "statement_block"
+  analyze(ast.children[3])
 
-   if ast.children[4].value != "empty":
-       analyze(ast.children[4])
+  if ast.children[4].value != "empty":
+      analyze(ast.children[4])
 
-   if ast.children[5].value != "empty":
-       analyze(ast.children[5])
+  if ast.children[5].value != "empty":
+      analyze(ast.children[5])
 
 
 def repeatTimesAnalyzer(ast):
-   # for "plus_expression"
-   analyze(ast.children[1])
-   # for "statement_block"
-   analyze(ast.children[4])
+  # for "plus_expression"
+  analyze(ast.children[1])
+  # for "statement_block"
+  analyze(ast.children[4])
 
 
 def repeatIfAnalyzer(ast):
@@ -156,26 +171,26 @@ def repeatIfAnalyzer(ast):
 
 def declarationCommandAnalyzer(ast):
    # Note ast.children[3].type is word
-   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function))
+   table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function, None))
 
 
 def assignmentCommandAnalyzer(ast):
    # check for the existence of ID - child 1
    # and that it can be accessed in this block
    id = ast.children[1].value
-   idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function)))
-   if idEntry == None
+   idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
+   if idEntry == None:
       # ID does not exist or exists but the scoping is wrong
       errorList.append("Error in assignment: variable does not exist or cannot be used here")
-   
+
    # do type checking
    # child 3 is an expression - it needs to be evaluated to a type
    child3Evaluation = analyze(ast.children[3])
-   if child3Evaluation == "ERROR"
+   if child3Evaluation == "ERROR":
       # type check in expression failed
       errorList.append("Error in assignment: use only words or only numbers; cannot mix both")
-   else
-      if idEntry.type != child3Evaluation
+   else:
+      if idEntry.type != child3Evaluation:
          # type check failed
           errorList.append("Error in assignment: variable and value must have the same type")
 
@@ -187,114 +202,131 @@ def printAnalyzer(ast):
 
 
 def defineCommandAnalyzer(ast):
+   global function
    id = ast.children[1].value
-   if firstPass
-      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), function))
-      return
-   if scopeList[-1] != 0
+   if scopeList[-1] != 0:
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
-   scopeList.append(count+1)
-   inFunction = True
    function = id
-   if ast.children[2].value == "opt_param_list":
-      analyze(ast.children[2])
-   scopeList.pop()
+   if firstPass:
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(children[3])))
+      scopeList.pop()
+      return
    # for "statement_block"
    analyze(ast.children[4])
-   inFunction = False
    function = None
 
 
 def optParamListAnalyzer(ast):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
+   scopeList.append(count+1)
+   parameterTypeList = []
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5])
+       return analyze(ast.children[5], parameterTypeList)
+   else
+       return parameterTypeList
 
 
-def optExtraParamsAnalyzer(ast):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function))
+def optExtraParamsAnalyzer(ast, parameterTypeList):
+   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
-       analyze(ast.children[5])
+       return analyze(ast.children[5], parameterTypeList)
+   else
+       return parameterTypeList
 
 
 def statementBlockAnalyzer(ast):
+   global count
    count += 1
    scopeList.append(count)
    analyze(ast.children[1])
    scopeList.pop()
 
 
-# currently working on this
 def functionCommandAnalyzer(ast):
-   
-   
-   pythonCode = generatePythonCode(ast.children[0])
-   pythonCode += "("
-   if len(ast.children) > 1:
-      pythonCode += generatePythonCode(ast.children[1])
-   pythonCode += ")\n"
-   return pythonCode
-   
-   
-def functionNameFinder(ast):
-   if len(ast.children) == 1
-      return ast.children[0].value
-   else
-      functionNameFinder(ast.children[0])
-   
-   
-def functionParameterTypeFinder(ast):  
-   # working on this
+  # check existence of function ID
+  idEntry = table.getEntry(SymbolTableEntry(ast.children[0].value, "function", list(scopeList), function, None))
+         if idEntry.type == "function"
+            parameterTypeList = idEntry.functionParameterTypes
+         else
+            errorList.append("Error in attempt to use function: function does not exist")
+            return
+  optParametersAnalyzer(ast.children[1], parameterTypeList)
+
 
 # this is for user-defined function parameters
-def optParametersTranslator(ast):
-   numChildren = len(ast.children)
-   if numChildren > 0:
-       pythonCode = generatePythonCode(ast.children[0])
-       if numChildren == 2:
-           pythonCode += ", "
-           pythonCode += generatePythonCode(ast.children[1])
-       return pythonCode
-   else:
-       return ""
+def optParametersAnalyzer(ast, parameterTypeList):
+  if len(ast.children) == 1
+      if len(parameterTypeList) != 1 or ast.children[0].type != parameterTypeList[0]
+          # Type checking error
+          errorList.append("Error in attempt to use function: wrong type of parameter used")
+  else
+      # More parameters left
+      if ast.children[1].type != parameterTypeList.pop()
+          # Type checking error
+          errorList.append("Error in attempt to use function: wrong type of parameter used")
+      else
+          optParametersAnalyzer(ast.children[0], parameterTypeList)
 
 
 def binaryOperatorAnalyzer(ast):
    result1 = analyze(ast.children[0])
    result3 = analyze(ast.children[2])
    
-   if result1 == "ERROR" or result3 == "ERROR"
+   if result1 == "ERROR" or result3 == "ERROR":
       return "ERROR"
    
-   if result1 == result3
+   if result1 == result3:
       return result1
       
-   else
+   else:
       return "ERROR" 
 
 
 def plusExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "number"
+   if result == "number":
       return valid
-   else
+   else:
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 
 def timesExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "number"
+   if result == "number":
       return valid
-   else
+   else:
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 def wordExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "word"
+   if result == "word":
       return valid
-   else
+   else:
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
+if __name__ == "__main__":
+    inputString = ''
+    while True:
 
+        inputString = raw_input('enter expression > ')
 
+        if inputString == 'exit':
+            break
 
+        else:
+            # first parse the string
+            ast = Parser.parseString(inputString)
+
+            ast.printTree()
+            print
+
+            # then check for errors
+            if len(ast.errors) > 0:
+                print ast.errors
+                break
+
+            analyzeStart(ast)
+
+            print errorList
