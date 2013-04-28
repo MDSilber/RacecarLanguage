@@ -268,20 +268,13 @@ def p_not_expression_not(p):
 
 
 def p_not_expression_can_move(p):
-    '''not_expression : CAN_MOVE can_move_direction'''
+    '''not_expression : CAN_MOVE drive_direction primary_expression'''
     p[0] = makeParseTreeNode(p, "not_expression")
 
 
 def p_not_expression_comparison(p):
     '''not_expression : comparison'''
     p[0] = p[1]
-
-
-def p_can_move_direction(p):
-    '''can_move_direction : drive_direction
-       | turn_direction'''
-    p[0] = p[1]
-
 
 def p_comparison_with_operator(p):
     '''comparison : plus_expression comparison_operator plus_expression'''
