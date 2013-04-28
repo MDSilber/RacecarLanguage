@@ -179,11 +179,14 @@ def declarationCommandAnalyzer(ast):
 def assignmentCommandAnalyzer(ast):
    # check for the existence of ID - child 1
    # and that it can be accessed in this block
+   idNoneBool = False
    id = ast.children[1].value
    idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
    if idEntry == None:
+      idNoneBool = True
       # ID does not exist or exists but the scoping is wrong
       errorList.append("Error in assignment: variable does not exist or cannot be used here")
+
 
    # do type checking
    # child 3 is an expression - it needs to be evaluated to a type
@@ -192,7 +195,7 @@ def assignmentCommandAnalyzer(ast):
       # type check in expression failed
       errorList.append("Error in assignment: use only words or only numbers; cannot mix both")
    else:
-      if idEntry.type != child3Evaluation:
+      if (not idNoneBool) and idEntry.type != child3Evaluation:
          # type check failed
           errorList.append("Error in assignment: variable and value must have the same type")
 

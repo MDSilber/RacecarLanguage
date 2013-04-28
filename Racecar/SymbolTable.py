@@ -47,7 +47,7 @@ class SymbolLookupTable:
         if len(matches) == 1:
             return matches[0]
         else:
-            raise Exception()
+            return None
 
 
 class SymbolTableEntry:
