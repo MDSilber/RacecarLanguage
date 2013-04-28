@@ -250,7 +250,7 @@ def optExtraParamsTranslator(ast):
 
 
 def statementBlockTranslator(ast):
-    prelimPythonCode = generatePythonCode(ast.children[1])
+    prelimPythonCode = generatePythonCode(ast.children[0])
 
     pythonCode = indentLines(prelimPythonCode)
 

@@ -155,7 +155,7 @@ def p_statements_empty(p):
 
 def p_statement_block(p):
     """statement_block : '{' statements '}' newline_opt_comment"""
-    p[0] = makeParseTreeNode(p, "statement_block")
+    p[0] = makeParseTreeNode([p[0], p[2]], "statement_block")
 
 
 def p_empty(p):
