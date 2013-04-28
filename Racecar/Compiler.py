@@ -33,7 +33,7 @@ def generatePythonCode(ast):
         "backward": backwardTranslator,
         "backwards": backwardTranslator,
         "comparison": comparisonTranslator,
-        "can_move_expression": canMoveExpressionTranslator,
+        "can_drive_expression": canDriveExpressionTranslator,
         "declaration_command": declarationCommandTranslator,
         "define_command": defineCommandTranslator,
         "drive_command": driveCommandTranslator,
@@ -309,7 +309,7 @@ def getCarPositionTranslator(ast):
     return "getCurrentPosition()"
 
 
-def canMoveExpressionTranslator(ast):
+def canDriveExpressionTranslator(ast):
     pythonCode = "can_move("
     pythonCode += generatePythonCode(ast.children[1])
     pythonCode += ", " + generatePythonCode(ast.children[0])

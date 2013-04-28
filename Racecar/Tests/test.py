@@ -697,7 +697,7 @@ elif 1 < 2:
 
     def test_can_move(self):
         test_string = \
-            """if canMove forward 5
+            """if canDrive forward 5 steps
 {
     drive forward 5 steps
 }

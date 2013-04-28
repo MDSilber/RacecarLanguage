@@ -15,7 +15,7 @@ reserved = {
     'turn': 'TURN',
     'left': 'LEFT',
     'right': 'RIGHT',
-    'canMove': 'CAN_MOVE',
+    'canDrive': 'CAN_DRIVE',
     'getCarPosition': 'GET_CAR_POSITION',
     'define': 'DEFINE',
     'using': 'USING',
@@ -241,8 +241,8 @@ def p_statement_contents_function(p):
     p[0] = p[1]
 
 
-def p_expression_can_move(p):
-    '''expression : can_move_expression''' 
+def p_expression_can_drive(p):
+    '''expression : can_drive_expression''' 
     p[0] = p[1]
 
 
@@ -251,9 +251,9 @@ def p_expression_comparison(p):
     p[0] = p[1]
 
 
-def p_can_move(p):
-    '''can_move_expression : CAN_MOVE drive_direction primary_expression'''
-    p[0] = makeParseTreeNode([p[0], p[2], p[3]], "can_move_expression")
+def p_can_drive(p):
+    '''can_drive_expression : CAN_DRIVE drive_direction primary_expression opt_steps'''
+    p[0] = makeParseTreeNode([p[0], p[2], p[3]], "can_drive_expression")
 
 
 def p_comparison_with_operator(p):
