@@ -734,13 +734,13 @@ class SymbolTableTests(unittest.TestCase):
         that has a type and the same name and scope, but not one with a
         different scope.'''
 
-        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
-        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", [0], "function1", [])
 
         self.assertFalse(entry1.validateWithTableEntry(entry2))
         self.assertFalse(entry2.validateWithTableEntry(entry1))
 
-        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
+        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global", )
 
         self.assertTrue(entry3.validateWithTableEntry(entry1))
         self.assertFalse(entry3.validateWithTableEntry(entry2))
