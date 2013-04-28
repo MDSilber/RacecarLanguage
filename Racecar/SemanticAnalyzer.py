@@ -282,7 +282,7 @@ def binaryOperatorAnalyzer(ast):
    elif result1 == result3:
       return result1
    
-   elif ast.children[1].type == "CONCAT"
+   elif ast.children[1].type == "CONCAT":
       return "word"
 
    else:
