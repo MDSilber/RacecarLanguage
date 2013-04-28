@@ -790,7 +790,7 @@ class SemanticAnalyzerTests(unittest.TestCase):
 """
         correct_translation = \
             """"""
-        result = .getPythonCode(test_string)
+        result = Parser.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
 if __name__ == '__main__':
