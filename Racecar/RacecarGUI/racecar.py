@@ -30,6 +30,9 @@ obstacles = []
 #list of walls on the course at any given time
 walls = []
 
+#grid ticks
+grid_ticks = []
+
 
 class Obstacle:
     def __init__(self, x, y, width, height):
@@ -838,6 +841,32 @@ origin = (23, 26)
 anti_origin = (
     23+106*canvas_frame.winfo_reqwidth()/110,
     26+56*canvas_frame.winfo_reqwidth()/110)
+
+#horizontal grid lines
+position = 0
+while position < anti_origin[0]:
+    tick = canvas.create_line(
+        position,
+        anti_origin[1]-5,
+        position,
+        anti_origin[1],
+        fill="#000",
+        width=2)
+    grid_ticks.append(tick)
+    position += steps_to_pixels(5)
+
+#vertical grid lines
+position = 0
+while position < anti_origin[1]:
+    tick = canvas.create_line(
+        0,
+        position,
+        5,
+        position,
+        fill="#000",
+        width=2)
+    grid_ticks.append(tick)
+    position += steps_to_pixels(5)
 
 print anti_origin
 #Run the GUI
