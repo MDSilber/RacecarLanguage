@@ -103,7 +103,7 @@ def statementsAnalyzer(ast):
 
 def driveCommandAnalyzer(ast):
    # for "plus_expression"
-   analyze(ast.children[2])
+   analyze(ast.children[1])
 
 
 def turnCommandAnalyzer(ast):
