@@ -2,6 +2,7 @@ import random
 import unittest
 import Racecar.Compiler as Compiler
 import Racecar.SymbolTable as SymbolTable
+import Racecar.SemanticAnalyzer as SemanticAnalyzer
 
 
 class TranslatorTests(unittest.TestCase):
@@ -694,6 +695,16 @@ elif 1 < 2:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
+    def test_get_car_position(self):
+        test_string = \
+            """can_move
+"""
+        correct_translation = \
+            """print_to_console(getCurrentPosition())
+"""
+        result = Compiler.getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
+
     def test_template(self):
         test_string = \
             """
@@ -770,6 +781,17 @@ class SymbolTableTests(unittest.TestCase):
 
         self.assertTrue(entry3.validateWithTableEntry(entry4))
         self.assertRaises(Exception, table.getEntry, entry2)
+
+
+class SemanticAnalyzerTests(unittest.TestCase):
+    def test_template(self):
+        test_string = \
+            """
+"""
+        correct_translation = \
+            """"""
+        result = .getPythonCode(test_string)
+        self.assertEqual(result[0], correct_translation)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TranslatorTests)
