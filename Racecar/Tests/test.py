@@ -706,7 +706,6 @@ elif 1 < 2:
 
 #still to test:
 #
-#test getLocation and compare it to others
 #test can move back and forward
 
 
