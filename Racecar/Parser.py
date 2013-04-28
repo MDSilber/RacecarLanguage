@@ -20,7 +20,6 @@ reserved = {
     'define': 'DEFINE',
     'using': 'USING',
     'and': 'AND',
-    'or': 'OR',
     'print': 'PRINT',
     'elseIf': 'ELSE_IF',
     'if': 'IF',
@@ -242,39 +241,20 @@ def p_statement_contents_function(p):
     p[0] = p[1]
 
 
-def p_expression(p):
-    '''expression : expression OR and_expression'''
-    p[0] = makeParseTreeNode(p, "expression")
-
-
-def p_expression_to_and(p):
-    '''expression : and_expression'''
+def p_expression_can_move(p):
+    '''expression : can_move_expression''' 
     p[0] = p[1]
 
 
-def p_and_expression(p):
-    '''and_expression : and_expression AND not_expression'''
-    p[0] = makeParseTreeNode(p, "and_expression")
-
-
-def p_and_expr_to_not(p):
-    '''and_expression : not_expression'''
+def p_expression_comparison(p):
+    '''expression : comparison'''
     p[0] = p[1]
 
 
-def p_not_expression_not(p):
-    '''not_expression : NOT not_expression'''
-    p[0] = makeParseTreeNode(p, "not_expression")
+def p_can_move(p):
+    '''can_move_expression : CAN_MOVE drive_direction primary_expression'''
+    p[0] = makeParseTreeNode([p[0], p[2], p[3]], "can_move_expression")
 
-
-def p_not_expression_can_move(p):
-    '''not_expression : CAN_MOVE drive_direction primary_expression'''
-    p[0] = makeParseTreeNode(p, "not_expression")
-
-
-def p_not_expression_comparison(p):
-    '''not_expression : comparison'''
-    p[0] = p[1]
 
 def p_comparison_with_operator(p):
     '''comparison : plus_expression comparison_operator plus_expression'''
