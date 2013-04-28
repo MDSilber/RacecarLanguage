@@ -273,20 +273,21 @@ def rotate_car(direction):
 
 
 #Check for collision with walls of the maze and a finish line
-def collision_with_internal_walls():
+def collision_with_internal_walls(pos_x, pos_y):
     for wall in walls:
         #horizontal wall
         if wall.is_horizontal:
             #in rance of wall
-            if wall.start <= car.position_x <= wall.end:
+            if wall.start <= pos_x <= wall.end:
                 #Current direction of the car
                 direction = car.car_direction.get_direction()
                 #distance from wall
-                dist_to_wall = math.fabs(car.position_y-wall.constant_coord)
+                dist_to_wall = math.fabs(pos_y-wall.constant_coord)
                 #Car is horizontally oriented
                 if direction == (1, 0) or direction == (-1, 0):
                     if dist_to_wall < car.radius/2:
                         return True
+                    #Check for collision with car
                 #Car is not horizontally oriented
                 else:
                     if dist_to_wall < car.radius:
@@ -294,10 +295,10 @@ def collision_with_internal_walls():
         #vertical wall
         else:
             #in range of wall
-            if wall.start <= car.position_y <= wall.end:
+            if wall.start <= pos_y <= wall.end:
                 direction = car.car_direction.get_direction()
                 #distance from wall
-                dist_to_wall = math.fabs(car.position_x-wall.constant_coord)
+                dist_to_wall = math.fabs(pos_x-wall.constant_coord)
                 #Car is vertically oriented
                 if direction == (0, 1) or direction == (0, -1):
                     if dist_to_wall < car.radius/2:
@@ -312,7 +313,7 @@ def collision_with_internal_walls():
 
 def is_collision(curr_x, curr_y):
     #Check for collisions with obstacles and walls
-    #pdb.set_trace()
+    
     #Check obstacles
     for obstacle in obstacles:
         distance = distance_between_points(
@@ -321,11 +322,9 @@ def is_collision(curr_x, curr_y):
             obstacle.center[0],
             obstacle.center[1])
         if distance < (car.radius + obstacle.radius):
-            #pdb.set_trace()
             return True
     #check internal walls for collision
-    if collision_with_internal_walls():
-        #pdb.set_trace()
+    if collision_with_internal_walls(curr_x, curr_y):
         return True
     #Check boundary walls
     elif not (origin[0] <= curr_x <= anti_origin[0]):
