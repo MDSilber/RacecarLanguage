@@ -210,7 +210,7 @@ def defineCommandAnalyzer(ast):
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
    function = id
    if firstPass:
-      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(children[1])))
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(ast.children[1])))
       scopeList.pop()
       return
    # for "statement_block"
