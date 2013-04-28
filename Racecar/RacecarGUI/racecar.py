@@ -407,6 +407,20 @@ def course_two():
 def course_three():
     clear_course()
 
+    max_x = canvas.winfo_reqwidth()
+    max_y = canvas.winfo_reqheight()
+
+    while len(obstacles) < 30:
+        pos_x = random.randrange(0, max_x, 1)
+        pos_y = random.randrange(0, max_y, 1)
+        radius = random.randrange(10, 50, 1)
+
+        if is_collision(pos_x, pos_y):
+            continue
+        else:
+            obstacle = Obstacle(pos_x, pos_y, radius, radius)
+            obstacles.append(obstacle)
+
 
 def course_four():
     clear_course()
