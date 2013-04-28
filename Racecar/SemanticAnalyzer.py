@@ -242,7 +242,7 @@ def statementBlockAnalyzer(ast):
    global count
    count += 1
    scopeList.append(count)
-   analyze(ast.children[1])
+   analyze(ast.children[0])
    scopeList.pop()
 
 
@@ -279,33 +279,30 @@ def binaryOperatorAnalyzer(ast):
    if result1 == "ERROR" or result3 == "ERROR":
       return "ERROR"
    
-   if result1 == result3:
+   elif result1 == result3:
       return result1
-      
+   
+   elif ast.children[1].type == "CONCAT"
+      return "word"
+
    else:
       return "ERROR" 
 
 
 def plusExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "number":
-      return valid
-   else:
+   if result != "number":
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 
 def timesExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "number":
-      return valid
-   else:
+   if result != "number":
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 def wordExpressionAnalyzer(ast):
    result = binaryOperatorAnalyzer(ast)
-   if result == "word":
-      return valid
-   else:
+   if result != "word":
       errorList.append("Error in an expression: use only words or only numbers; cannot mix both")
 
 if __name__ == "__main__":
