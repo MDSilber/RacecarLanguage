@@ -107,6 +107,11 @@ class CarDirection:
     def turn_left(self):
         self.direction = (self.direction + 1) % len(CarDirection.DIRECTIONS)
 
+    def opposite_direction(self):
+        return DIRECTIONS[
+            (self.direction + len(CarDirection.DIRECTIONS)/2) %
+            len(CarDirection.DIRECTIONS)]
+
 
 class Car:
     def __init__(self):
@@ -146,24 +151,27 @@ def getCurrentPosition():
 
 
 #Checks if there is going to be a collision on the upcoming path
-def can_move(num_steps):
+#drive_direction has to be CarDirection.FORWARDS or CarDirection.BACKWARDS
+def can_move(num_steps, drive_direction):
     global car
     curr_x = int(car.position_x)
     curr_y = int(car.position_y)
     direction = car.car_direction.get_direction()
     path = []
 
+    #If the direction is backwards, just reverse the direction
+    if drive_direction == CarDirection.BACKWARDS:
+        direction = car.car_direction.opposite_direction()
+
     #Create path coordinates
     for i in range(0, steps_to_pixels(num_steps)):
-        pos = get_position(
-            curr_x + i * direction[0],
-            curr_y + i * direction[1])
+        pos = (curr_x + i * direction[0], curr_y + i * direction[1])
         path.append(pos)
 
     #Check each point in the path to see if it collides with any of the
     #obstacles
     for pos in path:
-        if pos in obstacles:
+        if is_collision(pos[0], pos[1]):
             return False
 
     return True
@@ -353,6 +361,8 @@ finish_line = None
 
 def course_two():
     global finish_line
+
+    clear_console()
 
     message = "Try to navigate through the maze and cross the finish line!"
     print_to_console(message)
