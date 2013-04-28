@@ -268,20 +268,13 @@ def p_not_expression_not(p):
 
 
 def p_not_expression_can_move(p):
-    '''not_expression : CAN_MOVE can_move_direction'''
+    '''not_expression : CAN_MOVE drive_direction primary_expression'''
     p[0] = makeParseTreeNode(p, "not_expression")
 
 
 def p_not_expression_comparison(p):
     '''not_expression : comparison'''
     p[0] = p[1]
-
-
-def p_can_move_direction(p):
-    '''can_move_direction : drive_direction
-       | turn_direction'''
-    p[0] = p[1]
-
 
 def p_comparison_with_operator(p):
     '''comparison : plus_expression comparison_operator plus_expression'''
@@ -403,7 +396,7 @@ def p_turn_direction(p):
 def p_define_command(p):
     """define_command : DEFINE ID opt_param_list \
     newline_opt_comment statement_block"""
-    p[0] = makeParseTreeNode(p, "define_command")
+    p[0] = makeParseTreeNode([p[0], p[2], p[3], p[5]], "define_command")
 
 
 def p_opt_param_list(p):

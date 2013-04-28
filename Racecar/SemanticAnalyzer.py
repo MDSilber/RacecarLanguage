@@ -1,3 +1,5 @@
+# TODO type checking for built-in funcitons
+# TODO check bool operator for control flow statements
 
 # Scoping done using a universal count, which is a unique number for every single scope
 
@@ -208,11 +210,11 @@ def defineCommandAnalyzer(ast):
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
    function = id
    if firstPass:
-      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(children[3])))
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(children[1])))
       scopeList.pop()
       return
    # for "statement_block"
-   analyze(ast.children[4])
+   analyze(ast.children[2])
    function = None
 
 
@@ -223,7 +225,7 @@ def optParamListAnalyzer(ast):
    parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
        return analyze(ast.children[5], parameterTypeList)
-   else
+   else:
        return parameterTypeList
 
 
@@ -232,7 +234,7 @@ def optExtraParamsAnalyzer(ast, parameterTypeList):
    parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
        return analyze(ast.children[5], parameterTypeList)
-   else
+   else:
        return parameterTypeList
 
 
@@ -247,9 +249,9 @@ def statementBlockAnalyzer(ast):
 def functionCommandAnalyzer(ast):
   # check existence of function ID
   idEntry = table.getEntry(SymbolTableEntry(ast.children[0].value, "function", list(scopeList), function, None))
-         if idEntry.type == "function"
+  if idEntry.type == "function":
             parameterTypeList = idEntry.functionParameterTypes
-         else
+  else:
             errorList.append("Error in attempt to use function: function does not exist")
             return
   optParametersAnalyzer(ast.children[1], parameterTypeList)
@@ -257,16 +259,16 @@ def functionCommandAnalyzer(ast):
 
 # this is for user-defined function parameters
 def optParametersAnalyzer(ast, parameterTypeList):
-  if len(ast.children) == 1
-      if len(parameterTypeList) != 1 or ast.children[0].type != parameterTypeList[0]
+  if len(ast.children) == 1:
+      if len(parameterTypeList) != 1 or ast.children[0].type != parameterTypeList[0]:
           # Type checking error
           errorList.append("Error in attempt to use function: wrong type of parameter used")
-  else
+  else:
       # More parameters left
-      if ast.children[1].type != parameterTypeList.pop()
+      if ast.children[1].type != parameterTypeList.pop():
           # Type checking error
           errorList.append("Error in attempt to use function: wrong type of parameter used")
-      else
+      else:
           optParametersAnalyzer(ast.children[0], parameterTypeList)
 
 

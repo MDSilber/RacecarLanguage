@@ -1,0 +1,20 @@
+SCOPES
+
+scope of a declared variable
+	should only be able to be accessed in blocks that are nested in its block
+
+scope of a function
+	should be able to be accessed everywhere
+	should only be able to be declared non-nested, i.e. from the initial program block
+
+TYPES
+
+assignment
+	3 type checking - ID and word, ID and number, and ID and ID
+
+		for word and number:
+			1 expressions have to evaluate to one correct type, i.e. 
+
+comparison
+	each control-flow command needs to accept only a boolean comparison - (NOT YET IMPLEMENTED)
+
