@@ -406,7 +406,7 @@ def course_two():
 
 def course_three():
     clear_course()
-    
+
     max_x = canvas.winfo_reqwidth()
     max_y = canvas.winfo_reqheight()
 
