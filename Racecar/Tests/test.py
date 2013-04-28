@@ -696,12 +696,16 @@ elif 1 < 2:
         result = Compiler.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
-    def test_get_car_position(self):
+    def test_can_move(self):
         test_string = \
-            """can_move
+            """if canMove forward 5
+{
+    drive forward 5 steps
+}
 """
         correct_translation = \
-            """print_to_console(getCurrentPosition())
+            """if can_move(5, CarDirection.FORWARDS):
+    translate_car(5, CarDirection.FORWARDS)
 """
         result = Compiler.getPythonCode(test_string)
         #self.assertEqual(result[0], correct_translation)
@@ -800,6 +804,7 @@ class SemanticAnalyzerTests(unittest.TestCase):
         correct_translation = \
             """"""
         result = Compiler.getPythonCode(test_string)
+        result = Parser.getPythonCode(test_string)
         self.assertEqual(result[0], correct_translation)
 
 

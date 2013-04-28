@@ -22,6 +22,8 @@ current_program = None
 #Variable that serves as an interrupt to stop the program
 should_stop = False
 
+collision_occurred = False
+
 #List of obstacles on the course at any given time
 obstacles = []
 
@@ -214,6 +216,7 @@ def translate_car(steps, direction):
             #Stop execution of program
             #TODO Deal with delay on collision
             should_stop = True
+            collision_occurred = True
             return
         else:
             canvas.move(
@@ -417,6 +420,13 @@ def course_three():
 
         if is_collision(pos_x, pos_y):
             continue
+        #Check for collision with car
+        elif distance_between_points(
+            pos_x, 
+            pos_y, 
+            car.position_x, 
+            car.position_y) < (car.radius + radius):
+            continue
         else:
             obstacle = Obstacle(pos_x, pos_y, radius, radius)
             obstacles.append(obstacle)
@@ -540,6 +550,7 @@ def generate_program(code):
     global should_stop
     #Set the interrupt variable whenever a program is run
     should_stop = False
+    collision_occurred = False
     if len(code) > 1:
         #print code[:-1]
         #demo(code)
@@ -558,14 +569,16 @@ def generate_program(code):
             #If collision occurred
             if should_stop:
                 should_stop = False
-                if tkMessageBox.showwarning("Oops!", "You crashed! Try again"):
-                    reset_car_position()
-
-            #Print message to console saying program is finished executing
-            print_to_console("Done running program")
-            console.tag_add("End", "end -2 l", END)
-            console.tag_config("End", foreground="Green")
-            print "OUTPUT: " + console.index("end -1 l")
+                if collision_occurred:
+                    if tkMessageBox.showwarning(
+                        "Oops!", "You crashed! Try again"):
+                        reset_car_position()
+            else:
+                #Print message to console saying program is finished executing
+                print_to_console("Done running program")
+                console.tag_add("End", "end -2 l", END)
+                console.tag_config("End", foreground="Green")
+                print "OUTPUT: " + console.index("end -1 l")
         else:
             #Print message to console saying program has errors
             print_to_console(
