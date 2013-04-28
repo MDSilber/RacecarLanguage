@@ -316,7 +316,7 @@ def collision_with_internal_walls(pos_x, pos_y):
 
 def is_collision(curr_x, curr_y):
     #Check for collisions with obstacles and walls
-    
+
     #Check obstacles
     for obstacle in obstacles:
         distance = distance_between_points(
@@ -424,10 +424,10 @@ def course_three():
             continue
         #Check for collision with car
         elif distance_between_points(
-            pos_x, 
-            pos_y, 
-            car.position_x, 
-            car.position_y) < (car.radius + radius):
+                pos_x,
+                pos_y,
+                car.position_x,
+                car.position_y) < (car.radius + radius):
             continue
         else:
             obstacle = Obstacle(pos_x, pos_y, radius, radius)
@@ -573,7 +573,7 @@ def generate_program(code):
                 should_stop = False
                 if collision_occurred:
                     if tkMessageBox.showwarning(
-                        "Oops!", "You crashed! Try again"):
+                            "Oops!", "You crashed! Try again"):
                         reset_car_position()
             else:
                 #Print message to console saying program is finished executing
