@@ -667,6 +667,7 @@ root.title('Racecar')
 window_width = root.winfo_screenwidth() - 100
 window_height = 9*window_width/16
 root.geometry("%dx%d" % (window_width, window_height))
+root.resizable(width=FALSE, height=FALSE)
 
 menu_bar = Menu(root)
 
@@ -836,20 +837,22 @@ console.pack(expand=1, fill=BOTH)
 code_scrollbar.config(command=code.yview)
 console_scrollbar.config(command=console.yview)
 
+root.update_idletasks()
+
 #Origin and antiorigin are limits on the canvas where the car moves
 origin = (23, 26)
 anti_origin = (
-    23+106*canvas_frame.winfo_reqwidth()/110,
-    26+56*canvas_frame.winfo_reqwidth()/110)
+    23+106*canvas_frame.winfo_width()/110,
+    26+56*canvas_frame.winfo_width()/110)
 
 #horizontal grid lines
 position = 0
 while position < anti_origin[0]:
     tick = canvas.create_line(
         position,
-        anti_origin[1]-5,
+        anti_origin[1]-5+35,
         position,
-        anti_origin[1],
+        anti_origin[1]+35,
         fill="#000",
         width=2)
     grid_ticks.append(tick)
