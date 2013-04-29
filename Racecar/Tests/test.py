@@ -14,7 +14,9 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = \
             """"""
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
 
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_drive_forwards(self):
@@ -33,6 +35,17 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = \
             """translate_car(10, CarDirection.FORWARDS)
 """
+
+        ast1 = Parser.parseString(test_string1)
+        ast2 = Parser.parseString(test_string1)
+        ast3 = Parser.parseString(test_string1)
+        ast4 = Parser.parseString(test_string1)
+
+        self.assertEqual(len(ast1.errors), 0)
+        self.assertEqual(len(ast2.errors), 0)
+        self.assertEqual(len(ast3.errors), 0)
+        self.assertEqual(len(ast4.errors), 0)
+
         result1 = Compiler.getPythonCode(test_string1)
         result2 = Compiler.getPythonCode(test_string2)
         result3 = Compiler.getPythonCode(test_string3)
@@ -59,6 +72,17 @@ class TranslatorTests(unittest.TestCase):
         correct_translation = \
             """translate_car(10, CarDirection.BACKWARDS)
 """
+
+        ast1 = Parser.parseString(test_string1)
+        ast2 = Parser.parseString(test_string1)
+        ast3 = Parser.parseString(test_string1)
+        ast4 = Parser.parseString(test_string1)
+
+        self.assertEqual(len(ast1.errors), 0)
+        self.assertEqual(len(ast2.errors), 0)
+        self.assertEqual(len(ast3.errors), 0)
+        self.assertEqual(len(ast4.errors), 0)
+
         result1 = Compiler.getPythonCode(test_string1)
         result2 = Compiler.getPythonCode(test_string2)
         result3 = Compiler.getPythonCode(test_string3)
@@ -77,7 +101,9 @@ class TranslatorTests(unittest.TestCase):
             """rotate_car(WheelDirection.LEFT)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
 
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_turn_right(self):
@@ -88,7 +114,9 @@ class TranslatorTests(unittest.TestCase):
             """rotate_car(WheelDirection.RIGHT)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
 
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_print(self):
@@ -99,7 +127,9 @@ class TranslatorTests(unittest.TestCase):
             """print_to_console("hello world")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
 
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_declare(self):
@@ -110,7 +140,9 @@ class TranslatorTests(unittest.TestCase):
             """myNum = None
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
 
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_assign(self):
@@ -121,6 +153,9 @@ class TranslatorTests(unittest.TestCase):
             """myVar = otherThing
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_define(self):
@@ -136,6 +171,9 @@ class TranslatorTests(unittest.TestCase):
 """
 
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_function_invocation_no_params(self):
@@ -160,6 +198,9 @@ def moveForwardThenBackward():
 moveForwardThenBackward()
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_function_invocation_with_one_parameter(self):
@@ -170,6 +211,9 @@ moveForwardThenBackward()
             """move5Steps("forwards")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_function_invocation_with_two_parameters(self):
@@ -193,6 +237,9 @@ turnLeftThenDriveStraight 5 10
 turnLeftThenDriveStraight(5, 10)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_plus_expression(self):
@@ -203,6 +250,9 @@ turnLeftThenDriveStraight(5, 10)
             """print_to_console(((2) + (3)))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_times_expression(self):
@@ -213,6 +263,9 @@ turnLeftThenDriveStraight(5, 10)
             """print_to_console(((2) * (3)))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_minus_expression(self):
@@ -223,6 +276,9 @@ turnLeftThenDriveStraight(5, 10)
             """print_to_console(((2) - (3)))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_divide_expression(self):
@@ -233,6 +289,9 @@ turnLeftThenDriveStraight(5, 10)
             """print_to_console(((2) / (3)))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_all_expression(self):
@@ -243,6 +302,9 @@ turnLeftThenDriveStraight(5, 10)
             """print_to_console(((1) + (((2) * (((3) + (4)))))))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_assign_num_change(self):
@@ -257,6 +319,9 @@ num = 10
 num = ((num) * (2))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_assign_word_print(self):
@@ -271,6 +336,9 @@ color = "blue"
 print_to_console(color)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_statement(self):
@@ -285,6 +353,9 @@ print_to_console(color)
     print_to_console("yay")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_else_statement(self):
@@ -305,6 +376,9 @@ else:
     print_to_console("no")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_statement_nested(self):
@@ -325,6 +399,9 @@ else:
         print_to_console("yahoo")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_else_statement_nested(self):
@@ -357,6 +434,9 @@ else:
     print_to_console("no")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_elseif_else_statement(self):
@@ -383,6 +463,9 @@ else:
     print_to_console("done")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_elseif_else_statement_nested(self):
@@ -427,6 +510,9 @@ else:
     print_to_console("done")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_if_if_else_complicated(self):
@@ -501,6 +587,9 @@ else:
     print_to_console("no")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_comment_singleline(self):
@@ -510,6 +599,9 @@ else:
         correct_translation = \
             """"""
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_comment_multiline(self):
@@ -522,6 +614,9 @@ comment
         correct_translation = \
             """"""
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_loop_for(self):
@@ -540,6 +635,9 @@ for x in range(myCounter):
     translate_car(1, CarDirection.FORWARDS)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_loop_for_nested(self):
@@ -568,6 +666,9 @@ for x in range(myCounter):
         translate_car(1, CarDirection.FORWARDS)
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_loop_while(self):
@@ -588,6 +689,9 @@ while myCounter != 5:
     myCounter = ((myCounter) + (1))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_loop_while_nested(self):
@@ -620,6 +724,9 @@ while myCounter != 5:
     myCounter = ((myCounter) + (1))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_boolean_opeartors(self):
@@ -664,6 +771,9 @@ elif 1 < 2:
     print_to_console("yes")
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_string_concatenation(self):
@@ -674,6 +784,9 @@ elif 1 < 2:
             """print_to_console((str("hey") + str(myWord)))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_string_concatenation_complicated(self):
@@ -684,6 +797,9 @@ elif 1 < 2:
             """print_to_console((str((str("hey") + str(myWord))) + str("now")))
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_get_car_position(self):
@@ -694,6 +810,9 @@ elif 1 < 2:
             """print_to_console(getCurrentPosition())
 """
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
     def test_can_move(self):
@@ -708,7 +827,10 @@ elif 1 < 2:
     translate_car(5, CarDirection.FORWARDS)
 """
         result = Compiler.getPythonCode(test_string)
-        #self.assertEqual(result[0], correct_translation)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
+        self.assertEqual(result[0], correct_translation)
 
     def test_template(self):
         test_string = \
@@ -717,12 +839,10 @@ elif 1 < 2:
         correct_translation = \
             """"""
         result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
-
-
-#still to test:
-#
-#test can move back and forward
 
 
 class SymbolTableTests(unittest.TestCase):
@@ -789,23 +909,78 @@ class SymbolTableTests(unittest.TestCase):
 
 
 class SemanticAnalyzerTests(unittest.TestCase):
-    def test_template(self):
-        test_string = "drive forward 5 steps;"
+    def test_basic(self):
+        test_string = \
+            """drive forward 5 steps
+"""
 
         ast = Parser.parseString(test_string)
 
-        # then check for errors
+        # check for parsing errors
         if len(ast.errors) > 0:
             errors = ast.errors
 
         self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        SemanticAnalyzer.analyzeStart(ast)
         
-        correct_translation = \
-            """"""
-        result = Compiler.getPythonCode(test_string)
-        result = Parser.getPythonCode(test_string)
-        self.assertEqual(result[0], correct_translation)
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_one(self):
+        test_string = \
+            """myNum is a number
+set myNum to 10
+define turnLeft using numSteps (number) and numDegrees (number)
+{
+turn wheels left numDegrees
+drive numSteps steps
+turn wheels right numDegrees
+}
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
 
 
 if __name__ == '__main__':
