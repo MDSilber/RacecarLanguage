@@ -789,23 +789,78 @@ class SymbolTableTests(unittest.TestCase):
 
 
 class SemanticAnalyzerTests(unittest.TestCase):
-    def test_template(self):
-        test_string = "drive forward 5 steps;"
+    def test_basic(self):
+        test_string = \
+            """drive forward 5 steps
+"""
 
         ast = Parser.parseString(test_string)
 
-        # then check for errors
+        # check for parsing errors
         if len(ast.errors) > 0:
             errors = ast.errors
 
         self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        SemanticAnalyzer.analyzeStart(ast)
         
-        correct_translation = \
-            """"""
-        result = Compiler.getPythonCode(test_string)
-        result = Parser.getPythonCode(test_string)
-        self.assertEqual(result[0], correct_translation)
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_one(self):
+        test_string = \
+            """myNum is a number
+set myNum to 10
+define turnLeft using numSteps (number) and numDegrees (number)
+{
+turn wheels left numDegrees
+drive numSteps steps
+turn wheels right numDegrees
+}
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+
+        # check for parsing errors
+        if len(ast.errors) > 0:
+            errors = ast.errors
+
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
 
 
 if __name__ == '__main__':
