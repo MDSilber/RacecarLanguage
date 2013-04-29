@@ -63,19 +63,19 @@ t_ignore = ' \t'
 def t_ID(t):
     r'[A-Za-z][A-Za-z0-9]*'
     t.type = reserved.get(t.value, 'ID')
-    t.value = (t.value, t.type)
+    t.value = (t.value, t.type, t.lexer.lineno)
     return t
 
 
 def t_NUMBER(t):
     r'[0-9]+'
-    t.value = (t.value, t.type)
+    t.value = (t.value, t.type, t.lexer.lineno)
     return t
 
 
 def t_WORD(t):
     r'".*?"'
-    t.value = (t.value, t.type)
+    t.value = (t.value, t.type, t.lexer.lineno)
     return t
 
 
@@ -93,9 +93,9 @@ def t_NEWLINE(t):
 def t_error(t):
     print "Illegal character '%s' at line '%s'" % (t.value[0], t.lexer.lineno)
     t.lexer.skip(1)
+    t.value = (t.value, "ERROR", t.lexer.lineno)
     return t
 
-lexer = lex.lex()
 
 
 def p_error(p):
@@ -132,7 +132,8 @@ def makeParseTreeNode(p, value):
     else:
         toReturn.value = value
     if value == "error":
-        toReturn.errors.append(p[1])
+        errorMessage = str(p[1][2]) + ": " + p[1][0]
+        toReturn.errors.append(errorMessage)
 
     return toReturn
 
@@ -144,6 +145,8 @@ def p_statements(p):
 
 def p_error_statement(p):
     '''statement : error NEWLINE'''
+    if not isinstance(p[1], tuple):
+        p[1] = p[1].value
     p[0] = makeParseTreeNode(p, "error")
 
 
@@ -458,14 +461,17 @@ def p_assignment_command(p):
     """assignment_command : SET ID TO expression"""
     p[0] = makeParseTreeNode(p, "assignment_command")
 
-parser = yacc.yacc()
 
 
 def parseString(stringToParse):
     '''Returns the parse tree for the given string'''
+    lexer = lex.lex()
+    parser = yacc.yacc()
     return parser.parse(stringToParse)
 
 if __name__ == "__main__":
+    lexer = lex.lex()
+    parser = yacc.yacc()
     inputString = ''
     while True:
 
