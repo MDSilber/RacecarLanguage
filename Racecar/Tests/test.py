@@ -1084,16 +1084,11 @@ class SemanticAnalyzerTests(unittest.TestCase):
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
-    def test_one(self):
+    def test_print_var(self):
         test_string = \
             """myNum is a number
 set myNum to 10
-define turnLeft using numSteps (number) and numDegrees (number)
-{
-turn wheels left numDegrees
-drive numSteps steps
-turn wheels right numDegrees
-}
+print myNum
 """
 
         ast = Parser.parseString(test_string)
