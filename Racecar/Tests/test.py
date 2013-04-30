@@ -200,7 +200,7 @@ class TranslatorTests(unittest.TestCase):
         test_string = \
             """define moveForwardFive
 {
-    drive forward 5
+    drive forward 5 steps
 }
 """
         correct_translation = \
@@ -1098,6 +1098,144 @@ print myNum
         self.assertEqual(len(saErrors), 0)
 
 
+    def test_print_undeclared_var(self):
+        test_string = \
+            """print myNum
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_set_undeclared_var(self):
+        test_string = \
+            """set myNum to 10
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        #should have an error saying mySecondNum doesnt exist
+        self.assertEqual(len(saErrors), 1)
+
+    def test_general_access_undeclared_var(self):
+        test_string = \
+            """myNum is a number
+set myNum to mySecondNum
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        #should have an error saying mySecondNum doesnt exist
+        self.assertEqual(len(saErrors), 1)
+
+    def test_var_declared_in_if(self):
+        test_string = \
+            """if
+{
+    myNum is a number
+    set myNum to 10
+    print myNum
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_var_declared_in_if(self):
+        test_string = \
+            """if
+{
+    myNum is a number
+    set myNum to 10
+    print myNum
+}
+print myNum
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        #should have an error about printing myNum after the if
+        self.assertEqual(len(saErrors), 1)
+
+    def test_var_declared_in_func(self):
+        test_string = \
+            """define moveForwardFive
+{
+    myNum is a number
+    set myNum to 5
+    drive forward myNum steps
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_var_declared_in_func_accessed_outside(self):
+        test_string = \
+            """define moveForwardFive
+{
+    myNum is a number
+    set myNum to 5
+    drive forward myNum steps
+}
+moveForwardFive
+drive forward myNum steps
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_access_passed_in_var_in_func(self):
+        test_string = \
+            """define moveForwardFive using numSteps (number)
+{
+    drive forward numSteps steps
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_access_passed_in_var_in_if_in_func(self):
+        test_string = \
+            """define moveForwardFive using numSteps (number)
+{
+    drive forward numSteps steps
+    if 1
+    {
+        myCounter is a number
+        set myCounter to 10
+        drive forward 10 steps
+    }
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
     def test_template(self):
         test_string = \
             """
@@ -1108,7 +1246,6 @@ print myNum
         
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
-
 
     def test_template(self):
         test_string = \
