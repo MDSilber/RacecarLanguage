@@ -1019,7 +1019,8 @@ class SymbolTableTests(unittest.TestCase):
         different scope.'''
 
         entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
-        entry2 = SymbolTable.SymbolTableEntry("name1", "word", [0], "function1", [])
+        entry2 = \
+            SymbolTable.SymbolTableEntry("name1", "word", [0], "function1", [])
 
         self.assertFalse(entry1.validateWithTableEntry(entry2))
         self.assertFalse(entry2.validateWithTableEntry(entry1))
@@ -1079,8 +1080,8 @@ class SemanticAnalyzerTests(unittest.TestCase):
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1092,11 +1093,10 @@ print myNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
-
 
     def test_print_undeclared_var(self):
         test_string = \
@@ -1104,8 +1104,8 @@ print myNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
@@ -1115,8 +1115,8 @@ print myNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         #should have an error saying mySecondNum doesnt exist
         self.assertEqual(len(saErrors), 1)
@@ -1128,8 +1128,8 @@ set myNum to mySecondNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         #should have an error saying mySecondNum doesnt exist
         self.assertEqual(len(saErrors), 1)
@@ -1145,8 +1145,8 @@ set myNum to mySecondNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1162,8 +1162,7 @@ print myNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         #should have an error about printing myNum after the if
         self.assertEqual(len(saErrors), 1)
@@ -1179,8 +1178,7 @@ print myNum
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1197,8 +1195,8 @@ drive forward myNum steps
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
@@ -1211,8 +1209,8 @@ drive forward myNum steps
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1231,8 +1229,8 @@ drive forward myNum steps
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1242,8 +1240,8 @@ drive forward myNum steps
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
@@ -1253,8 +1251,8 @@ drive forward myNum steps
 """
 
         ast = Parser.parseString(test_string)
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
