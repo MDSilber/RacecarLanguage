@@ -16,6 +16,9 @@ class TranslatorTests(unittest.TestCase):
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -50,6 +53,16 @@ class TranslatorTests(unittest.TestCase):
         result2 = Compiler.getPythonCode(test_string2)
         result3 = Compiler.getPythonCode(test_string3)
         result4 = Compiler.getPythonCode(test_string4)
+
+        saErrors1 = SemanticAnalyzer.analyzeStart(ast1)
+        saErrors2 = SemanticAnalyzer.analyzeStart(ast2)
+        saErrors3 = SemanticAnalyzer.analyzeStart(ast3)
+        saErrors4 = SemanticAnalyzer.analyzeStart(ast4)
+
+        self.assertEqual(len(saErrors1), 0)
+        self.assertEqual(len(saErrors2), 0)
+        self.assertEqual(len(saErrors3), 0)
+        self.assertEqual(len(saErrors4), 0)
 
         self.assertEqual(result1[0], correct_translation)
         self.assertEqual(result2[0], correct_translation)
@@ -88,6 +101,16 @@ class TranslatorTests(unittest.TestCase):
         result3 = Compiler.getPythonCode(test_string3)
         result4 = Compiler.getPythonCode(test_string4)
 
+        saErrors1 = SemanticAnalyzer.analyzeStart(ast1)
+        saErrors2 = SemanticAnalyzer.analyzeStart(ast2)
+        saErrors3 = SemanticAnalyzer.analyzeStart(ast3)
+        saErrors4 = SemanticAnalyzer.analyzeStart(ast4)
+
+        self.assertEqual(len(saErrors1), 0)
+        self.assertEqual(len(saErrors2), 0)
+        self.assertEqual(len(saErrors3), 0)
+        self.assertEqual(len(saErrors4), 0)
+
         self.assertEqual(result1[0], correct_translation)
         self.assertEqual(result2[0], correct_translation)
         self.assertEqual(result3[0], correct_translation)
@@ -103,6 +126,9 @@ class TranslatorTests(unittest.TestCase):
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -115,6 +141,9 @@ class TranslatorTests(unittest.TestCase):
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -129,6 +158,9 @@ class TranslatorTests(unittest.TestCase):
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -142,6 +174,9 @@ class TranslatorTests(unittest.TestCase):
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -154,6 +189,9 @@ class TranslatorTests(unittest.TestCase):
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 2)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -172,6 +210,9 @@ class TranslatorTests(unittest.TestCase):
 
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -200,6 +241,9 @@ moveForwardThenBackward()
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -212,6 +256,9 @@ moveForwardThenBackward()
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertNotEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -239,6 +286,9 @@ turnLeftThenDriveStraight(5, 10)
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -251,6 +301,9 @@ turnLeftThenDriveStraight(5, 10)
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -265,6 +318,9 @@ turnLeftThenDriveStraight(5, 10)
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -277,6 +333,9 @@ turnLeftThenDriveStraight(5, 10)
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -291,6 +350,9 @@ turnLeftThenDriveStraight(5, 10)
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -303,6 +365,9 @@ turnLeftThenDriveStraight(5, 10)
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -321,6 +386,33 @@ num = ((num) * (2))
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+        self.assertEqual(len(ast.errors), 0)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_assign_easy_num_change(self):
+        test_string = \
+            """num is a number
+set num to 10
+num2 is a number
+set num2 to 20
+set num to num2
+"""
+        correct_translation = \
+            """num = None
+num = 10
+num2 = None
+num2 = 20
+num = num2
+"""
+        result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -337,6 +429,36 @@ print_to_console(color)
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+        self.assertEqual(len(ast.errors), 0)
+        self.assertEqual(result[0], correct_translation)
+
+    def test_assign_word_print_complicated(self):
+        test_string = \
+            """color is a word
+set color to "blue"
+print color
+c2 is a word
+set c2 to "green"
+set color to c2
+"""
+        correct_translation = \
+            """color = None
+color = "blue"
+print_to_console(color)
+c2 = None
+c2 = "green"
+color = c2
+"""
+        result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        print saErrors
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -915,11 +1037,6 @@ class SemanticAnalyzerTests(unittest.TestCase):
 """
 
         ast = Parser.parseString(test_string)
-
-        # check for parsing errors
-        if len(ast.errors) > 0:
-            errors = ast.errors
-
         self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
         
         saErrors = SemanticAnalyzer.analyzeStart(ast)
@@ -938,27 +1055,6 @@ turn wheels right numDegrees
 """
 
         ast = Parser.parseString(test_string)
-
-        # check for parsing errors
-        if len(ast.errors) > 0:
-            errors = ast.errors
-
-        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
-        
-        saErrors = SemanticAnalyzer.analyzeStart(ast)
-        self.assertEqual(len(saErrors), 0)
-
-    def test_template(self):
-        test_string = \
-            """
-"""
-
-        ast = Parser.parseString(test_string)
-
-        # check for parsing errors
-        if len(ast.errors) > 0:
-            errors = ast.errors
-
         self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
         
         saErrors = SemanticAnalyzer.analyzeStart(ast)
@@ -971,11 +1067,18 @@ turn wheels right numDegrees
 """
 
         ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
+        
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
-        # check for parsing errors
-        if len(ast.errors) > 0:
-            errors = ast.errors
 
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
         self.assertEqual(len(ast.errors), 0, "SA test statement failed at parser.")
         
         saErrors = SemanticAnalyzer.analyzeStart(ast)
