@@ -457,7 +457,6 @@ color = c2
         ast = Parser.parseString(test_string)
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
-        print saErrors
         self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
@@ -476,6 +475,9 @@ color = c2
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -500,6 +502,9 @@ else:
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -522,6 +527,9 @@ else:
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -558,6 +566,9 @@ else:
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -586,6 +597,9 @@ else:
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -633,6 +647,9 @@ else:
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -711,6 +728,9 @@ else:
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -722,6 +742,9 @@ else:
             """"""
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -738,6 +761,9 @@ comment
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -748,6 +774,7 @@ set myCounter to 10
 repeat myCounter times
 {
     drive forward 1 step
+    print myCounter
 }
 """
         correct_translation = \
@@ -755,9 +782,13 @@ repeat myCounter times
 myCounter = 10
 for x in range(myCounter):
     translate_car(1, CarDirection.FORWARDS)
+    print_to_console(myCounter)
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -790,6 +821,9 @@ for x in range(myCounter):
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
@@ -813,8 +847,13 @@ while myCounter != 5:
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
+
+#***********************************stopped SA tests here
 
     def test_loop_while_nested(self):
         test_string = \
@@ -847,6 +886,9 @@ while myCounter != 5:
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
