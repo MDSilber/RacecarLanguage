@@ -1,0 +1,14 @@
+memorize first + last 2 minutes
+kids = 8-10 + columbia
+demo at beginning
+hands?
+AST for demoed program integrated into block diagram (click on "AST", "translated program", "source", etc.)
+
+lessons learned
+project plan
+        how often did we meet
+        how did we communicate
+problems we had
+
+explain PEP8: automatic enforcement of style: whitespace, line length, etc.
+mention end-to-end systems test: input = Racecar code, output = python
