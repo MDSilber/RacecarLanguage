@@ -21,7 +21,6 @@ current_program = None
 
 #Variable that serves as an interrupt to stop the program
 should_stop = False
-
 collision_occurred = False
 
 #List of obstacles on the course at any given time
@@ -197,6 +196,7 @@ def distance_between_points(x_1, y_1, x_2, y_2):
 def translate_car(steps, direction):
     global car
     global should_stop
+    global collision_occurred
 
     steps = int(steps)
     direction = int(direction)
@@ -550,6 +550,8 @@ def stop_program():
 #Runs code
 def generate_program(code):
     global should_stop
+    global collision_occurred
+
     #Set the interrupt variable whenever a program is run
     should_stop = False
     collision_occurred = False
@@ -570,7 +572,6 @@ def generate_program(code):
 
             #If collision occurred
             if should_stop:
-                should_stop = False
                 if collision_occurred:
                     if tkMessageBox.showwarning(
                             "Oops!", "You crashed! Try again"):
