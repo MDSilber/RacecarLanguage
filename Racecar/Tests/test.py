@@ -1564,6 +1564,18 @@ moveForwardFiveAndTurn "left" 10
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
+    def test_zvar_uninitialized(self):
+        test_string = \
+            """myNum is a number
+drive forward myNum steps
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
     def test_course2(self):
         test_string = \
             """define fullTurn using direction (word)
