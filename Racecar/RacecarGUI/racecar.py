@@ -436,7 +436,18 @@ def course_three():
 
 def course_four():
     clear_course()
+    obstacle_coord_x = 123
+    obstacle_coord_y = 60
+    while obstacle_coord_y < anti_origin[1]:
+        while obstacle_coord_x < anti_origin[0]:
+            obstacle = Obstacle(obstacle_coord_x, obstacle_coord_y, 30, 30)
+            obstacles.append(obstacle)
+            obstacle_coord_x = obstacle_coord_x + 150
+        obstacle_coord_y = obstacle_coord_y + 80
+        obstacle_coord_x = 123
 
+    for obstacle in obstacles:
+        print obstacle.center
 
 def course_five():
     clear_course()
