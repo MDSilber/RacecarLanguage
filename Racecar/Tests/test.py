@@ -1304,6 +1304,48 @@ print numSteps
         #should fail since numSteps is only inside the function
         self.assertEqual(len(saErrors), 1)
 
+    def test_assignments_var_to_var(self):
+        test_string = \
+            """myNum is a number
+set myNum to 10
+myWord is a word
+set myWord to "hello"
+set myNum to myWord
+set myWord to myNum
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        print saErrors
+        self.assertEqual(len(saErrors), 2)
+
+
+    def test_assignments_var_number(self):
+        test_string = \
+            """myWord is a word
+set myWord to 10
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_assignments_var_str_literal(self):
+        test_string = \
+            """myNum is a number
+set myNum to "hello"
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
     def test_template(self):
         test_string = \
             """
@@ -1314,7 +1356,6 @@ print numSteps
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
-
 
 
 if __name__ == '__main__':
