@@ -1,10 +1,13 @@
-class SymbolLookupTable:
+list1 = []
+
+
+class SymbolLookupTable(object):
     '''A class implementing a Symbol Lookup Table that records each
     identifier's name, type, and scope.'''
 
     def __init__(self):
         '''Create a new empty table with the given name'''
-        self.table = {}
+        self.list = []
 
     def addEntry(self, entry):
         '''Add the given entry to the table.  Throws an error if
@@ -14,15 +17,16 @@ class SymbolLookupTable:
         # throws error if a function is attempted to be declared
         # outside of the global block
         if entry.type == "function" and entry.scopeList[-1] != 0:
+            print "????"
             return
         # this will call an error in the Semantic Analyzer
 
         if self.verifyEntry(entry):
-            raise Exception()
+            return
 
         # if not, add the entry to the table
         print entry.id + "added"
-        self.table[entry.id] = entry
+        self.list.append(entry)
 
     def verifyEntry(self, entry):
         '''Verify that a given entry is in the table with the appropriate
@@ -32,8 +36,8 @@ class SymbolLookupTable:
         Returns true if entry exists in the table, regardless of type,
         meaning that addEntry should not work'''
 
-        for x, existingEntry in self.table.iteritems():
-            if entry.validateWithTableEntry(existingEntry):
+        for x in self.list:
+            if entry.validateWithTableEntry(x):
                 return True
 
         # if none validate
@@ -43,9 +47,19 @@ class SymbolLookupTable:
         '''Returns the entry corresponding to the specified id and scope.
         This is really only useful to find out the type of a particular id.'''
 
+        for x in self.list:
+            if entryQuery.validateWithTableEntry(x):
+                print x.id + " was returned"
+                return x
+
+        return None
+
+        matches = []
+
         matches = [y for (x, y) in self.table.iteritems()
                    if self.verifyEntry(entryQuery)]
-        if len(matches) == 1:
+        if len(matches) >= 1:
+            print "returning for get entry - " + matches[0].id
             return matches[0]
         else:
             return None
@@ -72,7 +86,10 @@ class SymbolTableEntry:
         self.type = inType
         self.scopeList = inScopeList
         self.function = inFunction
-        self.functionParameterTypes = inFunctionPTypes
+        if inFunctionPTypes != None:
+            self.functionParameterTypes = list(inFunctionPTypes)
+        else:
+            self.functionParameterTypes = None
 
     def validateWithTableEntry(self, tableEntry):
         print "self " + self.id
@@ -94,6 +111,8 @@ class SymbolTableEntry:
         print selfScopeAcceptable
         print functionScopeAcceptable
         if idEq and selfScopeAcceptable and functionScopeAcceptable:
+            print "returning true"
             return True
         else:
+            print "returning false"
             return False

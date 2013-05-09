@@ -104,7 +104,8 @@ def statementsAnalyzer(ast):
 
 def driveCommandAnalyzer(ast):
    # for "plus_expression"
-   analyze(ast.children[1])
+   if analyze(ast.children[1]) != "number":
+      errorList.append("Error in drive command: need to use valid variable or number")
 
 
 def turnCommandAnalyzer(ast):
@@ -194,6 +195,7 @@ def assignmentCommandAnalyzer(ast):
       idNoneBool = True
       # ID does not exist or exists but the scoping is wrong
       errorList.append("Error1 in assignment: variable does not exist or cannot be used here")
+      print "here now"
 
 
    # do type checking
@@ -222,9 +224,12 @@ def defineCommandAnalyzer(ast):
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
    function = id
    if firstPass:
-      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, analyze(ast.children[1])))
+      print scopeList
+      paramList = []
       if ast.children[1].value != "empty":
+          paramList = optParamListAnalyzer(ast.children[1])
           scopeList.pop()
+      table.addEntry(SymbolTableEntry(id, "function", list(scopeList), None, paramList))
       return
    # for "statement_block"
    analyze(ast.children[2])
@@ -234,11 +239,15 @@ def defineCommandAnalyzer(ast):
 def optParamListAnalyzer(ast):
    scopeList.append(count+1)
    parameterTypeList = []
+   print "appended " + ast.children[3].value
    table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
    parameterTypeList.append(ast.children[3].value)
+   print "appended to ptype list " + ast.children[3].value
    if ast.children[5].value == "opt_extra_params":
        return optExtraParamsAnalyzer(ast.children[5], parameterTypeList)
    else:
+       print "RETURN "
+       print parameterTypeList
        return parameterTypeList
 
 
@@ -248,7 +257,7 @@ def optExtraParamsAnalyzer(ast, parameterTypeList):
    if ast.children[5].value == "opt_extra_params":
        return optParametersAnalyzer(ast.children[5], parameterTypeList)
    else:
-       return parameterTypeList
+       return list(parameterTypeList)
 
 
 def statementBlockAnalyzer(ast):
@@ -262,28 +271,39 @@ def statementBlockAnalyzer(ast):
 def functionCommandAnalyzer(ast):
   # check existence of function ID
   idEntry = table.getEntry(SymbolTableEntry(ast.children[0].value, "function", list(scopeList), function, None))
+  print "HERE"
+  print idEntry.id
+  print idEntry.type
   if idEntry == None:
+      print "here1"
       errorList.append("Error in attempt to use function: function does not exist")
       return
   elif idEntry.type == "function":
+            print "here2"
+            print idEntry.functionParameterTypes
             parameterTypeList = idEntry.functionParameterTypes
   else:
             errorList.append("Error in attempt to use function: function does not exist")
             return
-  optParametersAnalyzer(ast.children[1], idEntry.functionParameterTypes)
+  if len(ast.children) == 2:
+      optParametersAnalyzer(ast.children[1], idEntry.functionParameterTypes)
 
 
 # this is for user-defined function parameters
 def optParametersAnalyzer(ast, parameterTypeList):
   if len(ast.children) == 1:
-      if len(parameterTypeList) != 1 or ast.children[0].type != parameterTypeList[0]:
+      print "this spot"
+      print len(parameterTypeList)
+      print ast.children[0].type
+      print parameterTypeList[0]
+      if len(parameterTypeList) != 1 or analyze(ast.children[0]) != parameterTypeList[0]:
           # Type checking error
           errorList.append("Error in attempt to use function: wrong type of parameter used")
   else:
       # More parameters left
-      if ast.children[1].type != parameterTypeList.pop():
+      if analyze(ast.children[1]) != parameterTypeList.pop():
           # Type checking error
-          errorList.append("Error in attempt to use function: wrong type of parameter used")
+          errorList.append("Error1 in attempt to use function: wrong type of parameter used")
       else:
           optParametersAnalyzer(ast.children[0], parameterTypeList)
 
