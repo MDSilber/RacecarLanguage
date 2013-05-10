@@ -118,10 +118,10 @@ def emptyAnalyzer(ast):
 def comparisonAnalyzer(ast):
   result = binaryOperatorAnalyzer(ast)
   if result == "number":
-      return valid
+      return
   elif result == "word":
       if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
-         return valid
+         return
       else:
          errorList.append("Error in comparison: words must be compared using 'is' or 'is not'")
   else:
