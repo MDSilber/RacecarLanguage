@@ -1136,7 +1136,7 @@ set myNum to mySecondNum
 
     def test_var_declared_in_if(self):
         test_string = \
-            """if
+            """if 1
 {
     myNum is a number
     set myNum to 10
@@ -1150,9 +1150,9 @@ set myNum to mySecondNum
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
-    def test_var_declared_in_if(self):
+    def test_var_declared_in_if_accessed_outside(self):
         test_string = \
-            """if
+            """if 1
 {
     myNum is a number
     set myNum to 10
@@ -1318,7 +1318,6 @@ set myWord to myNum
         self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
-        print saErrors
         self.assertEqual(len(saErrors), 2)
 
 
@@ -1345,6 +1344,116 @@ set myNum to "hello"
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
+
+    def test_compare_vars_num_to_string(self):
+        test_string = \
+            """myNum is a number
+set myNum to 10
+myWord is a word
+set myWord to "hello"
+if myWord > myNum
+{
+    print "bad"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_compare_num_to_stringliteral(self):
+        test_string = \
+            """if 10 > "hello"
+{
+    print "bad"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_zcompare_num_to_num(self):
+        test_string = \
+            """if 10 > 5
+{
+    print "good"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_compare_strL_to_strL(self):
+        test_string = \
+            """if "hello" is "hi"
+{
+    print "good"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_compare_strL_to_strL_not(self):
+        test_string = \
+            """if "hello" is not "hi"
+{
+    print "good"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_compare_num_str_is(self):
+        test_string = \
+            """if 10 is "hello"
+{
+    print "bad"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_template(self):
+        test_string = \
+            """
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
 
     def test_template(self):
         test_string = \
