@@ -1525,12 +1525,84 @@ moveForwardFiveAndTurn "left" 10
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
-    def test_zif_plus(self):
+    def test_built_in_functions_params(self):
         test_string = \
-            """if 2 + 5
+            """drive forwards five steps
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_while_loop(self):
+        test_string = \
+            """repeat 5 times
 {
     print "hi"
 }
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_while_loop_bad(self):
+        test_string = \
+            """repeat five times
+{
+    print "hi"
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_course2(self):
+        test_string = \
+            """define fullTurn using direction (word)
+{
+    if direction is "left"
+    {
+        turn left
+        turn left
+    }
+    else
+    {
+        turn right
+        turn right
+    }
+}
+
+define driveThenFullTurn using numSteps (number) and direction (word)
+{
+    drive forward numSteps steps
+    fullTurn direction
+}
+
+driveThenFullTurn 0 "right"
+driveThenFullTurn 25 "left"
+driveThenFullTurn 18 "left"
+
+repeat 2 times
+{
+
+    driveThenFullTurn 50 "right"
+    driveThenFullTurn 15 "right"
+    driveThenFullTurn 50 "left"
+    driveThenFullTurn 16 "left"
+}
+
+driveThenFullTurn 50 "right"
+driveThenFullTurn 15 "right"
+driveThenFullTurn 50 "left"
+driveThenFullTurn 10 "left"
 """
 
         ast = Parser.parseString(test_string)
