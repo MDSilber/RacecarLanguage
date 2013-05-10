@@ -120,7 +120,7 @@ def comparisonAnalyzer(ast):
   if result == "number":
       return
   elif result == "word":
-      if ast.children[1].value == "IS" or ast.children[1].value == "IS NOT":
+      if ast.children[1].type == "IS" or ast.children[1].type == "IS NOT":
          return
       else:
          errorList.append("Error in comparison: words must be compared using 'is' or 'is not'")
@@ -161,7 +161,8 @@ def ifCommandAnalyzer(ast):
 
 def repeatTimesAnalyzer(ast):
   # for "plus_expression"
-  analyze(ast.children[1])
+  if analyze(ast.children[1]) != "number":
+      errorList.append("Error in repeat loop: need to use valid variable or number")
   # for "statement_block"
   analyze(ast.children[4])
 
