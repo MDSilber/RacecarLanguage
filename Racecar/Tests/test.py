@@ -996,6 +996,23 @@ elif 1 < 2:
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
+    def test_if_plus(self):
+        test_string = \
+            """if 2 + 5
+{
+    print "yay"
+}
+"""
+        correct_translation = \
+            """if ((2) + (5)):
+    print_to_console("yay")
+"""
+        result = Compiler.getPythonCode(test_string)
+        ast = Parser.parseString(test_string)
+
+        self.assertEqual(len(ast.errors), 0)
+        self.assertEqual(result[0], correct_translation)
+
     def test_template(self):
         test_string = \
             """
@@ -1377,7 +1394,7 @@ if myWord > myNum
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
-    def test_zcompare_num_to_num(self):
+    def test_compare_num_to_num(self):
         test_string = \
             """if 10 > 5
 {
@@ -1433,9 +1450,13 @@ if myWord > myNum
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
-    def test_template(self):
+    def test_num_params_passing(self):
         test_string = \
-            """
+            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+
+}
+moveForwardFiveAndTurn 10 "hi"
 """
 
         ast = Parser.parseString(test_string)
@@ -1444,9 +1465,72 @@ if myWord > myNum
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
 
-    def test_template(self):
+    def test_num_params_passing_2(self):
         test_string = \
-            """
+            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+
+}
+moveForwardFiveAndTurn 10 "hi" "extra"
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_num_params_passing_3(self):
+        test_string = \
+            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+
+}
+moveForwardFiveAndTurn 10 15
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_num_params_passing_4(self):
+        test_string = \
+            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+
+}
+moveForwardFiveAndTurn "hello" "hi"
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_num_params_passing_5(self):
+        test_string = \
+            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+
+}
+moveForwardFiveAndTurn "left" 10
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_zif_plus(self):
+        test_string = \
+            """if 2 + 5
+{
+    print "hi"
+}
 """
 
         ast = Parser.parseString(test_string)
