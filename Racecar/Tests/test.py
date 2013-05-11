@@ -1456,7 +1456,7 @@ if myWord > myNum
 {
 
 }
-moveForwardFiveAndTurn 10 "hi"
+moveForwardFiveAndTurn 10 "left"
 """
 
         ast = Parser.parseString(test_string)
@@ -1577,7 +1577,7 @@ moveForwardFiveAndTurn "left" 10
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
-    def test_course2(self):#ales - the problem with this one is that the driveThenRullTurn cant access fullTurn function inside of it, fix that
+    def test_course2(self):
         test_string = \
             """define fullTurn using direction (word)
 {
@@ -1636,6 +1636,70 @@ drive forward myNum steps
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
+    def test_call_function_in_if_and_while(self):
+        test_string = \
+            """moveForwardFiveAndTurn 10 "left"
+if 1
+{
+    moveForwardFiveAndTurn 10 "left"
+}
+repeat 2 times
+{
+    moveForwardFiveAndTurn 10 "left"
+}
+define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+    print numSteps
+    print direction
+    fullTurn direction
+}
+define fullTurn using direction (word)
+{
+    if direction is "left"
+    {
+        turn left
+        turn left
+    }
+    else
+    {
+        turn right
+        turn right
+    }
+    moveForwardFiveAndTurn 5 direction
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
+    def test_call_function_before_declared(self):
+        test_string = \
+            """moveForwardFiveAndTurn 10 "left"
+if 1
+{
+    moveForwardFiveAndTurn 10 "left"
+}
+repeat 2 times
+{
+    moveForwardFiveAndTurn 10 "left"
+}
+drive forward 5 steps
+define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+{
+    print numSteps
+    print direction
+}
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 0)
+
     def test_template(self):
         test_string = \
             """
@@ -1646,7 +1710,6 @@ drive forward myNum steps
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 0)
-
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TranslatorTests)
