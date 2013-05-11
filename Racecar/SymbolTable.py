@@ -75,6 +75,7 @@ class SymbolTableEntry:
         self.function = None
         self.functionParameterTypes = []
         self.initialized = False
+        self.functionParamBool = False
 
     def __init__(self, inId, inType, inScopeList, inFunction, inFunctionPTypes):
         '''Sets the entry's id, type, scope list, function string,
@@ -88,6 +89,7 @@ class SymbolTableEntry:
         else:
             self.functionParameterTypes = None
         self.initialized = False
+        self.functionParamBool = False
 
     def validateWithTableEntry(self, tableEntry):
         '''Returns true if the existence of tableEntry means that
@@ -103,15 +105,9 @@ class SymbolTableEntry:
         # or in a non-function scope
         else:
             functionScopeAcceptable = (self.function == tableEntry.function)
-        print "Booleans for " + self.id + " " + tableEntry.id
-        print idEq
-        print selfScopeAcceptable
-        print functionScopeAcceptable
-        print "topScopeCountTableEntry is "
-        print topScopeCountTableEntry
-        print "self.scopeList is "
-        print self.scopeList
-        if idEq and selfScopeAcceptable and functionScopeAcceptable:
+        if self.function != None and idEq and functionScopeAcceptable and tableEntry.functionParamBool == True:
+            return True
+        elif idEq and selfScopeAcceptable and functionScopeAcceptable:
             return True
         else:
             return False

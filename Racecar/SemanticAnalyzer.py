@@ -79,12 +79,8 @@ def analyze(ast):
          # do existence and scope checking right here
          # return type if passes
          id = ast.value
-         print id
-         print scopeList
-         print function
          idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
          if idEntry == None:
-            print "None"
             # ID does not exist or exists but the scoping is wrong
             # this is to be returned to binaryOperatorAnalyzer
             return "ERROR"
@@ -110,11 +106,7 @@ def statementsAnalyzer(ast):
 
 def driveCommandAnalyzer(ast):
    # for "plus_expression"
-   print "START"
-   print ast.children[1].value
    result = analyze(ast.children[1])
-   print result
-   print "STOP"
    if result != "number":
       errorList.append("Error in drive command: need to use valid variable or number")
 
@@ -244,7 +236,9 @@ def defineCommandAnalyzer(ast):
 def optParamListAnalyzer(ast):
    scopeList.append(count+1)
    parameterTypeList = []
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   toAdd = SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None)
+   toAdd.functionParamBool = True
+   table.addEntry(toAdd)
    parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
        return optExtraParamsAnalyzer(ast.children[5], parameterTypeList)
@@ -253,7 +247,9 @@ def optParamListAnalyzer(ast):
 
 
 def optExtraParamsAnalyzer(ast, parameterTypeList):
-   table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
+   toAdd = SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None)
+   toAdd.functionParamBool = True
+   table.addEntry(toAdd)
    parameterTypeList.append(ast.children[3].value)
    if ast.children[5].value == "opt_extra_params":
        return optParametersAnalyzer(ast.children[5], parameterTypeList)
