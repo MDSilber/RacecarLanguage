@@ -578,7 +578,8 @@ def generate_program(code):
 
             #Toggle the buttons on the bottom and run program
             toggle_buttons(True)
-            exec(python_code, globals())
+            tempGlobal = globals().copy()
+            exec(python_code, tempGlobal)
             toggle_buttons(False)
 
             #If collision occurred
