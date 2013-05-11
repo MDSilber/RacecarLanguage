@@ -17,7 +17,6 @@ class SymbolLookupTable(object):
         # throws error if a function is attempted to be declared
         # outside of the global block
         if entry.type == "function" and entry.scopeList[-1] != 0:
-            print "????"
             return
         # this will call an error in the Semantic Analyzer
 
@@ -25,7 +24,6 @@ class SymbolLookupTable(object):
             return
 
         # if not, add the entry to the table
-        print entry.id + "added"
         self.list.append(entry)
 
     def verifyEntry(self, entry):
@@ -49,7 +47,6 @@ class SymbolLookupTable(object):
 
         for x in self.list:
             if entryQuery.validateWithTableEntry(x):
-                print x.id + " was returned"
                 return x
 
         return None
@@ -59,7 +56,6 @@ class SymbolLookupTable(object):
         matches = [y for (x, y) in self.table.iteritems()
                    if self.verifyEntry(entryQuery)]
         if len(matches) >= 1:
-            print "returning for get entry - " + matches[0].id
             return matches[0]
         else:
             return None
@@ -78,6 +74,7 @@ class SymbolTableEntry:
         self.scopeList = []
         self.function = None
         self.functionParameterTypes = []
+        self.initialized = False
 
     def __init__(self, inId, inType, inScopeList, inFunction, inFunctionPTypes):
         '''Sets the entry's id, type, scope list, function string,
@@ -90,10 +87,9 @@ class SymbolTableEntry:
             self.functionParameterTypes = list(inFunctionPTypes)
         else:
             self.functionParameterTypes = None
+        self.initialized = False
 
     def validateWithTableEntry(self, tableEntry):
-        print "self " + self.id
-        print "tableEntry " + tableEntry.id
         '''Returns true if the existence of tableEntry means that
         self cannot be added to the table (same ID and overlapping scopes)
         Ignore type since we don't want to allow different types'''
@@ -107,12 +103,15 @@ class SymbolTableEntry:
         # or in a non-function scope
         else:
             functionScopeAcceptable = (self.function == tableEntry.function)
+        print "Booleans for " + self.id + " " + tableEntry.id
         print idEq
         print selfScopeAcceptable
         print functionScopeAcceptable
+        print "topScopeCountTableEntry is "
+        print topScopeCountTableEntry
+        print "self.scopeList is "
+        print self.scopeList
         if idEq and selfScopeAcceptable and functionScopeAcceptable:
-            print "returning true"
             return True
         else:
-            print "returning false"
             return False

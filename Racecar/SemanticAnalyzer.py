@@ -79,16 +79,22 @@ def analyze(ast):
          # do existence and scope checking right here
          # return type if passes
          id = ast.value
+         print id
+         print scopeList
+         print function
          idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
          if idEntry == None:
+            print "None"
             # ID does not exist or exists but the scoping is wrong
             # this is to be returned to binaryOperatorAnalyzer
+            return "ERROR"
+         if function == None and idEntry.initialized == False:
             return "ERROR"
          return idEntry.type
 
    # if the translator is a real function, then invoke it
    else:
-       analyzer(ast)
+       return analyzer(ast)
 
 
 def statementsAnalyzer(ast):
@@ -104,7 +110,12 @@ def statementsAnalyzer(ast):
 
 def driveCommandAnalyzer(ast):
    # for "plus_expression"
-   if analyze(ast.children[1]) != "number":
+   print "START"
+   print ast.children[1].value
+   result = analyze(ast.children[1])
+   print result
+   print "STOP"
+   if result != "number":
       errorList.append("Error in drive command: need to use valid variable or number")
 
 
@@ -177,10 +188,6 @@ def repeatIfAnalyzer(ast):
 def declarationCommandAnalyzer(ast):
    # Note ast.children[3].type is word
    table.addEntry(SymbolTableEntry(ast.children[0].value, ast.children[3].value, list(scopeList), function, None))
-   print ast.children[0].value
-   print ast.children[3].value
-   print scopeList
-   print function
 
 
 def assignmentCommandAnalyzer(ast):
@@ -189,14 +196,12 @@ def assignmentCommandAnalyzer(ast):
    idNoneBool = False
    id = ast.children[1].value
    idEntry = table.getEntry(SymbolTableEntry(id, None, list(scopeList), function, None))
-   print id
-   print scopeList
-   print function
    if idEntry == None:
       idNoneBool = True
       # ID does not exist or exists but the scoping is wrong
       errorList.append("Error1 in assignment: variable does not exist or cannot be used here")
-      print "here now"
+   else:
+      idEntry.initialized = True
 
 
    # do type checking
@@ -208,9 +213,6 @@ def assignmentCommandAnalyzer(ast):
    else:
       if (not idNoneBool) and idEntry.type != child3Evaluation:
          # type check failed
-         print idNoneBool
-         print idEntry.type
-         print child3Evaluation
          errorList.append("Error3 in assignment: variable and value must have the same type")
 
 
@@ -228,7 +230,6 @@ def defineCommandAnalyzer(ast):
       errorList.append("Error in function creation: functions cannot be created in other functions or a nested block")
    function = id
    if firstPass:
-      print scopeList
       paramList = []
       if ast.children[1].value != "empty":
           paramList = optParamListAnalyzer(ast.children[1])
@@ -243,15 +244,11 @@ def defineCommandAnalyzer(ast):
 def optParamListAnalyzer(ast):
    scopeList.append(count+1)
    parameterTypeList = []
-   print "appended " + ast.children[3].value
    table.addEntry(SymbolTableEntry(ast.children[1].value, ast.children[3].value, list(scopeList), function, None))
    parameterTypeList.append(ast.children[3].value)
-   print "appended to ptype list " + ast.children[3].value
    if ast.children[5].value == "opt_extra_params":
        return optExtraParamsAnalyzer(ast.children[5], parameterTypeList)
    else:
-       print "RETURN "
-       print parameterTypeList
        return parameterTypeList
 
 
@@ -275,31 +272,21 @@ def statementBlockAnalyzer(ast):
 def functionCommandAnalyzer(ast):
   # check existence of function ID
   idEntry = table.getEntry(SymbolTableEntry(ast.children[0].value, "function", list(scopeList), function, None))
-  print "HERE"
-  print idEntry.id
-  print idEntry.type
   if idEntry == None:
-      print "here1"
       errorList.append("Error in attempt to use function: function does not exist")
       return
   elif idEntry.type == "function":
-            print "here2"
-            print idEntry.functionParameterTypes
-            parameterTypeList = idEntry.functionParameterTypes
+            parameterTypeList = list(idEntry.functionParameterTypes)
   else:
             errorList.append("Error in attempt to use function: function does not exist")
             return
   if len(ast.children) == 2:
-      optParametersAnalyzer(ast.children[1], idEntry.functionParameterTypes)
+      optParametersAnalyzer(ast.children[1], parameterTypeList)
 
 
 # this is for user-defined function parameters
 def optParametersAnalyzer(ast, parameterTypeList):
   if len(ast.children) == 1:
-      print "this spot"
-      print len(parameterTypeList)
-      print ast.children[0].type
-      print parameterTypeList[0]
       if len(parameterTypeList) != 1 or analyze(ast.children[0]) != parameterTypeList[0]:
           # Type checking error
           errorList.append("Error in attempt to use function: wrong type of parameter used")
