@@ -1499,7 +1499,8 @@ moveForwardFiveAndTurn 10 15
         test_string = \
             """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
 {
-
+    print numSteps
+    print direction
 }
 moveForwardFiveAndTurn "hello" "hi"
 """
@@ -1514,7 +1515,8 @@ moveForwardFiveAndTurn "hello" "hi"
         test_string = \
             """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
 {
-
+    print numSteps
+    print direction
 }
 moveForwardFiveAndTurn "left" 10
 """
@@ -1564,7 +1566,18 @@ moveForwardFiveAndTurn "left" 10
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 1)
 
-    def test_course2(self):
+    def test_calling_nonexistant_function(self):
+        test_string = \
+            """fullTurn "left"
+"""
+
+        ast = Parser.parseString(test_string)
+        self.assertEqual(len(ast.errors), 0, "Test failed at parser.")
+
+        saErrors = SemanticAnalyzer.analyzeStart(ast)
+        self.assertEqual(len(saErrors), 1)
+
+    def test_course2(self):#ales - the problem with this one is that the driveThenRullTurn cant access fullTurn function inside of it, fix that
         test_string = \
             """define fullTurn using direction (word)
 {
