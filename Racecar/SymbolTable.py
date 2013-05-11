@@ -17,14 +17,15 @@ class SymbolLookupTable(object):
         # throws error if a function is attempted to be declared
         # outside of the global block
         if entry.type == "function" and entry.scopeList[-1] != 0:
-            return
+            return False
         # this will call an error in the Semantic Analyzer
 
         if self.verifyEntry(entry):
-            return
+            return False
 
         # if not, add the entry to the table
         self.list.append(entry)
+        return True
 
     def verifyEntry(self, entry):
         '''Verify that a given entry is in the table with the appropriate
@@ -42,23 +43,13 @@ class SymbolLookupTable(object):
         return False
 
     def getEntry(self, entryQuery):
-        '''Returns the entry corresponding to the specified id and scope.
-        This is really only useful to find out the type of a particular id.'''
+        '''Returns the entry corresponding to the specified id and scope.'''
 
         for x in self.list:
             if entryQuery.validateWithTableEntry(x):
                 return x
 
         return None
-
-        matches = []
-
-        matches = [y for (x, y) in self.table.iteritems()
-                   if self.verifyEntry(entryQuery)]
-        if len(matches) >= 1:
-            return matches[0]
-        else:
-            return None
 
 
 class SymbolTableEntry:

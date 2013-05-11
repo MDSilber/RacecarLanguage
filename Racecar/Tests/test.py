@@ -1028,66 +1028,44 @@ elif 1 < 2:
 
 class SymbolTableTests(unittest.TestCase):
 
-    def test_symbol_table_entry_validate(self):
-        '''Tests the SymbolTableEntry.validateWithTableEntry() function.
-        In particular, ensures two same-named entries with different scopes
-        are not equal, and an entry without a type matches an existing entry
-        that has a type and the same name and scope, but not one with a
-        different scope.'''
+    def test_symbol_table_add_entry(self):
+        '''Tests the SymbolTableEntry.addEntry) function.'''
 
-        entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
-        entry2 = \
-            SymbolTable.SymbolTableEntry("name1", "word", [0], "function1", [])
-
-        self.assertFalse(entry1.validateWithTableEntry(entry2))
-        self.assertFalse(entry2.validateWithTableEntry(entry1))
-
-        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global", )
-
-        self.assertTrue(entry3.validateWithTableEntry(entry1))
-        self.assertFalse(entry3.validateWithTableEntry(entry2))
-
-    def test_symbol_table_add_entry_twice(self):
-        '''Tests whether adding a duplicate entry results in an error.'''
         table = SymbolTable.SymbolLookupTable()
 
-        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
 
         table.addEntry(entry1)
 
-        self.assertRaises(Exception, table.addEntry, entry1)
+        self.assertFalse(table.addEntry(entry2))
+
+        entry3 = SymbolTable.SymbolTableEntry("name2", "word", [0], None, [])
+
+        self.assertTrue(entry3.validateWithTableEntry(entry3))
 
     def test_symbol_table_verify(self):
         '''Tests the SymbolLookupTable.verifyEntry() function.'''
         table = SymbolTable.SymbolLookupTable()
 
-        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
-        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
+        entry2 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
+        entry3 = SymbolTable.SymbolTableEntry("name2", "word", [0], None, [])
 
         table.addEntry(entry1)
+        table.addEntry(entry3)
 
-        self.assertTrue(table.verifyEntry(entry1))
-        self.assertFalse(table.verifyEntry(entry2))
-
-        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
-
-        self.assertTrue(table.verifyEntry(entry3))
-        self.assertFalse(table.verifyEntry(entry2))
+        self.assertTrue(table.verifyEntry(entry2))
 
     def test_symbol_table_get_entry(self):
         '''Tests the SymbolLookupTable.getEntry() function.'''
         table = SymbolTable.SymbolLookupTable()
 
-        entry1 = SymbolTable.SymbolTableEntry("name1", "word", "global")
-        entry2 = SymbolTable.SymbolTableEntry("name1", "word", "local")
-        entry3 = SymbolTable.SymbolTableEntry("name1", "", "global")
+        entry1 = SymbolTable.SymbolTableEntry("name1", "word", [0], None, [])
 
         table.addEntry(entry1)
 
-        entry4 = table.getEntry(entry3)
-
-        self.assertTrue(entry3.validateWithTableEntry(entry4))
-        self.assertRaises(Exception, table.getEntry, entry2)
+        self.assertEqual(table.getEntry(SymbolTable.SymbolTableEntry("name1", None, [0], None, [])), entry1)
 
 
 class SemanticAnalyzerTests(unittest.TestCase):
