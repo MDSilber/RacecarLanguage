@@ -208,7 +208,10 @@ def assignmentCommandAnalyzer(ast):
    else:
       if (not idNoneBool) and idEntry.type != child3Evaluation:
          # type check failed
-          errorList.append("Error3 in assignment: variable and value must have the same type")
+         print idNoneBool
+         print idEntry.type
+         print child3Evaluation
+         errorList.append("Error3 in assignment: variable and value must have the same type")
 
 
 def printAnalyzer(ast):
