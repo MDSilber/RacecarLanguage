@@ -1085,7 +1085,10 @@ class SymbolTableTests(unittest.TestCase):
 
         table.addEntry(entry1)
 
-        self.assertEqual(table.getEntry(SymbolTable.SymbolTableEntry("name1", None, [0], None, [])), entry1)
+        self.assertEqual(
+            table.getEntry(
+                SymbolTable.SymbolTableEntry(
+                    "name1", None, [0], None, [])), entry1)
 
 
 class SemanticAnalyzerTests(unittest.TestCase):
@@ -1335,7 +1338,6 @@ set myWord to myNum
         saErrors = SemanticAnalyzer.analyzeStart(ast)
         self.assertEqual(len(saErrors), 2)
 
-
     def test_assignments_var_number(self):
         test_string = \
             """myWord is a word
@@ -1450,7 +1452,8 @@ if myWord > myNum
 
     def test_num_params_passing(self):
         test_string = \
-            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+            """define moveForwardFiveAndTurn using numSteps (number)\
+ and direction (word)
 {
 
 }
@@ -1465,7 +1468,8 @@ moveForwardFiveAndTurn 10 "left"
 
     def test_num_params_passing_2(self):
         test_string = \
-            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+            """define moveForwardFiveAndTurn using numSteps (number)\
+ and direction (word)
 {
 
 }
@@ -1480,7 +1484,8 @@ moveForwardFiveAndTurn 10 "hi" "extra"
 
     def test_num_params_passing_3(self):
         test_string = \
-            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+            """define moveForwardFiveAndTurn using numSteps (number)\
+ and direction (word)
 {
 
 }
@@ -1495,7 +1500,8 @@ moveForwardFiveAndTurn 10 15
 
     def test_num_params_passing_4(self):
         test_string = \
-            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+            """define moveForwardFiveAndTurn using numSteps (number)\
+ and direction (word)
 {
     print numSteps
     print direction
@@ -1511,7 +1517,8 @@ moveForwardFiveAndTurn "hello" "hi"
 
     def test_num_params_passing_5(self):
         test_string = \
-            """define moveForwardFiveAndTurn using numSteps (number) and direction (word)
+            """define moveForwardFiveAndTurn using numSteps (number)\
+ and direction (word)
 {
     print numSteps
     print direction
@@ -1712,7 +1719,3 @@ define moveForwardFiveAndTurn using numSteps (number) and direction (word)
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TranslatorTests)
     unittest.TextTestRunner(verbosity=2).run(suite)
-
-
-
-
