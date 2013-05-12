@@ -1,5 +1,4 @@
-# TODO type checking for built-in funcitons
-# TODO check bool operator for control flow statements
+# Written by Alex Fields and Colfax Selby
 
 # Scoping done using a universal count, which is a unique number for
 # every single scope

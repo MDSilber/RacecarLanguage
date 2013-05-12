@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# Written by Mason Silber and Sam Kohn
 
 from Tkinter import *
 from PIL import Image
@@ -448,6 +448,7 @@ def course_four():
 
     for obstacle in obstacles:
         print obstacle.center
+
 
 def course_five():
     clear_course()

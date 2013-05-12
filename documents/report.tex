@@ -92,7 +92,7 @@ for keeping students on task and excited about their progress.
 \subsection{What Problem Does Racecar Solve?}
 
 Existing attempts to teach children about computer programming generally
-utilize languages from one of three categories: graphical "drag-and-drop"
+utilize languages from one of three categories: graphical ``drag-and-drop''
 programming, simplistic text programming (with graphical output),
 and conventional programming languages. These various ideas each have
 their drawbacks, and Racecar is designed to improve on all of the
@@ -132,8 +132,8 @@ the accompanying lessons and debug students' programs
 quickly. The lessons included with the language tutorial build on
 each other, showing students that a complex task can be accomplished
 by breaking the problem into manageable parts. Each lesson adds a
-new movement (including "drive straight"
-and "turn") or programming concept
+new movement (including ``drive straight''
+and ``turn'') or programming concept
 (including subroutines and looping/iteration) that can be integrated
 into the previous lesson's program.
 
@@ -146,25 +146,25 @@ beseech students to include whitespace, avoid long chains of function
 calls, and comment as often as possible. However, it still seems that
 people write indecipherable code that even experts have trouble understanding.
 Language designers have tried to remedy this problem proactively by
-writing "readable" languages.
+writing ``readable'' languages.
 Existing readable languages include COBOL and Python. Both contain
 syntactic constructs that are useful for programmers, yet degrade
-readability. If you thought "OCCURS 12 TIMES"
-means "loop/repeat 12 times"
+readability. If you thought $\mathtt{OCCURS\ 12\ TIMES}$
+means ``loop/repeat 12 times''
 in COBOL, you'd be wrong---it's a
 declaration for a 12-element array! In Python (a vast improvement
-from COBOL), many keywords and functions such as "def,"
-"len," and "str"
+from COBOL), many keywords and functions such as $\mathtt{def}$,
+$\mathtt{len}$, and $\mathtt{str}$
 are short, making them easy to type, but hard for non-experts to recognize.
 Racecar strives to be readable even to non-technical students, teachers
 and parents. For example, Racecar is a statically typed language,
-and there are two primitive types: "number"
-and "word." No "ints,"
-"floats," or "doubles"
-are around to complicate things, and although "string"
-might be a more general term, "word"
+and there are two primitive types: $\mathtt{number}$
+and $\mathtt{word}$. No $\mathtt{ints}$,
+$\mathtt{floats}$ or $\mathtt{doubles}$
+are around to complicate things, and although $\mathtt{string}$
+might be a more general term, $\mathtt{word}$
 emphasizes the important difference between the data types more clearly
-than "string" does. All of Racecar's
+than $\mathtt{string}$ does. All of Racecar's
 keywords and constructs are designed with this kind of readability
 in mind. Table $1$ demonstrates some examples of Racecar's readability.
 \begin{table}[h]
@@ -205,7 +205,7 @@ sequence is rewarding and builds confidence to tackle subsequent challenges.
 
 There are a number of technologies available whose goal is to teach
 children in elementary school to think algorithmically and programmatically.
-One such "language" is MIT's
+One such ``language'' is MIT's
 Scratch platform, which presents a graphics-based language to children;
 code is constructed using a drag-and-drop interface. However, physically
 typing commands into a text editor is paramount in internalization
@@ -259,8 +259,8 @@ and helping your students to program is as easy as possible.
 
 First, let's look at the Racecar application. It consists of a window
 for writing Racecar code, a screen displaying the car and its surroundings,
-and a few menus and buttons. The big GO button is what you click when
-you want to run the program sitting in the program window. The STOP
+and a few menus and buttons. The ``Run Program'' button is what you click when
+you want to run the program sitting in the program window. The ``Stop Program''
 button is how you stop a program that's running if you want it to
 finish early. The other menus have the usual Save, Open, and Quit
 buttons that you may be used to from other computer applications.
@@ -273,18 +273,18 @@ different, completely unrelated words. Along the same lines, Racecar
 will not fix your spelling, so be sure to check for typos as you write
 your programs, as any typos will cause your program to not work as
 expected. Names that you come up with in Racecar to represent numbers,
-words, and actions (which are called "variable names"
-and "function names") cannot
+words, and actions (which are called ``variable names''
+and ``function names'') cannot
 have any spaces in them. A standard trick programmers use to keep
 their names readable, even when they consist of more than one English
 word, is called Camel Case: keep the first letter lowercase, and then
 capitalize the first letter of every new word. For example, the phrase
-"You can write in Racecar" would
+``You can write in Racecar'' would
 be formatted in Camel Case as $\mathtt{youCanWriteInRacecar}$. This
 way, it is simple to see where the words begin and end even though
 there are no spaces. Another important restriction on these variable
 and function names is that they cannot be the same as Racecar's keywords.
-In the language reference manual, Section 10 contains a list of all
+In the language reference manual, Section $10$ contains a list of all
 of the keywords (reserved words) that would lead to ambiguity (and
 hence errors) if they were used as variable or function names. 
 
@@ -314,8 +314,7 @@ A second valuable lesson to learn about programming is that it is
 almost impossible to write the code you really want on the first try.
 In other words, you will always mess up in your first draft of a program.
 And probably in the second, third, and fourth ones, too. The errors
-you encounter are called "bugs,"
-and the art of finding and fixing bugs is called "debugging."
+you encounter are called $\mathtt{bugs}$, and the art of finding and fixing bugs is called $\mathtt{debugging}$.
 It is a practice which is difficult to teach, and consequently much
 of the time you are coding will actually consist of debugging and
 learning how to debug. Here are some common bugs that you could start
@@ -416,8 +415,8 @@ drive backwards 4 steps :) moving backwards again!
 \end{lstlisting}
 
 This program begins with a multi-line comment. These comments start
-with a frowny face, :-(, and then continue until the first hyphenated
-smiley face, :-), possibly extending over multiple lines. They are
+with a frowny face, $\mathtt{:-(}$, and then continue until the first hyphenated
+smiley face, $\mathtt{:-)}$, possibly extending over multiple lines. They are
 particularly useful to put a summary of the program you are writing
 at the top of the program itself, as done in the above example, but
 can also be used anywhere in a program. We recommend that you put
@@ -427,17 +426,17 @@ so that the first column of text lines up. The closing smiley face
 should then be lined up with the opening frowny face. 
 
 The other comments in this program are single-line comments. They
-begin with a smiley face, :), and continue until the end of the line.
+begin with a smiley face, $\mathtt{:)}$, and continue until the end of the line.
 Single-line comments are useful for explaining the purpose of shorter
 blocks of code that are only a few lines long. As you can see in the
 last example, you can also have a single-line comment on the same
-line as a piece of code - it extends from the smiley face ( :) ) to
+line as a piece of code---it extends from the smiley face ( $\mathtt{:)}$ ) to
 the end of the line.
 
 There is another big difference between this program and the programs
 from Lesson 1: there is more than one command the computer executes.
-The rules for multiple commands are very simple\textemdash{}you may
-already be able to guess them\textemdash{}each command goes on its
+The rules for multiple commands are very simple---you may
+already be able to guess them---each command goes on its
 own line, and the computer performs the actions in the order they
 appear on the screen. 
 
@@ -448,7 +447,7 @@ Comments are easy to forget about when you are first learning how
 to program, since the programs are so short, and your students will
 probably not want to use them at first. The comment symbols are smiley
 faces to try to make commenting a bit more appealing to children---in
-many languages, comment symbols are boring, like \# comment, /{*}
+many languages, comment symbols are boring, like $\mathtt{\#}$ comment, $\mathtt{/{*}}$
 comment {*}/, or ({*} comment {*}). As a teacher, you have the opportunity
 to make sure your students comment by instructing them that their
 programs are not complete unless it is commented. All of the example
@@ -1424,14 +1423,13 @@ The following are reserved words and cannot be used as identifiers
 
 \subsection{Formal Grammar}
 
-The grammar productions are formatted as follows: nonterminals are
-in lowercase; terminals are in UPPERCASE; literals are in 'quotes'
-and can only be one character long, as defined by PLY. The empty string
-is represented by epsilon. The start symbol for all Racecar programs
-is statements. Comments are treated as whitespace by the lexer and
+The following listing shows the Racecar grammar, as generated by the PLY parser. The grammar productions are formatted as follows: nonterminals are
+in lowercase; terminals are in UPPERCASE; literals are (,),\{, and \}. The empty string
+is represented by the production `empty', which produces the PLY <empty> statement. The start symbol for all Racecar programs
+is `statements'. Multi-line comments are treated as whitespace by the lexer and
 hence are not covered by the grammar.
 
-\lstinputlisting{../Racecar/grammar.txt}
+\lstinputlisting{../Racecar/final_grammar.txt}
 
 
 \section{Project Plan}
@@ -1627,10 +1625,13 @@ of the implementation of the architecture, the following shows the
 module and which team members had the most influential role in its
 development:
 
-Lexer(Sam Kohn) Parser-AST(Sam Kohn, Jeremy Spencer) Semantic Analyzer(Alex
-Fields, Colfax Selby) Translator(Sam Kohn, Jeremy Spencer) IDE(Mason
-Silber, Sam Kohn)
-
+\begin{itemize}
+\item Lexer (Sam Kohn)
+\item Parser-AST (Sam Kohn, Jeremy Spencer)
+\item Semantic Analyzer (Alex Fields, Colfax Selby)
+\item Translator (Sam Kohn, Jeremy Spencer)
+\item IDE (Mason Silber, Sam Kohn)
+\end{itemize}
 
 \section{Development and Run-Time Environment}
 

@@ -74,7 +74,7 @@
 \contentsline {section}{\numberline {8}Test Plan}{37}
 \contentsline {subsubsection}{By Colfax Selby}{37}
 \contentsline {subsection}{\numberline {8.1}Segmented Testing}{37}
-\contentsline {subsection}{\numberline {8.2}Iterative Testing}{37}
+\contentsline {subsection}{\numberline {8.2}Iterative Testing}{38}
 \contentsline {section}{\numberline {9}Conclusions}{38}
 \contentsline {subsection}{\numberline {9.1}Lessons Learned as a Team}{38}
 \contentsline {subsubsection}{Successes}{38}
@@ -83,16 +83,16 @@
 \contentsline {subsubsection}{Sam Kohn}{39}
 \contentsline {subsubsection}{Alex Fields}{40}
 \contentsline {subsubsection}{Jeremy Spencer}{40}
-\contentsline {subsubsection}{Mason Silber}{40}
-\contentsline {subsection}{\numberline {9.3}Advice for Future Teams}{40}
+\contentsline {subsubsection}{Mason Silber}{41}
+\contentsline {subsection}{\numberline {9.3}Advice for Future Teams}{41}
 \contentsline {subsection}{\numberline {9.4}Suggestions for the Instructor}{41}
 \contentsline {subsubsection}{Topics we would have liked to see}{41}
 \contentsline {subsubsection}{Topics that directly helped our project}{41}
-\contentsline {subsubsection}{Topics that did not help our project, but maybe helped other projects}{41}
-\contentsline {subsubsection}{Topics that did not help our project or seem relevant to any project}{41}
+\contentsline {subsubsection}{Topics that did not help our project, but maybe helped other projects}{42}
+\contentsline {subsubsection}{Topics that did not help our project or seem relevant to any project}{42}
 \contentsline {section}{\numberline {10}Appendix}{42}
 \contentsline {subsection}{\numberline {10.1}Launch Script}{42}
 \contentsline {subsection}{\numberline {10.2}Graphical Interface}{42}
 \contentsline {subsection}{\numberline {10.3}Lexer and Parser}{66}
-\contentsline {subsection}{\numberline {10.4}Semantic Analyzer and Symbol Table}{79}
-\contentsline {subsection}{\numberline {10.5}Translator}{90}
+\contentsline {subsection}{\numberline {10.4}Semantic Analyzer and Symbol Table}{80}
+\contentsline {subsection}{\numberline {10.5}Translator}{91}

@@ -1,0 +1,109 @@
+statements -> statements statement
+statement -> error NEWLINE
+statements -> empty
+
+statement_block -> { statements } newline_opt_comment
+
+empty -> <empty>
+
+newline_opt_comment -> opt_comment NEWLINE
+
+opt_comment -> SINGLE_LINE_COMMENT
+opt_comment -> empty
+
+statement -> simple_statement
+statement -> compound_statement
+
+simple_statement -> statement_contents newline_opt_comment
+simple_statement -> newline_opt_comment
+
+statement_contents -> drive_command
+statement_contents -> turn_command
+statement_contents -> print_command
+statement_contents -> assignment_command
+statement_contents -> declaration_command
+statement_contents -> function_command
+
+compound_statement -> define_command
+compound_statement -> repeat_if_command
+compound_statement -> repeat_times_command
+compound_statement -> if_command
+
+expression -> can_drive_expression
+expression -> comparison
+
+can_drive_expression -> CAN_DRIVE drive_direction primary_expression opt_steps
+
+comparison -> plus_expression comparison_operator plus_expression
+comparison -> plus_expression
+
+comparison_operator -> IS
+comparison_operator -> IS NOT
+comparison_operator -> GT
+comparison_operator -> LT
+comparison_operator -> GEQ
+comparison_operator -> LEQ
+
+plus_expression -> plus_expression + times_expression
+plus_expression -> plus_expression - times_expression
+plus_expression -> times_expression
+
+times_expression -> times_expression * word_expression
+times_expression -> times_expression / word_expression
+times_expression -> word_expression
+
+word_expression -> word_expression CONCAT primary_expression
+word_expression -> primary_expression
+
+primary_expression -> ( expression )
+primary_expression -> NUMBER
+primary_expression -> WORD
+primary_expression -> GET_CAR_POSITION
+primary_expression -> ID
+
+function_command -> ID opt_parameters
+
+opt_parameters -> opt_parameters primary_expression
+opt_parameters -> empty
+
+drive_command -> DRIVE drive_direction plus_expression opt_steps
+
+drive_direction -> FORWARD
+drive_direction -> BACKWARD
+
+opt_steps -> STEP
+opt_steps -> empty
+
+turn_command -> TURN turn_direction
+
+turn_direction -> LEFT
+turn_direction -> RIGHT
+
+define_command -> DEFINE ID opt_param_list newline_opt_comment statement_block
+
+opt_param_list -> USING ID ( type_enum ) opt_extra_params
+opt_param_list -> empty
+
+opt_extra_params -> AND ID ( type_enum ) opt_extra_params
+opt_extra_params -> empty
+
+type_enum -> WORD_TYPE
+type_enum -> NUMBER_TYPE
+
+repeat_if_command -> REPEAT IF expression newline_opt_comment statement_block
+
+repeat_times_command -> REPEAT plus_expression TIMES newline_opt_comment statement_block
+
+if_command -> IF expression newline_opt_comment statement_block opt_else_if opt_else
+
+opt_else_if -> ELSE_IF expression newline_opt_comment statement_block opt_else_if
+opt_else_if -> empty
+
+opt_else -> ELSE newline_opt_comment statement_block
+opt_else -> empty
+
+print_command -> PRINT word_expression
+
+declaration_command -> ID IS A type_enum
+
+assignment_command -> SET ID TO expression

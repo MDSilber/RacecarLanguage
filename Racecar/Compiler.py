@@ -1,3 +1,5 @@
+# Written by Sam Kohn and Jeremy Spencer
+
 from Parser import parseString
 from SemanticAnalyzer import analyzeStart
 
@@ -298,6 +300,7 @@ def plusExpressionTranslator(ast):
 def timesExpressionTranslator(ast):
     return binaryOperatorTranslator(ast)
 
+
 def wordExpressionTranslator(ast):
     pythonCode = "(str("
     pythonCode += generatePythonCode(ast.children[0])
@@ -305,6 +308,7 @@ def wordExpressionTranslator(ast):
     pythonCode += generatePythonCode(ast.children[2])
     pythonCode += "))"
     return pythonCode
+
 
 def getCarPositionTranslator(ast):
     return "getCurrentPosition()"

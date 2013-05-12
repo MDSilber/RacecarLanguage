@@ -1,3 +1,5 @@
+# Written by Sam Kohn and Jeremy Spencer
+
 import ply.lex as lex
 import ply.yacc as yacc
 from Tree import *
@@ -95,7 +97,6 @@ def t_error(t):
     t.lexer.skip(1)
     t.value = (t.value, "ERROR", t.lexer.lineno)
     return t
-
 
 
 def p_error(p):
@@ -245,7 +246,7 @@ def p_statement_contents_function(p):
 
 
 def p_expression_can_drive(p):
-    '''expression : can_drive_expression''' 
+    '''expression : can_drive_expression'''
     p[0] = p[1]
 
 
@@ -255,7 +256,8 @@ def p_expression_comparison(p):
 
 
 def p_can_drive(p):
-    '''can_drive_expression : CAN_DRIVE drive_direction primary_expression opt_steps'''
+    '''can_drive_expression : CAN_DRIVE drive_direction \
+    primary_expression opt_steps'''
     p[0] = makeParseTreeNode([p[0], p[2], p[3]], "can_drive_expression")
 
 
@@ -460,7 +462,6 @@ def p_declaration_command(p):
 def p_assignment_command(p):
     """assignment_command : SET ID TO expression"""
     p[0] = makeParseTreeNode(p, "assignment_command")
-
 
 
 def parseString(stringToParse):
