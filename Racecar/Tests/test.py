@@ -182,16 +182,24 @@ class TranslatorTests(unittest.TestCase):
 
     def test_assign(self):
         test_string = \
-            """set myVar to otherThing
+            """myVar is a number
+otherThing is a number
+set myVar to 10
+set otherThing to 11
+set myVar to otherThing
 """
         correct_translation = \
-            """myVar = otherThing
+            """myVar = None
+otherThing = None
+myVar = 10
+otherThing = 11
+myVar = otherThing
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
-        self.assertEqual(len(saErrors), 2)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -249,16 +257,22 @@ moveForwardThenBackward()
 
     def test_function_invocation_with_one_parameter(self):
         test_string = \
-            """move5Steps "forwards"
+            """define move5Steps using direction (word)
+{
+    print direction
+}
+move5Steps "forwards"
 """
         correct_translation = \
-            """move5Steps("forwards")
+            """def move5Steps(direction):
+    print_to_console(direction)
+move5Steps("forwards")
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
 
         saErrors = SemanticAnalyzer.analyzeStart(ast)
-        self.assertNotEqual(len(saErrors), 0)
+        self.assertEqual(len(saErrors), 0)
 
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
@@ -853,8 +867,6 @@ while myCounter != 5:
         self.assertEqual(len(ast.errors), 0)
         self.assertEqual(result[0], correct_translation)
 
-#***********************************stopped SA tests here
-
     def test_loop_while_nested(self):
         test_string = \
             """myCounter is a number
@@ -942,10 +954,14 @@ elif 1 < 2:
 
     def test_string_concatenation(self):
         test_string = \
-            """print "hey" ++ myWord
+            """myWord is a word
+set myWord to "hi "
+print "hey" ++ myWord
 """
         correct_translation = \
-            """print_to_console((str("hey") + str(myWord)))
+            """myWord = None
+myWord = "hi "
+print_to_console((str("hey") + str(myWord)))
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
@@ -955,10 +971,14 @@ elif 1 < 2:
 
     def test_string_concatenation_complicated(self):
         test_string = \
-            """print "hey" ++ myWord ++ "now"
+            """myWord is a word
+set myWord to "hi "
+print "hey" ++ myWord ++ "now"
 """
         correct_translation = \
-            """print_to_console((str((str("hey") + str(myWord))) + str("now")))
+            """myWord = None
+myWord = "hi "
+print_to_console((str((str("hey") + str(myWord))) + str("now")))
 """
         result = Compiler.getPythonCode(test_string)
         ast = Parser.parseString(test_string)
