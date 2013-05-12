@@ -1,5 +1,3 @@
-A grammar for Racecar
-
 statements : statements statement
       | epsilon
 

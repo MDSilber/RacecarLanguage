@@ -12,6 +12,19 @@
 \usepackage{units}
 \usepackage{graphicx}
 \usepackage{setspace}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{courier}
+\lstset{
+basicstyle=\ttfamily,
+%numbers=left,
+%numberstyle=\tiny,
+columns=fullflexible,
+showstringspaces=false,
+keepspaces=true,
+upquote=true
+}
 \onehalfspacing
 
 \makeatletter
@@ -28,10 +41,23 @@
 \usepackage{babel}
 \begin{document}
 
-\title{Racecar: A Programming Language for Kids}
 
-\maketitle
+%\title{Racecar: A Programming Language for Kids}
+
+%\author{
+%\textbf{Team 19}\\
+%Samuel Kohn: Project Manager \\
+%Alexander Fields: Language Guru \\
+%Jeremy Spencer: System Architect \\
+%Mason Silber: System Integrator \\
+%Colfax Selby: Verification and Validation
+%}
+\include{title}
+
+%\maketitle
+\newpage
 \tableofcontents{}
+\newpage
 
 
 \section{Introduction}
@@ -45,11 +71,11 @@ critical thinking style that is critical to writing programs as well
 as solving many other problems in life. Racecar is designed to solve
 this problem by providing a language that is \emph{easy to teach},
 even for non-experts; \emph{readable}, so parents can easily involve
-themselves in their children\textquoteright{}s education; and \emph{engaging}
+themselves in their children's education; and \emph{engaging}
 for 8 to 10-year-old children so they are motivated to experiment
 and learn more about computers and programming, even outside of school.
 
-In order to capture and maintain children\textquoteright{}s interest
+In order to capture and maintain children's interest
 in programming, Racecar is designed around a single goal: to write
 a program that will navigate a car through an obstacle course. Students
 will learn how to write programs that tell the car to move and turn
@@ -58,7 +84,7 @@ concrete objects---an essential requirement for a language designed
 for 8 to 10-year-olds---while they solve a prototypical problem of
 the algorithmic style of thinking. More importantly, the programs
 students write can be run using the accompanying application, which
-shows the car as it executes the program\textquoteright{}s instructions
+shows the car as it executes the program's instructions
 and navigates the obstacles. This immediate visual feedback is essential
 for keeping students on task and excited about their progress. 
 
@@ -66,7 +92,7 @@ for keeping students on task and excited about their progress.
 \subsection{What Problem Does Racecar Solve?}
 
 Existing attempts to teach children about computer programming generally
-utilize languages from one of three categories: graphical \textquotedblleft{}drag-and-drop\textquotedblright{}
+utilize languages from one of three categories: graphical "drag-and-drop"
 programming, simplistic text programming (with graphical output),
 and conventional programming languages. These various ideas each have
 their drawbacks, and Racecar is designed to improve on all of the
@@ -74,7 +100,7 @@ positive aspects while minimizing the effects of the problems with
 these techniques. In general, these languages fall short in one of
 three categories: similarity to real-world programming (e.g. program
 is not a text file), readability for non-experts, and a level of engagement
-that captures children\textquoteright{}s interest. Racecar is designed
+that captures children's interest. Racecar is designed
 with these properties in mind, with the goal of making computer programming
 extremely easy to teach in schools.
 
@@ -90,7 +116,7 @@ of the language is relatively small---it is clearly domain-specific---and
 it is easy for a non-technical adult or teacher to pick up Racecar
 as well; any elementary school teacher should be able to learn the
 language quickly and to teach it effectively to others. Lastly, even
-children\textquoteright{}s parents could learn how to write, or at
+children's parents could learn how to write, or at
 least read, Racecar programs to help on homeworks or independent projects
 if necessary.
 
@@ -102,14 +128,14 @@ if necessary.
 
 Racecar is syntactically easy to understand so that instructors with
 minimal knowledge of computer science concepts will be able to teach
-the accompanying lessons and debug students\textquoteright{} programs
+the accompanying lessons and debug students' programs
 quickly. The lessons included with the language tutorial build on
 each other, showing students that a complex task can be accomplished
 by breaking the problem into manageable parts. Each lesson adds a
-new movement (including \textquotedblleft{}drive straight\textquotedblright{}
-and \textquotedblleft{}turn\textquotedblright{}) or programming concept
+new movement (including "drive straight"
+and "turn") or programming concept
 (including subroutines and looping/iteration) that can be integrated
-into the previous lesson\textquoteright{}s program.
+into the previous lesson's program.
 
 
 \subsubsection{Readable}
@@ -120,25 +146,25 @@ beseech students to include whitespace, avoid long chains of function
 calls, and comment as often as possible. However, it still seems that
 people write indecipherable code that even experts have trouble understanding.
 Language designers have tried to remedy this problem proactively by
-writing \textquotedblleft{}readable\textquotedblright{} languages.
+writing "readable" languages.
 Existing readable languages include COBOL and Python. Both contain
 syntactic constructs that are useful for programmers, yet degrade
-readability. If you thought \textquotedbl{}OCCURS 12 TIMES\textquotedbl{}
-means \textquotedblleft{}loop/repeat 12 times\textquotedblright{}
-in COBOL, you\textquoteright{}d be wrong---it\textquoteright{}s a
+readability. If you thought "OCCURS 12 TIMES"
+means "loop/repeat 12 times"
+in COBOL, you'd be wrong---it's a
 declaration for a 12-element array! In Python (a vast improvement
-from COBOL), many keywords and functions such as \textquotedblleft{}def,\textquotedblright{}
-\textquotedblleft{}len,\textquotedblright{} and \textquotedblleft{}str\textquotedblright{}
+from COBOL), many keywords and functions such as "def,"
+"len," and "str"
 are short, making them easy to type, but hard for non-experts to recognize.
 Racecar strives to be readable even to non-technical students, teachers
 and parents. For example, Racecar is a statically typed language,
-and there are two primitive types: \textquotedblleft{}number\textquotedblright{}
-and \textquotedblleft{}word.\textquotedblright{} No \textquotedblleft{}ints,\textquotedblright{}
-\textquotedblleft{}floats,\textquotedblright{} or \textquotedblleft{}doubles\textquotedblright{}
-are around to complicate things, and although \textquotedblleft{}string\textquotedblright{}
-might be a more general term, \textquotedblleft{}word\textquotedblright{}
+and there are two primitive types: "number"
+and "word." No "ints,"
+"floats," or "doubles"
+are around to complicate things, and although "string"
+might be a more general term, "word"
 emphasizes the important difference between the data types more clearly
-than \textquotedblleft{}string\textquotedblright{} does. All of Racecar's
+than "string" does. All of Racecar's
 keywords and constructs are designed with this kind of readability
 in mind. Table $1$ demonstrates some examples of Racecar's readability.
 \begin{table}[h]
@@ -167,10 +193,10 @@ car following the commands the student programmed. The ability to
 control the outcome of an action, such as driving a car, is engaging
 and teaches students to think creatively while still conforming to
 rules. Navigating a car visually may be trivial, but Racecar will
-show students that a precise definition of the car\textquoteright{}s
+show students that a precise definition of the car's
 movement is necessary to achieve the desired outcome. The goal-oriented
 nature of the lessons combined with frequent positive feedback coming
-from the graphical application captures children\textquoteright{}s
+from the graphical application captures children's
 attention. Accomplishing the complex goal at the end of the lesson
 sequence is rewarding and builds confidence to tackle subsequent challenges.
 
@@ -179,19 +205,19 @@ sequence is rewarding and builds confidence to tackle subsequent challenges.
 
 There are a number of technologies available whose goal is to teach
 children in elementary school to think algorithmically and programmatically.
-One such \textquotedblleft{}language\textquotedblright{} is MIT\textquoteright{}s
+One such "language" is MIT's
 Scratch platform, which presents a graphics-based language to children;
 code is constructed using a drag-and-drop interface. However, physically
 typing commands into a text editor is paramount in internalization
 of language constructs, programming style, and procedural thinking.
-Racecar\textquoteright{}s language and platform combines these approaches,
+Racecar's language and platform combines these approaches,
 compelling children to write their programs in a normal text editor,
 but then compiling it and importing it into an application where they
 can see graphical output of their code.
 
 Other approaches to teaching algorithmic thinking have taken the form
 of games, completely abstracting away the idea of programming form
-the user. For example, Armor Games\textquoteright{} Light Bot (http://cache.armorgames.com/files/games/light-bot-2205.swf)
+the user. For example, Armor Games' Light Bot (http://cache.armorgames.com/files/games/light-bot-2205.swf)
 gives children a platform on which to build small programs with a
 limited number of instructions, forcing them to think in terms of
 subroutines. Again, this platform, while certainly engaging, fails
@@ -199,9 +225,9 @@ to give children the irreplaceable experience of typing a procedure
 word for word, the importance of which was discussed earlier.
 
 Older technologies like LOGO incorporate true algorithmic thinking
-and graphical output. However, LOGO\textquoteright{}s platform is
+and graphical output. However, LOGO's platform is
 not as engaging as children have come to expect from modern software.
-Furthermore, LOGO\textquoteright{}s language itself lacks human-readability
+Furthermore, LOGO's language itself lacks human-readability
 compared to Racecar, a feature that is particularly important in conveying
 programmatic ideas and facilitating an easy transition into coding
 for children.
@@ -211,7 +237,7 @@ to program their legos to move, allowing creations like robots, self-driving
 cars, etc. Hardware-based approaches, however, have fundamental limitations
 in distribution. One set of legos can create only one robot at a time;
 there is no such limitation with a purely software-based platform,
-since, for example, a proud parent can send his child\textquoteright{}s
+since, for example, a proud parent can send his child's
 program to relatives without making them buy physical kits.
 
 
@@ -247,13 +273,13 @@ different, completely unrelated words. Along the same lines, Racecar
 will not fix your spelling, so be sure to check for typos as you write
 your programs, as any typos will cause your program to not work as
 expected. Names that you come up with in Racecar to represent numbers,
-words, and actions (which are called \textquotedblleft{}variable names\textquotedblright{}
-and \textquotedblleft{}function names\textquotedblright{}) cannot
+words, and actions (which are called "variable names"
+and "function names") cannot
 have any spaces in them. A standard trick programmers use to keep
 their names readable, even when they consist of more than one English
 word, is called Camel Case: keep the first letter lowercase, and then
 capitalize the first letter of every new word. For example, the phrase
-\textquotedblleft{}You can write in Racecar\textquotedblright{} would
+"You can write in Racecar" would
 be formatted in Camel Case as $\mathtt{youCanWriteInRacecar}$. This
 way, it is simple to see where the words begin and end even though
 there are no spaces. Another important restriction on these variable
@@ -288,8 +314,8 @@ A second valuable lesson to learn about programming is that it is
 almost impossible to write the code you really want on the first try.
 In other words, you will always mess up in your first draft of a program.
 And probably in the second, third, and fourth ones, too. The errors
-you encounter are called \textquotedblleft{}bugs,\textquotedblright{}
-and the art of finding and fixing bugs is called \textquotedblleft{}debugging.\textquotedblright{}
+you encounter are called "bugs,"
+and the art of finding and fixing bugs is called "debugging."
 It is a practice which is difficult to teach, and consequently much
 of the time you are coding will actually consist of debugging and
 learning how to debug. Here are some common bugs that you could start
@@ -330,7 +356,9 @@ and $\mathtt{backward}/\mathtt{backwards}$, and $\mathtt{step}/\mathtt{steps}$.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 drive forward 10 steps
+\end{lstlisting}
 
 This program tells the car to move forward $10$ steps. The keyword
 $\mathtt{drive}$ is how you tell the car that you want it to move.
@@ -347,7 +375,9 @@ The other direction keyword is $\mathtt{backward}$ or $\mathtt{backwards}$.
 Have the students write a program that moves the car backwards $10$
 steps (or any other number of steps). It should look something like:
 
+\begin{lstlisting}
 drive backward 10 steps
+\end{lstlisting}
 
 If the number of steps is large enough (in either direction), the
 car will reach the border of the window, at which point it will stop,
@@ -371,23 +401,19 @@ comments.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 :-( In this program, we will drive the car
-
 forwards and then backwards, so that it
-
 ends up in the same place it started in.
-
 :-)
 
 :) Here, we drive the car forwards
-
 drive forwards 8 steps
 
 :) Now, we will move the car back the same number of steps
-
 drive backwards 4 steps
-
 drive backwards 4 steps :) moving backwards again! 
+\end{lstlisting}
 
 This program begins with a multi-line comment. These comments start
 with a frowny face, :-(, and then continue until the first hyphenated
@@ -446,24 +472,19 @@ by rotating in place. The keywords covered are turn, left, and right.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 :-( This program drives the car forwards
-
 for a bit, and then turns the car to the
-
 left.
-
 :-)
-
 drive forward 10 steps
-
 :) Here we rotate to the left but do not move the car
-
 turn left
 
-:) And now we move the car in its new \textquotedbl{}forward\textquotedbl{}
+:) And now we move the car in its new "forward"
 direction
-
 drive forward 1 step
+\end{lstlisting}
 
 This program has three commands. The first command is identical to
 the entire program from Lesson 1, telling the car to move forward
@@ -485,29 +506,24 @@ turn command multiple times.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 :-( This program will turn the car halfway around and move it
-
 back to where it started.
-
 :-)
 
 :) drive around first just because I want to
-
 drive forward 5 steps
 
 :-( Each instruction results in another 45 degree turn
-
-so 4 {*} 45 = 180 degrees :-)
-
+so 4 * 45 = 180 degrees
+:-)
 turn right
-
 turn right
-
 turn right
-
 turn right
 
 drive forward 5 steps
+\end{lstlisting}
 
 This program will make the car move forward 5 steps, and then turn
 the car around completely! At the second command of the program, the
@@ -534,37 +550,25 @@ in the car's path.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 :-( In this program we check if car can move to the left.
-
 If it can, we will turn and then move left. If not,
-
 we will print a message to the computer screen with
-
 that information.
-
 :-)
 
 :) Checks if the car can move left
-
 if canMove left
-
-\{
-
-turn left
-
-turn left
-
-drive forward 1 step
-
-\}
-
+{
+    turn left
+    turn left
+    drive forward 1 step
+}
 else :) If we cannot turn left, alert the programmer!
-
-\{
-
-print \textquotedbl{}Whoa! Don't try to move left!\textquotedbl{}
-
-\} 
+{
+    print "Whoa! Don't try to move left!"
+} 
+\end{lstlisting}
 
 In this program, we explore conditional statements, where a block
 of code is run or not run depending on an expression that is either
@@ -608,23 +612,31 @@ followed lastly by or, which is like addition. The last way to form
 expressions to give to an if statement is the most common: compare
 two values using comparison operators: is, is not, >, <, >=, and <=.
 For example, to check if the number 2 is greater than the number 1
-or if the word \textquotedbl{}hello\textquotedbl{} is the same as
-the word \textquotedbl{}good bye\textquotedbl{}, you could say if
-2 > 1 or \textquotedbl{}hello\textquotedbl{} is \textquotedbl{}good
-bye\textquotedbl{} \{...\}. Since 2 is in fact greater than 1, the
+or if the word "hello" is the same as
+the word "good bye", you could say if
+2 > 1 or "hello" is "good
+bye" \{...\}. Since 2 is in fact greater than 1, the
 overall statement is true, so the statements in curly braces would
 be executed.
 
 If you want to provide more than one alternative, you can use any
 number of elseIf statements after an if statement, like the following:
 
-:) Print out a message describing any obstacles if canMove left \{
-print \textquotedbl{}You can move left!\textquotedbl{} \} elseIf canMove
-forwards \{ print \textquotedbl{}Can't move left, but you can move
-forwards!\textquotedbl{} \} else :) maybe some other direction is
-available \{ print \textquotedbl{}Left and forwards are bad.\textquotedbl{}
-print \textquotedbl{}You're running out of options!\textquotedbl{}
-\}
+\begin{lstlisting}
+:) Print out a message describing any obstacles if canMove left
+{
+    print "You can move left!
+}
+elseIf canMove forwards
+{
+    print "Can't move left, but you can move forwards!"
+}
+else :) maybe some other direction is available
+{
+    print "Left and forwards are bad."
+    print "You're running out of options!"
+}
+\end{lstlisting}
 
 Each condition is checked in order, and the corresponding code is
 skipped if the condition is false. As soon as one condition is satisfied,
@@ -650,26 +662,39 @@ do describe actions without knowing everything about them.
 
 Program 1:
 
-:-( This program creates a variable \textquoteleft{}numberOfSteps\textquoteright{}
-that is a number, sets it to 10, and then has the car drive that number
-of steps. :-)
+\begin{lstlisting}
+:-( This program creates a variable "numberOfSteps"
+that is a number, sets it to 10, and then
+has the car drive that number of steps.
+:-)
 
-:) Create the variable numberOfSteps is a number :) Set it to a value
+:) Create the variable
+numberOfSteps is a number
+
+:) Set it to a value
 set numberOfSteps to 10
 
-:) Command the car to drive forward that number of steps drive forward
-numberOfSteps steps 
+:) Command the car to drive forward that number of steps
+drive forward numberOfSteps steps 
+\end{lstlisting}
 
-Program 2:
+\ \\Program 2:
 
-:-( This program creates a variable \textquoteleft{}myWord\textquoteright{}
-that is a word, sets it to \textquotedbl{}Hello, world!\textquotedbl{},
-and then prints it out. :-)
+\begin{lstlisting}
+:-( This program creates a variable "myWord"
+that is a word, sets it to "Hello, world!",
+and then prints it out.
+:-)
 
-:) Create the variable myWord is a word :) Set its value set myWord
-to \textquotedbl{}Hello, world!\textquotedbl{}
+:) Create the variable
+myWord is a word
+:) Set its value
+set myWord to "Hello, world!"
 
-:) Print it out print myWord
+:) Print it out
+print myWord
+
+\end{lstlisting}
 
 In this program, we learn about variables. Variables are like boxes
 which can hold a value. For example, the variable called numberOfSteps
@@ -689,13 +714,13 @@ but again, we strongly, strongly recommend against it.
 
 Every variable also must have a type: either a number or a word. Numbers
 can be positive or negative whole numbers. Words consist of an opening
-double quote, \textquotedbl{}, followed by 0 or more characters (i.e.
+double quote, ", followed by 0 or more characters (i.e.
 letters, numbers, or symbols that are not double quotes), followed
-by a closing double quote. For example, \textquotedbl{}Sam said, 'Hello,
-world!'\textquotedbl{} is a valid word, but \textquotedbl{}Sam said,
-\textquotedbl{}Hello, world!\textquotedbl{}\textquotedbl{} is not
+by a closing double quote. For example, "Sam said, 'Hello,
+world!'" is a valid word, but "Sam said,
+"Hello, world!"" is not
 because it contains double quotes. Confusingly, it is possible to
-have a word that is just a single number: \textquotedbl{}5\textquotedbl{}
+have a word that is just a single number: "5"
 is still a word, because it is surrounded by double quotes. Before
 you can assign a value to a variable, you must declare the variable's
 name and type. This is done with statements like numberOfSteps is
@@ -710,7 +735,7 @@ not need to know what the value of the variable is! In this manner,
 you can write a program that does many different things depending
 on the actual value of the variable. Also, you can set variables to
 other variables, or even to modified versions of themselves. For example,
-set myNumber to myNumber {*} 2 will store in the myNumber \textquotedblleft{}box\textquotedblright{}
+set myNumber to myNumber {*} 2 will store in the myNumber "box"
 twice what was previously stored there! 
 
 
@@ -719,22 +744,36 @@ twice what was previously stored there!
 Variables can be compared to other variables or to actual numbers
 or words in if statements using the keywords is and is not. For example,
 the following program checks if my name is Sam and if so, prints out
-the message \textquotedbl{}Hello, Sam!\textquotedbl{}. 
+the message "Hello, Sam!". 
 
-:-( This program creates a variable \textquoteleft{}myName\textquoteright{}
-to be a word, sets it to \textquotedbl{}John\textquotedbl{}, and then
-checks if it is \textquotedbl{}Sam\textquotedbl{} and if so, it prints
-out \textquotedbl{}Hello, Sam!\textquotedbl{}. If not, it prints out
-\textquotedbl{}You're not Sam!\textquotedbl{}. :-)
+\begin{lstlisting}
+:-( This program creates a variable 'myName'
+to be a word, sets it to "John", and then
+checks if it is "Sam" and if so, it prints
+out "Hello, Sam!". If not, it prints out
+"You're not Sam!".
+:-)
 
-:) Create the variable myName is a word :) Set its value set myName
-to \textquotedbl{}John\textquotedbl{}
+:) Create the variable
+myName is a word
 
-:) Check if the variable is \textquotedbl{}Sam\textquotedbl{} and
-print something if so if myName is \textquotedbl{}Sam\textquotedbl{}
-:) Tell Sam hello \{ print \textquotedbl{}Hello, Sam!\textquotedbl{}
-\} else :) This person is not Sam, so tell him so \{ print \textquotedbl{}You're
-not Sam! You must be \textquotedbl{} ++ myName \}
+:) Set its value
+set myName to "John"
+
+:) Check if the variable is "Sam" and
+print something if so
+if myName is "Sam"
+{
+    :) Tell Sam hello
+    print "Hello, Sam!"
+}
+else
+{
+    :) This person is not Sam, so tell him so
+    print "You're not Sam! You must be " ++ myName
+}
+
+\end{lstlisting}
 
 As an exercise, have the students write a program where the car will
 drive forward only if the variable numberOfSteps is set to 7. Of course,
@@ -745,8 +784,8 @@ additional ways of being compared: >, greater than; <, less than;
 >=, greater than or equal to; and <=, less than or equal to. Words
 cannot be compared this way.
 
-This program also uses the \textquotedblleft{}concatenation\textquotedblright{}
-or \textquotedblleft{}joining\textquotedblright{} operator, ++. Putting
+This program also uses the "concatenation"
+or "joining" operator, ++. Putting
 two plus signs in a row between two words (either variables or actual
 words) results in a new word which is just the first word followed
 by the second. So, the code inside the above else statement will print
@@ -765,12 +804,24 @@ action many times using a loop.
 
 \subsubsection{The Program}
 
-:-( This program creates a variable \textquoteleft{}myCounter\textquoteright{}
-that is a number, sets it to 1, and repeats a block of code until
-myCounter is 5. :-) myCounter is a number set myCounter to 1 :) Here
-is our loop repeat if myCounter is not 5 \{ :) The code in here will
-repeat until myCounter is 5 drive forward 1 step set myCounter to
-myCounter + 1 \} 
+\begin{lstlisting}
+:-( This program creates a variable 'myCounter'
+    that is a number, sets it to 1, and repeats a
+    block of code until myCounter is 5.
+:-)
+
+myCounter is a number
+set myCounter to 1
+
+:) Here is our loop
+repeat if myCounter is not 5
+{
+    :) The code in here will repeat until myCounter is 5
+    drive forward 1 step
+    set myCounter to myCounter + 1
+} 
+
+\end{lstlisting}
 
 In this program, we explore repeat-if loops. As you can see, we have
 a variable myCounter. The repeat-if loop is similar to a conditional
@@ -784,7 +835,7 @@ until the expression becomes false. It is possible that the first
 time the expression is checked, it is false, in which case the code
 inside curly braces is never executed. More dangerously, it is possible
 that the expression will always be true, in which case the loop will
-repeat forever! This is called an \textquotedblleft{}infinite loop,\textquotedblright{}
+repeat forever! This is called an "infinite loop,"
 and the only way to escape from an infinite loop is to force the program
 to stop using the STOP button on the Racecar application screen. It
 is up to you to ensure that your loops will always end eventually. 
@@ -796,26 +847,41 @@ This kind of loop is especially useful when you do not know how many
 times you want to run the code (for example, if you are moving around
 looking for something). For example: 
 
-:-( This program is similar to our last, but this time we stop our
-loop when a word has changed instead of a number :-) location is a
-word set location to \textquotedbl{}out\textquotedbl{}
+\begin{lstlisting}
+:-( This program is similar to our last, but this
+    time we stop our loop when a word has changed
+    instead of a number
+:-)
 
-:) save the car's current position in a variable homePosition is a
-number set homePosition to getCarPosition
+location is a word
+set location to "out"
 
-:) drive away from home! drive backwards 15 steps
+:) save the car's current position in a variable
+homePosition is a number
+set homePosition to getCarPosition
 
-:) try to find \textquotedbl{}home\textquotedbl{} repeat if location
-is not \textquotedbl{}home\textquotedbl{} \{ :) you are in the loop
-so you must not be \textquotedbl{}home\textquotedbl{}
+:) drive away from home!
+drive backwards 15 steps
 
-:) first, drive one step drive forward 1 step
+:) try to find "home"
+repeat if location is not "home"
+{
+    :) you are in the loop so you must not be "home"
 
-:) then, check to see if you are home if getCarPosition is homePosition
-\{ set location to \textquotedbl{}home\textquotedbl{} \} \} 
+    :) first, drive one step
+    drive forward 1 step
 
-As long as the car\textquoteright{}s location is not equal to the
-home location, location will still be set to \textquotedbl{}out\textquotedbl{},
+    :) then, check to see if you are home
+    if getCarPosition is homePosition
+    {
+        set location to "home"
+    } 
+} 
+
+\end{lstlisting}
+
+As long as the car's location is not equal to the
+home location, location will still be set to "out",
 so the code will continue to run and the car will continue to move
 forward until it reaches its home. 
 
@@ -831,15 +897,26 @@ number of times using another kind of loop.
 
 \subsubsection{The Program}
 
+\begin{lstlisting}
 :-( This program is similar to our last, but we now use a loop that
-runs a specified amount of times :-)
+    runs a specified amount of times
+:-)
 
-numCorners is a number set numCorners to 8
+numCorners is a number
+set numCorners to 8
 
-:-( Instead of writing \textquotedbl{}drive forward 1 step (and) turn
-right\textquotedbl{} a bunch of times, just repeat the command numCorners
-times! :-) repeat numCorners times \{ drive forward 1 step turn right
-\}
+:-( Instead of writing "drive forward 1 step (and)
+    turn right" a bunch of times, just repeat the
+    command numCorners times!
+:-)
+
+repeat numCorners times
+{
+    drive forward 1 step
+    turn right
+}
+
+\end{lstlisting}
 
 In this program, we explore repeat-times loops. Similar to a repeat-if
 loop, a repeat-times loop repeats the enclosed block of code multiple
@@ -856,8 +933,13 @@ to get the number of times to repeat.
 Instead of using a variable, you can also specify an actual number
 of times you would like the block to run. For example: 
 
-repeat 5 times \{ drive forward 1 step \} 
+\begin{lstlisting}
+repeat 5 times
+{
+    drive forward 1 step
+} 
 
+\end{lstlisting}
 
 \subsection{Lesson 9: Subroutines}
 
@@ -866,31 +948,56 @@ repeat 5 times \{ drive forward 1 step \}
 
 In this lesson, you will learn how to give a nickname to a sequence
 of commands that you can use later. This sequence of commands is called
-a \textquotedblleft{}subroutine.\textquotedblright{}
+a "subroutine."
 
 
 \subsubsection{The Program}
 
-:-( In this program, we create and use a subroutine, which defines
-a set of commands. :-)
+\begin{lstlisting}
+:-( In this program, we create and use a subroutine,
+    which defines a set of commands.
+:-)
 
-:-( Here is the creation of our subroutine. This code is not actually
-executed at this point in the program because of the keyword \textquotedbl{}define\textquotedbl{}.
-Instead, these commands are saved for later. :-) :-( shiftLeft moves
-the car to the left by 1 step and returns it to face in its original
-direction. :-) define shiftLeft \{ turn left turn left drive forward
-1 step turn right turn right \}
+:-( Here is the creation of our subroutine. This code
+    is not actually executed at this point in the
+    program because of the keyword "define".
+    Instead, these commands are saved for later.
+:-)
+
+:-( shiftLeft moves the car to the left by 1 step
+    and returns it to face in its original
+    direction.
+:-)
+define shiftLeft
+{
+    turn left
+    turn left
+    drive forward 1 step
+    turn right
+    turn right
+}
 
 :) Here is the code we want to actually run:
 
-drive 10 steps :-( Here is the first time we actually use or \textquotedbl{}call\textquotedbl{}
-our subroutine :-) shiftLeft drive 10 steps shiftLeft drive 10 steps
-shiftLeft drive 10 steps shiftLeft 
+drive forward 10 steps
+
+:-( Here is the first time we actually use
+    or "call" our subroutine
+:-)
+shiftLeft
+drive forward 10 steps
+shiftLeft
+drive forward 10 steps
+shiftLeft
+drive forward 10 steps
+shiftLeft 
+
+\end{lstlisting}
 
 In this program, we write a subroutine. Subroutines are like shortcuts
 or nicknames: they allow us to write code only once for something
 we will use multiple times in our program. (Also, if you prefer, you
-can teach your students the name \textquotedblleft{}nickname\textquotedblright{}
+can teach your students the name "nickname"
 instead of subroutine, which is a big, scary word!) Our subroutine
 is called shiftLeft, which turns the car 90 degrees to the left, moves
 one step, then turns the car back to the right (i.e. straight). Notice
@@ -902,12 +1009,12 @@ left whenever we wanted to.
 \subsubsection{Further Advice}
 
 After we write out our program, it should be clear that we could have
-used a repeat-times loop instead to \textquotedblleft{}drive 10 steps
-and then shift left,\textquotedblright{} 4 times. You can ask your
+used a repeat-times loop instead to "drive 10 steps
+and then shift left," 4 times. You can ask your
 students to rewrite their code to incorporate this. Students may point
 out that now our subroutine does not make our program any shorter
 or easier to write. While this is true for this simple program, it
-often won\textquoteright{}t be for others, and it is important to
+often won't be for others, and it is important to
 emphasize this to students. And, even in this short demonstration,
 the subroutine's descriptive name results in more readable code.
 
@@ -923,26 +1030,40 @@ to modify the subroutine's action.
 
 \subsubsection{The Program}
 
-:-( In this program, we create and use a subroutine that takes a variable
-when it is used. :-)
+\begin{lstlisting}
+:-( In this program, we create and use a subroutine 
+    that takes a variable when it is used.
+:-)
 
-:) This time, during our creation we specify a variable define shiftLeft
-using distance (number) \{ turn left turn left
+:) This time, during our creation we specify a variable
+define shiftLeft using distance (number)
+{
+    turn left 
+    turn left
 
-:) Here is where the \textquotedbl{}distance\textquotedbl{} variable
-will be used drive forward distance steps turn right turn right \}
+    :) Here is where the "distance" variable will be used
+    drive forward distance steps
+    turn right
+    turn right
+}
 
-:-( Now we use the subroutine, specifying the variable which gets
-plugged into the code we wrote above for our subroutine :-) shiftLeft
-8 drive forward 10 steps shiftLeft 4 
+:-( Now we use the subroutine, specifying the variable
+    which gets plugged into the code
+    we wrote above for our subroutine
+:-)
+shiftLeft 8
+drive forward 10 steps
+shiftLeft 4 
+
+\end{lstlisting}
 
 Like the last program, we write a subroutine for stepping to the left
 called shiftLeft, but unlike the last program we now are using a new
 variable in our subroutine called distance. These kinds of variables
 that are defined at the same time as a subroutine are called parameters
 or arguments. When you define the subroutine, you must give the new
-parameter's name and type. This is equivalent to declaring a \textquotedblleft{}normal\textquotedblright{}
-variable using the statement variableName is a \textquotedbl{}type\textquotedbl{}.
+parameter's name and type. This is equivalent to declaring a "normal"
+variable using the statement variableName is a "type".
 You can only refer to parameters inside the subroutine that they are
 defined with, and you cannot refer to any outside variables inside
 the subroutine. Now we can have the car move any number of steps in
@@ -961,14 +1082,22 @@ variable as a paramter, as in shiftLeft myNumberVariable.
 Subroutines with parameters can have any number of parameters. To
 add more, simply use and:
 
-define shiftLeftThenDriveStraight using numStepsLeft (number) and
-numStepsStraight (number) \{ turn left turn left drive numStepsLeft
-steps turn right turn right drive numStepsDrive \}
+\begin{lstlisting}
+define shiftLeftThenDriveStraight using numStepsLeft (number) and numStepsStraight (number)
+{
+    turn left
+    turn left
+    drive forward numStepsLeft steps
+    turn right
+    turn right
+    drive forward numStepsStraight steps
+}
 
-How to call the subroutine:
+:) How to call the subroutine:
 
 shiftLeftThenDriveStraight 5 10
 
+\end{lstlisting}
 
 \section{Language Reference Manual}
 
@@ -995,7 +1124,7 @@ an identifier which is already declared in the same scope is an error.
 
 There are three kinds of scopes a variable can have in Racecar: global,
 function, and control-flow. The actual commands executed by Racecar
-are not contained in any function\textemdash{}they are \textquotedblleft{}global.\textquotedblright{}
+are not contained in any function\textemdash{}they are "global."
 Any variables declared outside of all curly braces are said to have
 global scope. They can be accessed everywhere except for inside function
 definitions. There is no main method required, but it is recommended
@@ -1022,7 +1151,7 @@ a variable inside a control-flow statement if a variable with the
 same name is accessible just outside that statement.
 
 Identifiers representing functions have a scope which extends throughout
-the entire source file\textemdash{}into other functions and outside
+the entire source file---into other functions and outside
 of all functions (i.e. global scope). Functions can be recursive,
 i.e. the scope of a function name identifier extends into the function
 definition itself. It is illegal to declare a function inside another
@@ -1034,7 +1163,7 @@ function, so all functions must be declared as global functions.
 There are three data types in Racecar: word, number, and boolean.
 A literal word is an opening double-quote, followed by any string
 of characters that is not a double quote, followed by another (closing)
-double-quote. The empty word is notated as \textquotedbl{}\textquotedbl{}.
+double-quote. The empty word is notated as "".
 There is no way to have a double-quote as a character in a word. Words
 can be concatenated with the concatenation operator ++, which is left-associative,
 and their equality can be tested with the operators is and is not.
@@ -1045,13 +1174,13 @@ They can be compared using any of the comparison operators: is, is
 not, >, <, >=, and <=. Arithmetic operations are evaluated before
 comparisons. Numbers can be concatenated into strings and into other
 numbers (resulting in a string). The left-associativity of the concatenation
-operator means that the following is still valid: \textquotedbl{}hello\textquotedbl{}
-++ 5 ++ 2 ++ 3, and the result of the expression is the word \textquotedbl{}hello523\textquotedbl{}.
-To \textquotedblleft{}cast\textquotedblright{} a number to a word,
-simply concatenate it with the empty word, as in \textquotedbl{}\textquotedbl{}
-++ 5, which evaluates to the word \textquotedbl{}5\textquotedbl{}.
+operator means that the following is still valid: "hello"
+++ 5 ++ 2 ++ 3, and the result of the expression is the word "hello523".
+To "cast" a number to a word,
+simply concatenate it with the empty word, as in ""
+++ 5, which evaluates to the word "5".
 There is no way to cast a word to a number. Boolean values are not
-allowed to be stored in variables, and hence the word \textquotedblleft{}boolean\textquotedblright{}
+allowed to be stored in variables, and hence the word "boolean"
 is not a reserved word (although its use as an identifier is strongly
 discouraged!). The boolean literals are true and false. Booleans are
 used internally to evaluate the result of comparisons and boolean
@@ -1072,7 +1201,7 @@ invocation statements are specified in the user-defined functions
 section. The remaining statements are print, declaration, and assignment.
 
 Print statements cause the specified text to appear in the graphical
-\textquotedblleft{}console\textquotedblright{} in the Racecar application.
+"console" in the Racecar application.
 The syntax for print statements is: print word\_expression (word expressions
 are covered in the expressions section). This command causes the value
 of the word expression to appear in the console. Print statements
@@ -1124,8 +1253,21 @@ and parentheses.
 
 The conditional statement construct in Racecar is defined as follows:
 
-if <boolean expression> \{ <code block> \} elseIf <boolean expression>
-\{ <code block> \} else \{ <code block> \} 
+\begin{lstlisting}
+if <boolean expression>
+{
+    <code block>
+}
+elseIf <boolean expression>
+{
+    <code block>
+}
+else
+{
+    <code block>
+}
+
+\end{lstlisting} 
 
 This code executes the first code block if the first boolean expression
 is true. If it is false, the next boolean expression is checked and
@@ -1146,7 +1288,13 @@ There are two types of loops in Racecar: repeat-if (similar to while
 in other programming languages) and repeat-times (similar to for).
 The repeat-if statement looks like the following:
 
-repeat if <boolean expression> \{ <code block> \}
+\begin{lstlisting}
+repeat if <boolean expression>
+{
+    <code block>
+}
+
+\end{lstlisting}
 
 This loop checks the value of the boolean expression and executes
 the code block if it evaluates to true. It then checks the value of
@@ -1157,7 +1305,13 @@ expression can be used in these loops.
 The second type of loop is the repeat-times loop. It looks like the
 following:
 
-repeat <number expression> times \{ <code block> \}
+\begin{lstlisting}
+repeat <number expression> times
+{
+    <code block>
+}
+
+\end{lstlisting}
 
 This loop will execute the code in the code block repeatedly the specified
 number of times. You can specify this number by any numerical expression.
@@ -1173,7 +1327,10 @@ functions). The direction arguments to the first three functions are
 not strings, but rather language keywords. The drive function is defined
 by the following: 
 
+\begin{lstlisting}
 drive <direction> <number expression> <optional step(s)>
+
+\end{lstlisting}
 
 drive tells the program to move the car <number expression> steps
 in the <direction> direction. The possible values for <direction>
@@ -1182,7 +1339,12 @@ reserved words). The user can either type step or steps, or omit the
 term entirely. Racecar does not check the English grammar of using
 step for only moving 1 step and steps for 0 steps or 2 or more steps.
 
-The turn function is the following: turn <direction> 
+The turn function is the following:
+
+\begin{lstlisting}
+turn <direction>
+
+\end{lstlisting}
 
 The turn function turns the car 45 degrees in the direction specified.
 The possible values for <direction> in this function are: left and
@@ -1191,7 +1353,10 @@ left/counter-clockwise, or right/clockwise.
 
 The canMove function is the following:
 
+\begin{lstlisting}
 canMove <direction>
+
+\end{lstlisting}
 
 The canMove function returns a boolean (true or false) representing
 whether the car can move one step in the given direction without hitting
@@ -1209,13 +1374,22 @@ equality comparison with some previously stored position.
 Users can define their own functions in Racecar. Function definition
 follows the signature:
 
-define <identifier> <optional parameter list> \{ <code block> \}
+\begin{lstlisting}
+define <identifier> <optional parameter list>
+{
+    <code block>
+}
+
+\end{lstlisting}
 
 The function name must be a valid identifier and cannot conflict with
 any variable names that have global scope. The <optional parameter
 list> is defined by the following:
 
+\begin{lstlisting}
 using <identifier> (type) and ... and <identifier> (type)
+
+\end{lstlisting}
 
 The keyword using is required if there is at least one parameter,
 and the keyword and is required whenever there are two or more parameters,
@@ -1229,13 +1403,16 @@ to the function. Functions cannot return values.
 User-defined functions are invoked using the same syntax as built-in
 functions: 
 
-function\_name parameter\_1 ... parameter\_n
+\begin{lstlisting}
+function_name parameter_1 ... parameter_n
+
+\end{lstlisting}
 
 Unlike some built-in functions, user-defined functions are always
 complete statements on their own, and cannot be used as expressions.
 To use a non-trivial expression as a parameter, surround it with parentheses.
-For example, myFunction (2 + 3) \textquotedbl{}hello\textquotedbl{}
-(\textquotedbl{}John\textquotedbl{} ++ \textquotedbl{} Doe\textquotedbl{})
+For example, myFunction (2 + 3) "hello"
+("John" ++ " Doe")
 is a function call where myFunction is called with three parameters.
 
 
@@ -1253,6 +1430,8 @@ and can only be one character long, as defined by PLY. The empty string
 is represented by epsilon. The start symbol for all Racecar programs
 is statements. Comments are treated as whitespace by the lexer and
 hence are not covered by the grammar.
+
+\lstinputlisting{../Racecar/grammar.txt}
 
 
 \section{Project Plan}
@@ -1348,7 +1527,7 @@ it may not conform exactly to the PEP-8 specifications online.
 
 \subsubsection{By Alex Fields}
 
-Our \textquotedblleft{}buzz words\textquotedblright{} for our language
+Our "buzz words" for our language
 are engaging, easy-to-teach, and readable. Engaging is based on what
 our language was developed to do, i.e. control a virtual racecar,
 and is based on our method of having the user interact with our language
@@ -1364,31 +1543,31 @@ experience, we were forced to approach these concepts through complex
 programming languages that required digesting extra material in order
 to begin to interact with the languages. We wanted a language in which
 a program could be created without an understanding of eight or more
-different \textquoteleft{}types\textquoteright{}, without an understanding
+different 'types', without an understanding
 of objects, without an overabundance of syntax rules.
 
 We decided that, in the goal of making our language as minimal as
 possible, we would use little punctuation. Like OCaml and Haskell,
 function calls are extremely bare-bones: the language requires the
-function name and the variables, all separated by a space (ex. \textquotedblleft{}makeTurn
-right 10\textquotedblright{}). Like Python the language newline-terminated
+function name and the variables, all separated by a space (ex. "makeTurn
+right 10"). Like Python the language newline-terminated
 statements. Again, the goal of these syntax decisions was to attempt
-to assimilate the language as much to the children\textquoteright{}s
+to assimilate the language as much to the children's
 means of understanding rather than have the children assimilate to
 the language.
 
 Along the same vein, the language semantics are based off of English.
-This was quite easy to do since the language\textquoteright{}s built-in
+This was quite easy to do since the language's built-in
 functions are commands for car movement. We wanted users to be able
 to think out in English what they wanted the car to do and then write
 that out with as little translation from one to the other as possible.
 This makes the language both easy-to-teach and readable. Reserved
 words are also all English words, the best example perhaps our types,
-which are simply \textquoteleft{}word\textquoteright{} and \textquoteleft{}number\textquoteright{}.
-The language uses the words \textquoteleft{}set\textquoteright{} and
-\textquoteleft{}to\textquoteright{} for assignment (ex. \textquotedblleft{}set
-myVar to 10\textquotedblright{}). There are no foreign words in our
-language, such as \textquoteleft{}int\textquoteright{} or \textquoteleft{}double\textquoteright{}.
+which are simply 'word' and 'number'.
+The language uses the words 'set' and
+'to' for assignment (ex. "set
+myVar to 10"). There are no foreign words in our
+language, such as 'int' or 'double'.
 
 In incorporating these requirements into the language, the language
 did lose some functionality as compared to more complex languages
@@ -1420,7 +1599,7 @@ in the parsing stage.
 The parser takes the sequence of tokens from the lexer and produces
 an abstract syntax tree (AST). The parser forms the ast utilizing
 the tokens received from the lexer and builds the tree conforming
-to racecar\textquoteright{}s grammar specification. Any racecar code
+to racecar's grammar specification. Any racecar code
 that fails to build a valid parse tree is considered malformed and
 not valid racecar code. Within this same module we also perform semantic
 analysis on the racecar code. This step performs type checking on
@@ -1461,14 +1640,14 @@ Silber, Sam Kohn)
 We developed our language in Python using standard text editors like
 Vim and Sublime Text. We also heavily relied on git and Github for
 version control; since each member of the team was working on a number
-of things at once, we wanted to make sure that we didn\textquoteright{}t
-step on anyone\textquoteright{}s toes when making changes, so having
+of things at once, we wanted to make sure that we didn't
+step on anyone's toes when making changes, so having
 a central repository for our code base was essential. Our Integrated
 Development Environment (IDE) launches directly from a package, so
 no makefile is required to write code in our language.
 
 The runtime environment is a simple IDE customized for the Racecar
-language and the targeted demographic. From the IDE\textquoteright{}s
+language and the targeted demographic. From the IDE's
 menu bar, the user has the ability to save their code to files, and
 to open previously saved files. The user can also place obstacles
 on screen through which the car must navigate. The IDE has three main
@@ -1477,12 +1656,12 @@ the racecar moves. Each of these components will be briefly discussed.
 
 The coding text area takes up the left side of the IDE, and is where
 users write their Racecar programs. Once the user has written the
-code they would like to run, they press the \textquotedblleft{}Run
-Code\textquotedblright{} button located directly below the coding
+code they would like to run, they press the "Run
+Code" button located directly below the coding
 text area. Buttons are also available to clear the coding text area
-and to reset the car\textquoteright{}s position. Once \textquotedblleft{}Run
-Code\textquotedblright{} has been pressed, another button labeled
-\textquotedblleft{}Stop Program\textquotedblright{} becomes available,
+and to reset the car's position. Once "Run
+Code" has been pressed, another button labeled
+"Stop Program" becomes available,
 which will terminate the running program.
 
 The console is more straightforward. It is used to display textual
@@ -1494,7 +1673,7 @@ users can put print statements in their code; those print statements
 get printed to the console.
 
 The heart of the runtime environment is in the canvas. The canvas
-is the area in which the car drives, but more importantly, it\textquoteright{}s
+is the area in which the car drives, but more importantly, it's
 where users get to see visual output of their code. The car animates
 across the screen, driving forward and turning. The canvas also holds
 a number of obstacles, should the user desire them (to be selected
@@ -1559,22 +1738,22 @@ the whole compiler and then running tests at the end, we wrote tests
 along the way to ensure that each part and each bit of functionality
 was implemented properly. Each of the tests had descriptive names
 (such as test\_function\_invocation\_with\_one\_parameter or test\_get\_car\_position)
-so in the output, if a test did fail, we could tell exactly what wasn\textquoteright{}t
+so in the output, if a test did fail, we could tell exactly what wasn't
 working.
 
 An example test, followed by a detailed explanation, is below:
 
 def test\_function\_invocation\_with\_two\_parameters(self): test\_string
-= \textbackslash{} \textquotedbl{}\textquotedbl{}\textquotedbl{}define
+= \textbackslash{} """define
 turnLeftThenDriveStraight using numStepsTurn \textbackslash{} (number)
 and numStepsDrive (number) \{ turn left drive forward numStepsTurn
 steps turn right drive forward numStepsDrive steps \} turnLeftThenDriveStraight
-5 10 \textquotedbl{}\textquotedbl{}\textquotedbl{} correct\_translation
-= \textbackslash{} \textquotedbl{}\textquotedbl{}\textquotedbl{}def
+5 10 """ correct\_translation
+= \textbackslash{} """def
 turnLeftThenDriveStraight(numStepsTurn, numStepsDrive): rotate\_car(WheelDirection.LEFT)
 translate\_car(numStepsTurn, CarDirection.FORWARDS) rotate\_car(WheelDirection.RIGHT)
 translate\_car(numStepsDrive, CarDirection.FORWARDS) turnLeftThenDriveStraight(5,
-10) \textquotedbl{}\textquotedbl{}\textquotedbl{} result = Compiler.getPythonCode(test\_string)
+10) """ result = Compiler.getPythonCode(test\_string)
 ast = Parser.parseString(test\_string)
 
 saErrors = SemanticAnalyzer.analyzeStart(ast) self.assertEqual(len(saErrors),
@@ -1632,7 +1811,7 @@ Overall our project went very smoothly, but we did run into a few
 issues along the way. The biggest issue our team ran into was adhering
 to the timeline and completing all desired functionality on under
 the constraints. We did a good job of designing our language with
-a manageable scope, but as the semester progressed, we didn\textquoteright{}t
+a manageable scope, but as the semester progressed, we didn't
 have time to completely a few bits of the functionality we wanted
 to implement. This did not end up being an issue, though, because
 we made sure to implement the core functionality early on, so just
@@ -1640,7 +1819,7 @@ auxilary things had to be cut.
 
 Secondly, not really an issue, but the TkInter Python GUI framework
 gave us a bit of trouble. This, however, was not necessarily a function
-of our team\textquoteright{}s organization, but rather a function
+of our team's organization, but rather a function
 of it being a GUI framework, therefore being inherently difficult
 to learn and use.
 
@@ -1723,9 +1902,9 @@ and expansion easier.
 
 \subsection{Advice for Future Teams}
 
-We would highly recommend future teams use Python. As Sam said, \textquotedblleft{}Python
+We would highly recommend future teams use Python. As Sam said, "Python
 was the language through which I felt it was least necessary to think
-about the rules of the language while coding.\textquotedblright{}
+about the rules of the language while coding."
 Python is, of course, Racecar for adults. That being said, the language
 being created may look nothing like Python and a different language
 may be more suitable to the development of that language.
@@ -1791,4 +1970,43 @@ in top-down parsing.
 \end{itemize}
 
 \section{Appendix}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+
+\lstset{
+language=Python,
+basicstyle=\ttfamily,
+numbers=left,
+numberstyle=\footnotesize,
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{red},
+columns=fullflexible,
+showstringspaces=false,
+upquote=true,
+morekeywords={as}
+}
+
+The following sections show the source code for the Racecar interpreter and GUI. We have included a simple driver script which opens the GUI, although in actuality the program is packaged into an executable package like any other graphical application.
+
+\subsection{Launch Script}
+
+\lstinputlisting[caption=\texttt{launchRacecar.py}]{../runRacecarGUI.py}
+
+\subsection{Graphical Interface}
+
+\lstinputlisting[caption=\texttt{racecar.py}]{../Racecar/RacecarGUI/racecar.py}
+
+\subsection{Lexer and Parser}
+
+\lstinputlisting[caption=\texttt{Parser.py}]{../Racecar/Parser.py}
+
+\subsection{Semantic Analyzer and Symbol Table}
+
+\lstinputlisting[caption=\texttt{SemanticAnalyzer.py}]{../Racecar/SemanticAnalyzer.py}
+
+\subsection{Translator}
+
+\lstinputlisting[caption=\texttt{Compiler.py}]{../Racecar/Compiler.py}
+
 \end{document}

@@ -1,93 +1,98 @@
 \select@language {english}
-\contentsline {section}{\numberline {1}Introduction}{1}
-\contentsline {subsection}{\numberline {1.1}What Problem Does Racecar Solve?}{1}
-\contentsline {subsection}{\numberline {1.2}Who Should Use Racecar?}{2}
-\contentsline {subsection}{\numberline {1.3}Properties of Racecar}{2}
-\contentsline {subsubsection}{Easy to Teach}{2}
-\contentsline {subsubsection}{Readable}{2}
-\contentsline {subsubsection}{Engaging}{3}
-\contentsline {subsection}{\numberline {1.4}Similar Programming Languages}{3}
-\contentsline {section}{\numberline {2}Lesson Plans}{4}
-\contentsline {subsubsection}{Introduction: How to Use Racecar}{4}
-\contentsline {subsection}{\numberline {2.1}Lesson 1: How to Drive}{6}
-\contentsline {subsubsection}{Lesson Summary}{6}
-\contentsline {subsubsection}{The Program}{6}
-\contentsline {subsubsection}{Further Advice}{6}
-\contentsline {subsection}{\numberline {2.2}Lesson 2: Comments}{7}
-\contentsline {subsubsection}{Lesson Summary}{7}
-\contentsline {subsubsection}{The Program}{7}
-\contentsline {subsubsection}{Further Advice}{8}
-\contentsline {subsection}{\numberline {2.3}Lesson 3: Turning the Car}{8}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {subsection}{\numberline {1.1}What Problem Does Racecar Solve?}{3}
+\contentsline {subsection}{\numberline {1.2}Who Should Use Racecar?}{3}
+\contentsline {subsection}{\numberline {1.3}Properties of Racecar}{4}
+\contentsline {subsubsection}{Easy to Teach}{4}
+\contentsline {subsubsection}{Readable}{4}
+\contentsline {subsubsection}{Engaging}{4}
+\contentsline {subsection}{\numberline {1.4}Similar Programming Languages}{5}
+\contentsline {section}{\numberline {2}Lesson Plans}{6}
+\contentsline {subsubsection}{Introduction: How to Use Racecar}{6}
+\contentsline {subsection}{\numberline {2.1}Lesson 1: How to Drive}{8}
 \contentsline {subsubsection}{Lesson Summary}{8}
 \contentsline {subsubsection}{The Program}{8}
-\contentsline {subsection}{\numberline {2.4}Lesson 4: More Turning}{9}
-\contentsline {subsubsection}{Lesson Summary}{9}
+\contentsline {subsubsection}{Further Advice}{8}
+\contentsline {subsection}{\numberline {2.2}Lesson 2: Comments}{8}
+\contentsline {subsubsection}{Lesson Summary}{8}
 \contentsline {subsubsection}{The Program}{9}
-\contentsline {subsection}{\numberline {2.5}Lesson 5: Conditionals}{9}
-\contentsline {subsubsection}{Lesson Summary}{9}
-\contentsline {subsubsection}{The Program}{9}
-\contentsline {subsubsection}{Further Advice}{10}
-\contentsline {subsection}{\numberline {2.6}Lesson 6: Variables}{11}
+\contentsline {subsubsection}{Further Advice}{9}
+\contentsline {subsection}{\numberline {2.3}Lesson 3: Turning the Car}{10}
+\contentsline {subsubsection}{Lesson Summary}{10}
+\contentsline {subsubsection}{The Program}{10}
+\contentsline {subsection}{\numberline {2.4}Lesson 4: More Turning}{10}
+\contentsline {subsubsection}{Lesson Summary}{10}
+\contentsline {subsubsection}{The Program}{11}
+\contentsline {subsection}{\numberline {2.5}Lesson 5: Conditionals}{11}
 \contentsline {subsubsection}{Lesson Summary}{11}
-\contentsline {subsubsection}{The Programs}{11}
+\contentsline {subsubsection}{The Program}{11}
 \contentsline {subsubsection}{Further Advice}{12}
-\contentsline {subsection}{\numberline {2.7}Lesson 7: Loops Part 1}{13}
+\contentsline {subsection}{\numberline {2.6}Lesson 6: Variables}{13}
 \contentsline {subsubsection}{Lesson Summary}{13}
-\contentsline {subsubsection}{The Program}{13}
-\contentsline {subsubsection}{Further Advice}{14}
-\contentsline {subsection}{\numberline {2.8}Lesson 8: Loops Part 2}{14}
-\contentsline {subsubsection}{Lesson Summary}{14}
-\contentsline {subsubsection}{The Program}{14}
+\contentsline {subsubsection}{The Programs}{14}
 \contentsline {subsubsection}{Further Advice}{15}
-\contentsline {subsection}{\numberline {2.9}Lesson 9: Subroutines}{15}
-\contentsline {subsubsection}{Lesson Summary}{15}
-\contentsline {subsubsection}{The Program}{15}
-\contentsline {subsubsection}{Further Advice}{15}
-\contentsline {subsection}{\numberline {2.10}Lesson 10: Variables in Subroutines}{16}
+\contentsline {subsection}{\numberline {2.7}Lesson 7: Loops Part 1}{16}
 \contentsline {subsubsection}{Lesson Summary}{16}
 \contentsline {subsubsection}{The Program}{16}
-\contentsline {subsubsection}{Further Advice}{16}
-\contentsline {section}{\numberline {3}Language Reference Manual}{17}
-\contentsline {subsection}{\numberline {3.1}Introduction}{17}
-\contentsline {subsection}{\numberline {3.2}Identifiers and Scope}{17}
-\contentsline {subsection}{\numberline {3.3}Data Types}{18}
-\contentsline {subsection}{\numberline {3.4}Statements}{18}
-\contentsline {subsection}{\numberline {3.5}Comments}{19}
-\contentsline {subsection}{\numberline {3.6}Expressions}{19}
-\contentsline {subsection}{\numberline {3.7}Control Flow}{19}
-\contentsline {subsection}{\numberline {3.8}Built-in Functions}{20}
-\contentsline {subsection}{\numberline {3.9}User-defined Functions}{21}
-\contentsline {subsection}{\numberline {3.10}Reserved Words}{21}
-\contentsline {subsection}{\numberline {3.11}Formal Grammar}{21}
-\contentsline {section}{\numberline {4}Project Plan}{22}
-\contentsline {subsubsection}{By Sam Kohn}{22}
-\contentsline {subsection}{\numberline {4.1}Team Roles}{22}
-\contentsline {subsection}{\numberline {4.2}Development Process}{22}
-\contentsline {subsection}{\numberline {4.3}Project Schedule and Log}{23}
-\contentsline {subsection}{\numberline {4.4}Implementation Style}{23}
-\contentsline {section}{\numberline {5}Language Evolution}{24}
-\contentsline {subsubsection}{By Alex Fields}{24}
-\contentsline {section}{\numberline {6}Translator Architecture}{25}
-\contentsline {subsubsection}{By Jeremy Spencer}{25}
-\contentsline {section}{\numberline {7}Development and Run-Time Environment}{25}
-\contentsline {subsubsection}{By Mason Silber}{25}
-\contentsline {section}{\numberline {8}Test Plan}{27}
-\contentsline {subsubsection}{By Colfax Selby}{27}
-\contentsline {subsection}{\numberline {8.1}Segmented Testing}{28}
-\contentsline {subsection}{\numberline {8.2}Iterative Testing}{28}
-\contentsline {section}{\numberline {9}Conclusions}{29}
-\contentsline {subsection}{\numberline {9.1}Lessons Learned as a Team}{29}
-\contentsline {subsubsection}{Successes}{29}
-\contentsline {subsubsection}{Opportunities for Improvement}{29}
-\contentsline {subsection}{\numberline {9.2}Lessons Learned by Each Team Member}{30}
-\contentsline {subsubsection}{Sam Kohn}{30}
-\contentsline {subsubsection}{Alex Fields}{30}
-\contentsline {subsubsection}{Jeremy Spencer}{31}
-\contentsline {subsubsection}{Mason Silber}{31}
-\contentsline {subsection}{\numberline {9.3}Advice for Future Teams}{31}
-\contentsline {subsection}{\numberline {9.4}Suggestions for the Instructor}{31}
-\contentsline {subsubsection}{Topics we would have liked to see}{32}
-\contentsline {subsubsection}{Topics that directly helped our project}{32}
-\contentsline {subsubsection}{Topics that did not help our project, but maybe helped other projects}{32}
-\contentsline {subsubsection}{Topics that did not help our project or seem relevant to any project}{32}
-\contentsline {section}{\numberline {10}Appendix}{32}
+\contentsline {subsubsection}{Further Advice}{17}
+\contentsline {subsection}{\numberline {2.8}Lesson 8: Loops Part 2}{18}
+\contentsline {subsubsection}{Lesson Summary}{18}
+\contentsline {subsubsection}{The Program}{18}
+\contentsline {subsubsection}{Further Advice}{19}
+\contentsline {subsection}{\numberline {2.9}Lesson 9: Subroutines}{19}
+\contentsline {subsubsection}{Lesson Summary}{19}
+\contentsline {subsubsection}{The Program}{19}
+\contentsline {subsubsection}{Further Advice}{21}
+\contentsline {subsection}{\numberline {2.10}Lesson 10: Variables in Subroutines}{21}
+\contentsline {subsubsection}{Lesson Summary}{21}
+\contentsline {subsubsection}{The Program}{21}
+\contentsline {subsubsection}{Further Advice}{22}
+\contentsline {section}{\numberline {3}Language Reference Manual}{23}
+\contentsline {subsection}{\numberline {3.1}Introduction}{23}
+\contentsline {subsection}{\numberline {3.2}Identifiers and Scope}{23}
+\contentsline {subsection}{\numberline {3.3}Data Types}{24}
+\contentsline {subsection}{\numberline {3.4}Statements}{24}
+\contentsline {subsection}{\numberline {3.5}Comments}{25}
+\contentsline {subsection}{\numberline {3.6}Expressions}{25}
+\contentsline {subsection}{\numberline {3.7}Control Flow}{25}
+\contentsline {subsection}{\numberline {3.8}Built-in Functions}{26}
+\contentsline {subsection}{\numberline {3.9}User-defined Functions}{27}
+\contentsline {subsection}{\numberline {3.10}Reserved Words}{28}
+\contentsline {subsection}{\numberline {3.11}Formal Grammar}{28}
+\contentsline {section}{\numberline {4}Project Plan}{31}
+\contentsline {subsubsection}{By Sam Kohn}{31}
+\contentsline {subsection}{\numberline {4.1}Team Roles}{31}
+\contentsline {subsection}{\numberline {4.2}Development Process}{32}
+\contentsline {subsection}{\numberline {4.3}Project Schedule and Log}{32}
+\contentsline {subsection}{\numberline {4.4}Implementation Style}{33}
+\contentsline {section}{\numberline {5}Language Evolution}{33}
+\contentsline {subsubsection}{By Alex Fields}{33}
+\contentsline {section}{\numberline {6}Translator Architecture}{34}
+\contentsline {subsubsection}{By Jeremy Spencer}{34}
+\contentsline {section}{\numberline {7}Development and Run-Time Environment}{36}
+\contentsline {subsubsection}{By Mason Silber}{36}
+\contentsline {section}{\numberline {8}Test Plan}{37}
+\contentsline {subsubsection}{By Colfax Selby}{37}
+\contentsline {subsection}{\numberline {8.1}Segmented Testing}{37}
+\contentsline {subsection}{\numberline {8.2}Iterative Testing}{37}
+\contentsline {section}{\numberline {9}Conclusions}{38}
+\contentsline {subsection}{\numberline {9.1}Lessons Learned as a Team}{38}
+\contentsline {subsubsection}{Successes}{38}
+\contentsline {subsubsection}{Opportunities for Improvement}{39}
+\contentsline {subsection}{\numberline {9.2}Lessons Learned by Each Team Member}{39}
+\contentsline {subsubsection}{Sam Kohn}{39}
+\contentsline {subsubsection}{Alex Fields}{40}
+\contentsline {subsubsection}{Jeremy Spencer}{40}
+\contentsline {subsubsection}{Mason Silber}{40}
+\contentsline {subsection}{\numberline {9.3}Advice for Future Teams}{40}
+\contentsline {subsection}{\numberline {9.4}Suggestions for the Instructor}{41}
+\contentsline {subsubsection}{Topics we would have liked to see}{41}
+\contentsline {subsubsection}{Topics that directly helped our project}{41}
+\contentsline {subsubsection}{Topics that did not help our project, but maybe helped other projects}{41}
+\contentsline {subsubsection}{Topics that did not help our project or seem relevant to any project}{41}
+\contentsline {section}{\numberline {10}Appendix}{42}
+\contentsline {subsection}{\numberline {10.1}Launch Script}{42}
+\contentsline {subsection}{\numberline {10.2}Graphical Interface}{42}
+\contentsline {subsection}{\numberline {10.3}Lexer and Parser}{66}
+\contentsline {subsection}{\numberline {10.4}Semantic Analyzer and Symbol Table}{79}
+\contentsline {subsection}{\numberline {10.5}Translator}{90}
