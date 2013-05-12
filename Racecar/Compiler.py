@@ -1,4 +1,5 @@
 from Parser import parseString
+from SemanticAnalyzer import analyzeStart
 
 
 def getPythonCode(code):
@@ -8,12 +9,12 @@ def getPythonCode(code):
     # first parse the string
     ast = parseString(code)
 
-    # then check for errors
-    if len(ast.errors) > 0:
-        return (None, ast.errors)
-
     # then run the string through the semantic analyzer
-    # ast = runSemanticAnalyzer(ast)
+    semanticErrors = analyzeStart(ast)
+
+    # then check for errors
+    if len(ast.errors) > 0 or len(semanticErrors) > 0:
+        return (None, ast.errors + semanticErrors)
 
     # then generate python code!
     pythonCode = generatePythonCode(ast)
