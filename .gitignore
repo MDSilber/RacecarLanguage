@@ -10,3 +10,11 @@
 *.out
 
 parsetab.py
+
+*.aux
+
+*.log
+
+*.gz
+
+documents/report.pdf
