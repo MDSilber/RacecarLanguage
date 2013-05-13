@@ -1,4 +1,4 @@
-# Written by Mason Silber and Sam Kohn
+#!/usr/bin/python
 
 from Tkinter import *
 from PIL import Image
@@ -12,6 +12,7 @@ import Racecar.Compiler
 import random
 import pdb
 import math
+import ply
 
 random.seed()
 
@@ -341,6 +342,9 @@ def is_collision(curr_x, curr_y):
 def print_to_console(message):
 #Should console be cleared each time the program is restart?
 #Or should there be a button?
+    if should_stop:
+        return
+
     console.config(state=NORMAL)
     console.insert(END, str(message) + '\n')
     console.config(state=DISABLED)
@@ -445,10 +449,6 @@ def course_four():
             obstacle_coord_x = obstacle_coord_x + 150
         obstacle_coord_y = obstacle_coord_y + 80
         obstacle_coord_x = 123
-
-    for obstacle in obstacles:
-        print obstacle.center
-
 
 def course_five():
     clear_course()
@@ -563,6 +563,7 @@ def stop_program():
 def generate_program(code):
     global should_stop
     global collision_occurred
+    #pdb.set_trace()
 
     #Set the interrupt variable whenever a program is run
     should_stop = False
@@ -579,8 +580,7 @@ def generate_program(code):
 
             #Toggle the buttons on the bottom and run program
             toggle_buttons(True)
-            tempGlobal = globals().copy()
-            exec(python_code, tempGlobal)
+            exec(python_code, globals())
             toggle_buttons(False)
 
             #If collision occurred
