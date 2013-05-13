@@ -13,6 +13,7 @@ import random
 import pdb
 import math
 import ply
+import Racecar.Parser
 
 random.seed()
 
@@ -563,7 +564,7 @@ def stop_program():
 def generate_program(code):
     global should_stop
     global collision_occurred
-    #pdb.set_trace()
+    pdb.set_trace()
 
     #Set the interrupt variable whenever a program is run
     should_stop = False

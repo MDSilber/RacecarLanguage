@@ -58,7 +58,7 @@ t_LT = r'<'
 t_GEQ = r'>='
 t_LEQ = r'<='
 t_CONCAT = r'\+\+'
-t_SINGLE_LINE_COMMENT = r':\).*$'
+t_SINGLE_LINE_COMMENT = r':\).*'
 t_ignore = ' \t'
 
 
