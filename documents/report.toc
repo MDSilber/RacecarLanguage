@@ -96,3 +96,4 @@
 \contentsline {subsection}{\numberline {10.3}Lexer and Parser}{66}
 \contentsline {subsection}{\numberline {10.4}Semantic Analyzer and Symbol Table}{80}
 \contentsline {subsection}{\numberline {10.5}Translator}{91}
+\contentsline {subsection}{\numberline {10.6}Tests}{100}

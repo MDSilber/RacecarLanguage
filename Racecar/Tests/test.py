@@ -1,3 +1,4 @@
+# Written by Colfax Selby, Sam Kohn, and Alex Fields
 import random
 import unittest
 import Racecar.Compiler as Compiler
@@ -751,6 +752,7 @@ else:
     def test_comment_singleline(self):
         test_string = \
             """:) this is a single line comment
+drive forward 5 steps
 """
         correct_translation = \
             """"""
