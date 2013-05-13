@@ -731,17 +731,22 @@ code_frame = Frame(
     height=9*window_height/10)
 code_frame.grid_propagate(False)
 
-#scrollbar for code window
-code_scrollbar = Scrollbar(code_frame)
-code_scrollbar.pack(side=RIGHT, fill=Y)
+#vertical scrollbar for code window
+code_scrollbar_vert = Scrollbar(code_frame)
+code_scrollbar_vert.pack(side=RIGHT, fill=Y)
+
+#horizontal scrollbar for code window
+code_scrollbar_hor = Scrollbar(code_frame, orient=HORIZONTAL)
+code_scrollbar_hor.pack(side=BOTTOM, fill=X)
 
 #code is the window in which the code is written
 code = Text(
     code_frame,
     width=50,
     #height=window_height/16-8,
-    wrap=WORD,
-    yscrollcommand=code_scrollbar.set)
+    wrap=NONE,
+    yscrollcommand=code_scrollbar_vert.set,
+    xscrollcommand=code_scrollbar_hor.set)
 
 #Frame for buttons
 button_frame = Frame(left_frame)
@@ -849,7 +854,8 @@ console_label.pack()
 console_frame.pack(expand=1, fill=BOTH, pady=(0, 10))
 console.pack(expand=1, fill=BOTH)
 
-code_scrollbar.config(command=code.yview)
+code_scrollbar_vert.config(command=code.yview)
+code_scrollbar_hor.config(command=code.xview)
 console_scrollbar.config(command=console.yview)
 
 root.update_idletasks()
