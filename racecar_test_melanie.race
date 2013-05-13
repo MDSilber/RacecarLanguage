@@ -1,0 +1,65 @@
+:-(
+ -    racecar_test.txt
+ -    A Racecar Test Program
+ -    Melanie Kambadur
+ -
+ -    This program should make the car drive in (approximately) a figure 8
+ -    like the following (from the start point, then SE, NE, SE again, SW, 
+ -    then NW, and finally SW again to end up at the start point):
+ -
+ -                          *           *         |         N 
+ -                        *   *       *   *       |         ^
+ -   start &            *       *   *       *     |         |
+ - finish here ---->  *           *           *   |   W <-- * --> E
+ -                  \   *       *   *       *     |         |
+ -                    \   *   *       *   *       |         v
+ -                      \   *           *         |         S
+ -                        - > 
+:-)
+
+define turnNinetyDegrees using dir (word)
+{
+    if dir is "left"
+    {
+        turn left
+        turn left
+    }
+    elseIf dir is "right"
+    {
+        turn right
+        turn right
+    }
+    else
+    {
+        print dir ++ "is a bad argument"
+    }
+}
+
+:) Turn  45 degrees right (If grid is a map, then toward southeast)
+turn right
+
+:) Drive the first side of the '8'
+print "Starting out southeast... "
+drive forward 10
+
+:) Turn wheels 90 degrees left to northeast and drive the next straight: 
+turnNinetyDegrees "left"
+print "now heading northeast... "
+drive forward 20
+
+:) Complete the rest of the '8'
+turnNinetyDegrees "right"
+print "going southeast again... "
+drive forward 10
+
+turnNinetyDegrees "right"
+print "now heading southwest again... "
+drive forward 10
+
+turnNinetyDegrees "right" 
+print "going northwest for the long stretch ..."
+drive forward 20
+
+turnNinetyDegrees "left"
+print "and southwest for the final side!"
+drive forward 10
