@@ -8,7 +8,7 @@ import tkMessageBox
 import re
 import time
 import Racecar.Tree
-import Racecar.Compiler
+import Racecar.Interpreter
 import random
 import pdb
 import math
@@ -570,7 +570,7 @@ def generate_program(code):
     collision_occurred = False
     if len(code) > 1:
         #print code[:-1]
-        #demo(code)
+        
         python_code, errors, correct = verify_program(code)
         if(correct):
             #Print message to console saying program is executing
@@ -613,10 +613,11 @@ def generate_program(code):
 #Checks if program is a valid Racecar program and returns corresponding python
 #code if necessary
 def verify_program(code):
+    pdb.set_trace()
     clear_console()
     if len(code) < 2:
         return ("BLANK", False)
-    code, errors = Racecar.Compiler.getPythonCode(code)
+    code, errors = Racecar.Interpreter.getPythonCode(code)
     if errors:
         return (code, errors, False)
     else:

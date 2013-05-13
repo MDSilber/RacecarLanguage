@@ -1,5 +1,5 @@
 from Parser import parseString
-
+import pdb
 
 def getPythonCode(code):
     '''Convert the given Racecar code into the Python code that will
@@ -92,7 +92,7 @@ def indentLines(unindentedLines):
 
 
 def emptyTranslator(ast):
-    return ""
+    return "pass\n"
 
 
 def statementsTranslator(ast):
