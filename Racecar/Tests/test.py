@@ -7,6 +7,7 @@ import Racecar.SemanticAnalyzer as SemanticAnalyzer
 import Racecar.Parser as Parser
 import pdb
 
+
 class TranslatorTests(unittest.TestCase):
     def test_empty_statement(self):
         test_string = \

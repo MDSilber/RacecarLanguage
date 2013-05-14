@@ -451,9 +451,6 @@ def course_four():
         obstacle_coord_y = obstacle_coord_y + 80
         obstacle_coord_x = 123
 
-def course_five():
-    clear_course()
-
 
 def clear_course():
     global obstacles
@@ -570,7 +567,7 @@ def generate_program(code):
     collision_occurred = False
     if len(code) > 1:
         #print code[:-1]
-        
+
         python_code, errors, correct = verify_program(code)
         if(correct):
             #Print message to console saying program is executing

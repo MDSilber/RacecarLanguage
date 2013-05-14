@@ -1,6 +1,7 @@
 from Parser import parseString
 import pdb
 
+
 def getPythonCode(code):
     '''Convert the given Racecar code into the Python code that will
     run in the GUI.'''
@@ -297,6 +298,7 @@ def plusExpressionTranslator(ast):
 def timesExpressionTranslator(ast):
     return binaryOperatorTranslator(ast)
 
+
 def wordExpressionTranslator(ast):
     pythonCode = "(str("
     pythonCode += generatePythonCode(ast.children[0])
@@ -304,6 +306,7 @@ def wordExpressionTranslator(ast):
     pythonCode += generatePythonCode(ast.children[2])
     pythonCode += "))"
     return pythonCode
+
 
 def getCarPositionTranslator(ast):
     return "getCurrentPosition()"
