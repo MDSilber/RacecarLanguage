@@ -613,7 +613,6 @@ def generate_program(code):
 #Checks if program is a valid Racecar program and returns corresponding python
 #code if necessary
 def verify_program(code):
-    pdb.set_trace()
     clear_console()
     if len(code) < 2:
         return ("BLANK", False)
